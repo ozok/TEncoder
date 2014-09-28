@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{F72119FD-2B1C-42AB-84D6-47C40ED1F105}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="TEncoder.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="renametool.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="dvdrenametool.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="TEncoder">
+        <MSBuild Projects="TEncoder.dproj"/>
+    </Target>
+    <Target Name="TEncoder:Clean">
+        <MSBuild Projects="TEncoder.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TEncoder:Make">
+        <MSBuild Projects="TEncoder.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="renametool">
+        <MSBuild Projects="renametool.dproj"/>
+    </Target>
+    <Target Name="renametool:Clean">
+        <MSBuild Projects="renametool.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="renametool:Make">
+        <MSBuild Projects="renametool.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="dvdrenametool">
+        <MSBuild Projects="dvdrenametool.dproj"/>
+    </Target>
+    <Target Name="dvdrenametool:Clean">
+        <MSBuild Projects="dvdrenametool.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="dvdrenametool:Make">
+        <MSBuild Projects="dvdrenametool.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="TEncoder;renametool;dvdrenametool"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="TEncoder:Clean;renametool:Clean;dvdrenametool:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="TEncoder:Make;renametool:Make;dvdrenametool:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

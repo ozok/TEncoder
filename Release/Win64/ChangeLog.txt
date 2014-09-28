@@ -1,0 +1,525 @@
+TEncoder Change Log
+
+--4.5.0
+-Added: [Video/Audio Converter] Support for embedded subtitles
+-Added: [Video/Audio Converter] Support for ".ts" files
+-Improved: [Video/Audio Converter] Audio track selection accuracy
+-Improved: [Video/Audio Converter] FFMpeg encode starting performance
+-Fixed: [Video/Audio Converter] Audio index problems with MEncoder
+-Fixed: [Video/Audio Converter] Duration information from some mkv files couldn't be extracted
+-Fixed: [Video Downloader] Couldn't mux if file name ended/started with space
+-Fixed: Reset in trim window didn't work properly
+-Updated: Youtube-dl
+
+--4.4.0
+-Added: DVD ripper
+-Added: [Video/Audio Converter] Max. parallel process count is now 16
+-Added: [Video/Audio Converter] An option to send TEncoder to tray while encoding
+-Added: [Video/Audio Converter] Improved logs window's performance
+-Added: [General] Switching between functions will enable/disable related UI controls
+-Fixed: [Video/Audio Converter] MEncoder produced invalid ogg vorbis streams
+-Fixed: [Video/Audio Converter] Support for FLAC encoding
+-Added: [Video Downloader] Improved progress update performance
+-Fixed: [Video Downloader] Couldn't stop batch url adding 
+-Fixed: [Video Downloader] "Argument out of range" error while downloading
+-Updated: Youtube-dl
+
+--4.3.0
+-Added: [Video Downloader] An option to skip download if output file exists and contains audio 
+-Added: [Video Downloader] Ability to enter user name and password
+-Added: [Video Downloader] An option to disable thumbnail loading
+-Added: [Video Downloader] Some interface changes
+-Added: [Video Downloader] Improved video downloader starting performance
+-Added: [Video/Audio Converter] Re-enabled "Delete unfinished files" option
+-Added: [Video/Audio Converter] Moved custom arguments options to "Codec Options" window
+-Added: [Video/Audio Converter] When "Direct Copy" is selected as video codec ffmpeg will be used
+-Added: [General] Changed default skin to "Web2"
+-Fixed: [Video Downloader] Downloaded "M4A DASH" and "WEBM AUDIO" audio files couldn't be played by some players
+-Fixed: [Video Downloader] Logs weren't saved and shown properly
+-Fixed: [Video Downloader] Did not encode to audio only
+-Fixed: [Video Downloader] Did not encode to selected format
+-Fixed: [Video Downloader] Some interface problems
+-Updated: Youtube-dl
+
+--4.2.0
+-Added: Post-encode options for video downloader
+-Added: Users can now stop video link adding process
+-Added: A few changes to progress interface
+-Fixed: Adding an YouTube link from a playlist could cause some problems
+-Fixed: Download time value written to log was always empty
+-Fixed: Post-encode options weren't used
+-Fixed: TEncoder couldn't write logs because logs folder wasn't created in some rare cases
+-Updated: Youtube-dl
+-Updated: FFMpeg
+
+--4.1.1
+-Added: A tool to add watermarks to video (thx to joby_toss)
+-Added: A text to show video downloading progress
+-Added: TEncoder will now check downloaded files too
+-Added: A link to the list of supported video sites (thx to webfork)
+-Added: TEncoder will save encoder logs into "logs" sub-folder (thx to webfork)
+-Added: A few small interface changes
+-Fixed: Stopping video downloader didn't reset progress informations
+-Fixed: Update checker caused a message box to be shown when settings window was opened
+-Fixed: Couldn't clear some logs
+-Updated: Youtube-dl
+-Updated: FFmpeg
+
+--4.1.0
+-Added: TEncoder will now check output files after encoding
+-Added: An option to keep ssa and ass subtitle styles
+-Added: Info about subtitles won't be shown in summary list if FFMpeg is selected
+-Added: TEncoder will now remember the active tab
+-Fixed: Several problems with batch download link add
+-Fixed: Couldn't read video codec of some files with more than one audio track
+-Fixed: "Update video downloader" didn't work
+-Updated: Youtube-dl
+
+--4.0.0
+-Added: Video downloader
+-Added: Total progress will be updated more smoothly
+-Added: MP4Box progress will be shown
+-Added: A tool to create gif image from video
+-Added: An option to disable trimming
+-Added: Audio track option won't be used for mpeg sources as default
+-Fixed: Subtitle position wasn't used
+-Fixed: Duration info in the file list wasn't updated after trimming
+-Updated: FFMpeg
+
+--3.9
+-Added: A tool to merge an image and audio to video
+-Added: A tool to dub video with an external audio file
+-Added: Many skins
+-Added: MP4 muxing while using MEncoder will be done with MP4Box
+-Added: File list now shows more information
+-Added: "Copy date from source" will now copy last modified date too
+-Added: An option, under "Help" menu, to create log archive in the desktop
+-Added: Main window is now a bit larger as default
+-Fixed: Program would crash when muxing to mp4 using MEncoder as encoder
+-Fixed: Subtitle and audio delay values weren't saved properly
+-Fixed: Applying a profile didn't update video size option
+-Fixed: Video size option wasn't saved
+-Fixed: Profile editor would ask to save profile even if nothing was changed/added
+-Fixed: Scroll bars in logs window weren't visible
+-Fixed: Enabling skins didn't apply hue and saturation options
+-Fixed: Enable/disable skin options was not saved
+-Fixed: Profiles created by the user couldn't be deleted
+-Fixed: "Copy date from source" option wasn't saved
+-Fixed: "'' is not a valid integer value." error
+-Fixed: Couldn't add files without an audio stream
+-Fixed: A few UI related problems
+-Updated: FFMpeg
+
+--3.8
+-Added: Skinning is disabled by default
+-Added: An option to copy source files' date/time info to output files
+-Added: Support for *.mxf file type
+-Fixed: A bug where TEncoder would get stuck even if encoding is done
+-Fixed: A bug where checking "Export to script" would cause program to crash
+-Fixed: "Apply" or changing selected preset didn't update the summary
+-Fixed: "version.txt" errors
+
+--3.7
+-Added: A new GUI layout
+-Added: An option to disable track id options for mpeg sources with MEncoder
+-Added: Subtitle and audio delay step values are now 100 ms instead of 500 ms
+-Added: Audio volume option (works for MEncoder only)
+-Fixed: Encoding failed with MEncoder if container was mp4 and video codec other than x264
+-Fixed: Encoder selection in profile editor wasn't saved
+-Fixed: Exit shortcut was "X" instead of "Ctrl + X"
+-Fixed: Subtitle font option was ignored
+-Fixed: Player will follow subtitle and audio stream selections
+-Fixed: "Clear Selected Log" option in "Logs" window didn't work
+-Removed: Translations due to GUI changes
+-Updated: AlphaControls to 8.53
+
+--3.6
+-Added: Seperate 32bit and 64bit builds and setups
+-Added: Preview button (thx to Bluedraft )
+-Fixed: Prores quality option labels were wrong (thx to CyberOtter)
+-Fixed: Range editor allowed duration to be zero
+-Fixed: "+1 Sec" buttons couldn't increase their range to max
+
+--3.5
+-Added: CRF encoding with x264
+-Added: TEncoder will now create a temp folder in output when muxing to mp4
+-Added: New skins
+-Fixed: Video and audio settings didn't resize properly (thx to bug reporters)
+-Fixed: Video only encoding with MEncoder failed
+-Fixed: Custom general options for MEncoder and FFMpeg weren't saved
+-Fixed: Disabling skin caused text to be invisible
+-Fixed: Enabling subtitles when no subtitle existed caused problems
+-Fixed: Mp4 output with MEncoder was placed in wrong folder
+-Fixed: Tray icon didn't work
+-Fixed: "Export to script" didn't work
+-Fixed: Selecting items from file list with more than one audio track caused problems
+
+--3.4.1 Hotfix
+-Fixed: Copying video while encoding audio caused extension to be wrong (thx to woody345)
+-Fixed: Couldn't copy video without encoding audio
+-Fixed: Couldn't encode to huffyuv with MEncoder
+
+--3.4
+-Added: Russian translation (thx to A.Strezh)
+-Added: Basque translation (thx to Xabier Aramendi)
+-Added: A new GUI layout in order to make TEncoder work with lower resolutions. Older settings will be reseted.
+-Fixed: Spanish translation caused interface to distorted
+-Fixed: TEncoder checked for updates at startup even if it was disabled (thx to kolpotoru)
+-Fixed: GUI got distorted after an encode
+-Fixed: Audio ID problem with VOB and MTS files
+-Fixed: "?" was passed as subtitle file
+-Fixed: MEncoder produced invalid mp4 files
+
+--3.3.2 Hotfix
+-Fixed: FFMpeg second pass did not start
+-Fixed: Some GUI problems
+-Reverted: FFMpeg to version N-49610-gc2dd5a1
+-Updated: MPlayer and MEncoder to sherpya build r35968+g39eaacf
+
+--3.3.1 Hotfix
+-Fixed: "Index out of bounds" error while adding files (thx to bug reporters)
+-Updated: FFMpeg to latest from http://ffmpeg.zeranoe.com/builds/
+
+--3.3
+-Added: Option to disable folder structure creation
+-Added: Spanish translation (thx to Franco Ezequiel)
+-Added: Some GUI layout changes
+-Fixed: Adding video files with no audio stream could cause problems
+-Fixed: Audio ID problem with some vob and mpeg files
+-Updated: AlphaControls to 8.20
+-Updated: FFMpeg to latest from http://ffmpeg.zeranoe.com/builds/
+-Updated: MPlayer and MEncoder to SB50 from http://www.spirton.com/
+
+--3.2.1
+-Added: FFMpeg will now use Soxr for resampling
+-Added: "Donation" and "Send mail to author" buttons
+-Updated: AlphaControls to 8.17
+-Updated: FFMpeg to latest from http://ffmpeg.zeranoe.com/builds/
+
+--3.2
+-Added: TEncoder will save encoder logs to AppData folder now
+-Added: New skin "AlterMetro"
+-Added: An option to disable CPU usage bar
+-Added: Advanced video settings (only for x264 at the moment)
+-Improved: Audio track ID detection
+-Improved: Audio codec detection for "Direct Stream Copy"
+-Fixed: Wrong container format for some profiles (thx to MilesAhead)
+-Fixed: Moving files up/down in the list caused problems
+-Fixed: Main window disappeared if minimized after an encode (thx to LigH)
+-Fixed: A few minor UI problems
+-Updated: AlphaControls to 8.16
+-Updated: MPlayer and MEncoder to SB49 from http://www.spirton.com/
+-Updated: FFMpeg to latest from http://ffmpeg.zeranoe.com/builds/
+
+--3.1
+-Added: Turkish translation (Translators, please see "To translators.txt")
+-Added: Profiles are now stored in different files under "Profiles" folder
+-Added: User created Profiles will be saved in a differen directory
+-Added: Custom video and audio options to profiles
+-Added: Container options to profiles
+-Added: Parent folder of input file will be created in the output folder
+-Added: Option to use 32bit FFmpeg eventhough the OS is 64bit
+-Added: New skin "Mint"
+-Fixed: FFMpeg could not open AVS files (thx to goorawin)
+-Fixed: Some settings were not saved
+-Fixed: Preview window taskbar progress state problem
+-Fixed: When a profiles was added/deleted/edited, profile lists would become empty
+-Updated: AlphaControls to 8.04
+-Updated: FFMpeg to 20-11-2012
+-Updated: MPlayer and MEncoder to SB43
+
+--3.0
+-Added: 64bit ffmpeg will be used when it's possible
+-Added: Shutdown PC, log off or reboot post-encode options
+-Added: Option to run single process when video codec is x264
+-Added: CPU usage indicator
+-Added: Tray icon and balloon hint
+-Added: New skin "Zest"
+-Fixed: Audio summary info was wrong in some cases
+-Fixed: Reseting settings caused wrong skin selection
+-Fixed: Speex files could not be added
+-Fixed: BAT files with MEncoder as encoder could not start
+-Fixed: Default output folder is program folder for portable version
+-Updated: FFmpeg to 11-05-2012 from ffmpeg.zeranoe.com
+-Updated: MPlayer and MEncoder to SB42
+-Updated: AlphaControls to 8.03
+
+--2.9
+-Added: Support for audio codec Opus
+-Added: Support for .opus files
+-Added: Decreased main window dimensions (will reset position info)
+-Fixed: Custom arguments were not passed if codec is "Copy"
+-Fixed: MEncoder "Direct Stream Copy" container problem
+-Fixed: Minor UI problems
+-Updated: MPlayer and MEncoder to SB41
+-Updated: MediaInfo to 0.7.61
+-Updated: FFmpeg to latest from ffmpeg.zeranoe.com
+
+--2.8
+-Added: Option to make TEncoder delete unfinished files
+-Added: Custom arguments for MEncoder and FFmpeg are seperated
+-Added: Progress will be shown properly while adding folders
+-Added: Preview mode for audio only sources
+-Added: "Preview" window will show file's name in its title now
+-Added: Preview progress will be shown in taskbar
+-Added: Two new skins "WEB2" and "Subway"
+-Added: File being process will be shown during adding process
+-Fixed: Unnecessary warning if saving script enabled with MEncoder as encoder
+-Fixed: "Abort" button was disabled in some cases
+-Updated: AlphaControls to 8.02
+
+--2.7
+-Added: Support for 3gp container
+-Added: Video options won't be passed if source is audio file
+-Added: Some UI changes to "Logs" and "Settings" windows
+-Fixed: "Canvas does not allow drawing" errors
+-Fixed: Audio to audio convertion failed
+-Fixed: Wrong file extension if video options were set for audio only source
+-Fixed: Flickers due to excesive output from backends
+-Fixed: Errors occur when Logs were created
+-Updated: AlphaControls to 8.01 Beta
+-Updated: FFMpeg
+-Updated: MPlayer and MEncoder
+-Updated: JVCL to 3.47
+-Updated: MadExcept to 4.0.5
+
+--2.6
+-Added: User will be warned if given bitrate values are not numeric
+-Fixed: Some presets caused size edits and size list to show invalid values
+-Fixed: Audio track selection was ignored if "None" video codec was selected
+-Fixed: A few UI problems (thanks to Zoni)
+-Fixed: In rare cases, TEncoder could not be minimized
+-Fixed: Default skin was wrong for portable version
+-Updated: AlphaControls to 7.70
+-Updated: FFmpeg to git-bbe9fe4
+
+--2.5
+-Added: Support for Speex (FFMpeg only)
+-Added: About 840 device presets (old presets will not work!)
+-Added: several new skins
+-Added: Support for rmvb files as input
+-Fixed: Encoding failed if aspect ratio was forced with some video codecs
+-Fixed: TEncoder crashed if "Close TEncoder" was selected as post-encode option
+-Fixed: Settings weren't saved if "Close TEncoder" was selected as post-encode option 
+-Fixed: Video and audio summary problems
+-Improved: Audio codec detection (FLAC)
+-Updated: MediaInfo to 0.7.60
+-Updated: FFmpeg to git-cb3591e
+
+--2.4
+-Added: Video "Direct Stream Copy" is going to use selected container
+-Added: A few minor UI changes
+-Fixed: Selecting Huffyuv disabled all video settings (thx to pintcat)
+-Fixed: Huffyuv resizing, aspect ratio etc problems with FFMpeg
+-Fixed: FFMpeg is default encoder for Huffyuv now (thx to pintcat)
+-Fixed: Audio extraction may not work properly in some cases
+-Improved: Audio codec detection
+-Updated: AlphaControls to 7.68
+-Updated: FFMpeg to git-070b0e1
+
+--2.3
+-Added: Support for video codec Huffyuv (thx to pintcat and cauptain)
+-Added: Skin "Toxic"
+-Fixed: Audio only mode sometimes failed
+-Fixed: Audio delay used even though video was disabled
+-Fixed: Convertion sometimes failed with files without audio
+-Fixed: Passed time was shown wrong
+-Fixed: A few UI problems
+-Improved: Audio codec detection for audio copying
+-Updated: AlphaControls to 7.67
+
+--2.2
+-Added: Language info will be shown for audio tracks
+-Added: Option to keep audio sampling rate
+-Added: Option to keep audio channels
+-Added: "Delete" button to Profile editor to delete profiles
+-Added: Support for WMAV2
+-Added: TEncoder's main window size can be reduced now
+-Added: TEncoder will add index if output file already exists
+-Added: Option to force encoders to calculate width according to aspect ratio
+-Fixed: Logs saving problems (thanks to gnaw)
+-Fixed: Changed "Copy" codec to "Direct Stream Copy" (thanks to gnaw)
+-Fixed: Problems caused by files without any audio streams
+-Fixed: Wrong audio track problem
+-Fixed: Filtering problems
+-Fixed: Portable version default output path is now application folder (thx to portablefreeware.com/forum users)
+-Fixed: Profile editor "Refresh" button press caused profiles to dissappear from main window
+-Fixed: Proper skin was not applied when skinning was enabled after fresh start
+-Fixed: Some minor UI problmes
+-Improved: Some UI changes
+-Improved: Filtering options passed to encoder
+
+--2.1
+-Added: Cropping (beta)
+-Added: Option to disable skinning (thanks to zo-ni)
+-Added: Option to do CBR video encoding with FFMpeg
+-Fixed: Mencoder hard-coded subtitles eventhought subtitles were disabled (thanks to gnaw)
+-Fixed: A few visual problems (thanks to gnaw)
+-Fixed: Post-encode action value could not be saved
+
+--2.0.1 Hotfix
+-Fixed: Mencoder could not start
+-Fixed: Mencoder two pass could not start
+
+--2.0
+-Fixed: Didnt keep encoder logs if "Nothing" as post-encode option wasnt selected
+-Fixed: FFMpeg could not do two pass h.264 encoding
+-Fixed: m2ts files could not be draged and dropped
+-Fixed: Custom args were not passed correctly
+-Updated: AlphaControls to 7.65
+-Updated: MediaInfo.dll to 0.7.58
+-Updated: FFMpeg to N-41074-g9c27f29
+
+--1.9
+-Added: Option specify custom video width and height values
+-Added: Audio extraction now produces valid files
+-Added: A new skin: LightBoard
+-Fixed: 1440x1080 resolution was passed wrong to the encoders
+
+--1.8.1 Hotfix
+-Fixed: New resolution values were not effective
+-Fixed: Total progress value would exceed 100
+
+--1.8
+-Added: Option to use source folder as output folder
+-Added: Hue for skins
+-Added: Post-encode option to settings window
+-Added: New resolutions
+-Added: New fps values
+-Improved: Settings window UI layout
+-Fixed: 29.99 is corrected to 29.97
+-Fixed: Icon resolution problems
+-Fixed: Portable version would delete wrong txt files
+-Updated: MediaInfo.dll to 0.7.56
+-Updated: AlphaControls to 7.63
+-Updated: JVCL to 3.45
+-Updated: FFMpeg to N-39664-g6bfb304
+-Updated: MEncoder and Mplayer to svn-34401
+
+--1.7.1 Hotfix
+-Added: Support for m2ts files
+-Fixed: FFMpeg two pass problem
+-Fixed: FFMpeg aspect ratio problem with VP8
+-Improved: A few minor UI improvements
+
+--1.7
+-Added: Player
+-Added: Range Editor
+-Added: Option to specify subtitle delay for each file
+-Added: Option to scecify audio delay for each file
+-Added: Audio and video bitrates can be entered manually
+-Added: 4 more aspect ratio options
+-Added: Installer can create folder group in start menu
+-Added: MPlayer log
+-Added: Two new skins Lucy and Air
+-Fixed: MEncoder encode range misscalculation
+-Fixed: MEncoder no audio problem
+-Fixed: None as video and audio codec warning
+-Fixed: Subtitle and audio problems if file removed because it doesn't exist
+-Fixed: Drag and drop did not work
+-Fixed: Encoding time was not accurate
+-Removed: Splash screen because it causes problems with drag and drop
+-Improved: Some minor UI changes
+-Updated: MediaInfo to 0.7.53
+-Updated: AlphaControls to 7.60
+-Updated: FFMpeg to git-6833fe4
+
+--1.6
+-Added: Option to select audio or video only encoding
+-Added: Support for audio encoding (mp3 to aac etc.)
+-Added: Support for Webm (VP8 + OggVorbis)
+-Added: Splash Screen
+-Added: Option to apply range settings to all files in the list
+-Fixed: FFMpeg encode range misscalculation
+-Fixed: Command lines were not shown in logs
+-Fixed: Default skin was not Ubuntu
+-Fixed: FFmpeg Mpeg4+AAC+Mp4 problem
+-Improved: Encoding screen is merged with main screen
+-Updated: AlphaControls to 7.59
+
+--1.5 BETA
+-Added: 5.1 channel support
+-Added: Option to preserve aspect ratio
+-Added: Encoder changes according to selected video codec
+-Added: Options to select between multiple audio and subtitle tracks for each file
+-Added: Option to specify encoding range (in sec.) for each file
+-Added: Encoder output is shown during encoding process
+-Added: Skins
+-Fixed: AAC encoding problems with MEncoder
+-Fixed: A few minor bugs
+-Improved: Properties windows shows more info now
+-Improved: Some UI changes
+-Updated: AlphaControls to 7.57
+-Updated: MediaInfo to 0.7.52
+-Updated: FFmpeg to N-35966-g1d0ae92
+-Updated: MPlayer and MEncoder to Sherpya-SVN-r34401-4.6.2
+-Updated: libfaac to 1.28
+
+--1.4
+-Moved: Custom options, two pass and subtitle options to "Extra Options" window
+-Added: Deinterlaceing
+-Added: TEncoder will remember its last position and state
+-Added: Custom audio and video options
+-Added: Total progress is now updated smoothly
+-Added: Open output folder option to post-encode options
+-Added: Files that do not exist will be removed from list before encoding starts
+-Fixed: Temp. folder could not be cleared if encoder log keeping was off
+-Fixed: Flv, m4v and m2v files could not be opended sometimes
+-Removed: Some of the skins
+-Updated: AlphaControls to 7.55
+-Updated: MediaInfo to 0.7.51
+
+--1.3
+-Added: Option to select what to do after encoding
+-Added: Windows 7 taskbar progress
+-Added: Option specify audio track for multiple audio tracks
+-Added: Properties window now shows multiple audio/vidoe tracks
+-Added: Option to specify container for output file 
+-Added: New skins
+-Added: Shortcut keys
+-Added: Drag&Drop support
+-Fixed: Two passes being done simultaneously problem
+-Fixed: Two pass logs deleted now
+-Fixed: FFMpeg path problem with script
+-Fixed: FFmpeg video bitrate accuracy problem
+-Fixed: Naming issues with script saving on some systems
+-Fixed: Some file list menu commands not working
+-Fixed: Orignal video size option problem
+-Improved: A new UI layout and a few minor changes
+-Improved: Encoding window now offers more info
+-Updated: MediaInfo to 0.7.50
+-Updated: AlphaControls to 7.51
+-Updated: MPlayer and Mencoder to r34118
+
+--1.2
+-Added: Profiles and profile editor
+-Added: Settings window
+-Added: 7 Skins
+-Added: Saturation option for skins
+-Added: More subtitle settings
+-Added: A new icon
+-Added: A main menu
+-Added: A few new options to list menu
+-Added: Extra thread options passed to encoders
+-Added: Hints to all controls
+-Fixed: Two pass log files were not deleted
+-Fixed: Mencoder could not encode files to H264
+-Fixed: AAc related problems (added faac.dll)
+-Fixed: "TEncoder.bat" problem
+-Improved: Moved subtitle settings to Settings window 
+-Improved: Moved number of processes setting to Settings Window
+-Improved: Merged add buttons under a button and a popup menu
+-Improved: Set the min. window size
+-Improved: Update options are carried to Settings Window
+-Updated: MediaInfo to 0.7.46
+
+--1.1--
+-Added: Encoder logs
+-Added: Two pass options
+-Added: Option to pass custom arguments to encoders
+-Added: Option to export command lines into a script
+-Added: New progress bars
+-Fixed: Main window was not disabled when encoding starts 
+
+--1.0--
+-First public release
