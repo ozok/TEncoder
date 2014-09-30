@@ -382,6 +382,11 @@ var
   ProfileFile: TIniFile;
   ProfileIndex: integer;
 begin
+  if Length(ProfileList.Text) < 1  then
+  begin
+    Application.MessageBox('Please select an existing profile or create a new one using "New" button.', 'Error', MB_ICONERROR);
+    Exit;
+  end;
 
   if Copy(ProfileList.Text, 1, Length(UserStr)) = UserStr then
   begin

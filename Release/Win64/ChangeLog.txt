@@ -8,7 +8,8 @@ TEncoder Change Log
 -Fixed: [Video/Audio Converter] Audio index problems with MEncoder
 -Fixed: [Video/Audio Converter] Duration information from some mkv files couldn't be extracted
 -Fixed: [Video Downloader] Couldn't mux if file name ended/started with space
--Fixed: Reset in trim window didn't work properly
+-Fixed: [Profiles] Users could create profiles with empty file names
+-Fixed: [Trimming] Reset didn't work properly
 -Updated: Youtube-dl
 
 --4.4.0
