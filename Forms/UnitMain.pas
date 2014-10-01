@@ -612,7 +612,7 @@ type
     // converts hh:mm:ss to integer
     function TimeToInt(TimeStr: string): Integer;
     // converts hh:mm:ss.ms to integer
-    function TimeToIntEx(TimeStr: string): Integer;
+//    function TimeToIntEx(TimeStr: string): Integer;
     // checks if a given string is numeric
     function IsStringNumeric(Str: String): Boolean;
     // backend progress related
@@ -646,49 +646,10 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
   UnitVideotoGIF, UnitBatchAdd, UnitWatermark;
 
 const
-  Portable = False;
-  Build = 4773;
+  Portable = True;
+  Build = 4931;
 
 {$R *.dfm}
-
-function CreateSubCmd(VideoName: String): String;
-var
-  subname1: String;
-  subname2: String;
-  subname3: String;
-  subname4: String;
-  vname: String;
-begin
-
-  if (FileExists(VideoName)) then
-  begin
-    vname := ExtractFileName(VideoName);
-    Delete(vname, Length(vname) - 3, 4);
-    subname1 := ExtractFileDir(VideoName) + '\' + vname + '.srt';
-    subname2 := ExtractFileDir(VideoName) + '\' + vname + '.idx';
-    subname3 := ExtractFileDir(VideoName) + '\' + vname + '.ass';
-    subname4 := ExtractFileDir(VideoName) + '\' + vname + '.sub';
-
-    if (FileExists(subname1)) then
-    begin
-      Result := ' -sub ' + '"' + subname1 + '"';
-    end
-    else if (FileExists(subname2)) then
-    begin
-      Result := ' -sub ' + '"' + subname2 + '"';
-    end
-    else if (FileExists(subname3)) then
-    begin
-      Result := ' -sub ' + '"' + subname3 + '"';
-    end
-    else if (FileExists(subname4)) then
-    begin
-      Result := ' -sub ' + '"' + subname4 + '"';
-    end;
-
-  end;
-
-end;
 
 procedure TMainForm.A2Click(Sender: TObject);
 Var
@@ -4845,7 +4806,6 @@ procedure TMainForm.FormShow(Sender: TObject);
 var
   FilesListFile: string;
 begin
-
   // get options
   LoadOptions;
 
@@ -4925,6 +4885,12 @@ begin
     StartBtn.OnClick(Self);
   end;
   UpdateSummary;
+
+  AddToLog(0, 'Version: ' + AboutForm.Label2.Caption);
+  AddToLog(0, 'Portable: ' + BoolToStr(Portable, True));
+  AddToLog(0, 'OS: ' + Trim(Info.OS.ProductName));
+  AddToLog(0, 'CPU: ' + Trim(Info.CPU.Name));
+  AddToLog(0, '');
 
   Self.BringToFront;
 end;
@@ -6315,7 +6281,6 @@ end;
 procedure TMainForm.RemoveLogs;
 var
   Search: TSearchRec;
-  i: Integer;
 begin
   if (FindFirst(AppDataFolder + '\*.log', faAnyFile, Search) = 0) then
   Begin
@@ -7554,64 +7519,6 @@ begin
 
   end;
 
-end;
-
-function TMainForm.TimeToIntEx(TimeStr: string): Integer;
-var
-  TimeList: TStringList;
-  hour: Integer;
-  minute: Integer;
-  second: Integer;
-  milisec: integer;
-  LDotPos: integer;
-  LMSStr: string;
-  LMS: integer;
-begin
-  Result := 0;
-  if (Length(TimeStr) = 10) or (Length(TimeStr) = 11) or (Length(TimeStr) = 12) then
-  begin
-    LDotPos := Pos('.', TimeStr);
-    if LDotPos > 0 then
-    begin
-      LMSStr := Trim(Copy(TimeStr, LDotPos + 1, MaxInt));
-      TimeStr := Trim(Copy(TimeStr, 1, LDotPos-1));
-      if not TryStrToInt(LMSStr, LMS) then
-      begin
-        LMS := 0;
-      end;
-    end
-    else
-    begin
-      LMSStr := '0';
-    end;
-    TimeList := TStringList.Create;
-    try
-      TimeList.Delimiter := ':';
-      TimeList.StrictDelimiter := True;
-      TimeList.DelimitedText := TimeStr;
-      hour := 0;
-      minute := 0;
-      second := 0;
-      if TimeList.Count = 3 then
-      begin
-        if IsStringNumeric(TimeList[0]) then
-        begin
-          hour := StrToInt(TimeList[0]);
-        end;
-        if IsStringNumeric(TimeList[1]) then
-        begin
-          minute := StrToInt(TimeList[1]);
-        end;
-        if IsStringNumeric(TimeList[2]) then
-        begin
-          second := StrToInt(TimeList[2]);
-        end;
-        Result := ((hour * 3600000) + (minute * 60000) + (second * 1000)) + LMS;
-      end;
-    finally
-      FreeAndNil(TimeList);
-    end;
-  end;
 end;
 
 procedure TMainForm.TitlesListChange(Sender: TObject);

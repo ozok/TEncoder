@@ -74,10 +74,8 @@ uses UnitMain;
 
 procedure TAboutForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-
   MainForm.Enabled := True;
   MainForm.BringToFront;
-
 end;
 
 procedure TAboutForm.FormCreate(Sender: TObject);

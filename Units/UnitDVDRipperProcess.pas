@@ -163,6 +163,7 @@ end;
 
 function TDVDRipProcess.GetCurrentProcessType: TDVDProcessType;
 begin
+  Result := dvdmencoder;
   if FCommandIndex < FProcessTypes.Count then
     Result := FProcessTypes[FCommandIndex];
 end;
