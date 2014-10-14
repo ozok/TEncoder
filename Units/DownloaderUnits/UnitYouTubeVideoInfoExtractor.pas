@@ -433,8 +433,8 @@ var
 begin
   FThumbStatus := stReading;
 //FThumbProcess.ConsoleOutput.SaveToFile('C:\thumb.txt');
+  LImageTypeExt := TImageType.Create(FImageName);
   try
-    LImageTypeExt := TImageType.Create(FImageName);
     if LImageTypeExt.ImageType = '.jpg' then
     begin
       ResizeImg;
@@ -444,6 +444,7 @@ begin
       FImageName := '';
     end;
   finally
+    LImageTypeExt.Free;
     FThumbStatus := stDone;
   end;
 end;

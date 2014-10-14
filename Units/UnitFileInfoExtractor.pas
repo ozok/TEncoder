@@ -356,21 +356,24 @@ begin
         begin
           LLine := Copy(LLine, Length(LINE_START) + 1, MaxInt);
           LPos1 := Pos(VIDEO_LINE, LLine);
-          LMapStr := Copy(LLine, 1, LPos1 - 1);
-          FMapStrSplit.DelimitedText := LMapStr;
-          if FMapStrSplit.Count = 2 then
+          if LPos1 > 0 then
           begin
-            LPos1 := Pos('[', FMapStrSplit[1]);
-            if LPos1 > 0 then
+            LMapStr := Copy(LLine, 1, LPos1 - 1);
+            FMapStrSplit.DelimitedText := LMapStr;
+            if FMapStrSplit.Count = 2 then
             begin
-              FMapStrSplit[1] := Copy(FMapStrSplit[1], 1, LPos1-1);
+              LPos1 := Pos('[', FMapStrSplit[1]);
+              if LPos1 > 0 then
+              begin
+                FMapStrSplit[1] := Copy(FMapStrSplit[1], 1, LPos1-1);
+              end;
+              LPos1 := Pos('(', FMapStrSplit[1]);
+              if LPos1 > 0 then
+              begin
+                FMapStrSplit[1] := Copy(FMapStrSplit[1], 1, LPos1-1);
+              end;
+              FFFmpegVideoIndex := StrToInt(FMapStrSplit[1]);
             end;
-            LPos1 := Pos('(', FMapStrSplit[1]);
-            if LPos1 > 0 then
-            begin
-              FMapStrSplit[1] := Copy(FMapStrSplit[1], 1, LPos1-1);
-            end;
-            FFFmpegVideoIndex := StrToInt(FMapStrSplit[1]);
           end;
         end;
       end

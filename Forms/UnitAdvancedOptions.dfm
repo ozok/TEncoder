@@ -110,6 +110,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'General'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object MPEGAudioIDBtn: TsCheckBox
         Left = 8
         Top = 8
@@ -367,6 +371,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'ProRes'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object sLabel1: TsLabel
         Left = 3
         Top = 44

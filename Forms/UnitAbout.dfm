@@ -4123,7 +4123,7 @@ object AboutForm: TAboutForm
         Align = alTop
         Alignment = taCenter
         AutoSize = False
-        Caption = '4.4.0.4773'
+        Caption = '4.5.2.4940'
         ParentFont = False
         Layout = tlCenter
         Font.Charset = DEFAULT_CHARSET
@@ -4191,10 +4191,6 @@ object AboutForm: TAboutForm
       Caption = '3rd Parties'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label10: TsLabel
         Left = 159
         Top = 73

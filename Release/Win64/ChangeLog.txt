@@ -1,5 +1,18 @@
 TEncoder Change Log
 
+--4.5.3
+-Fixed: [Video Downloader] "Access violation" errors when removing items from the list
+-Updated: youtube-dl
+
+--4.5.2
+-Removed: Ads from installers
+
+--4.5.1 Hotfix
+-Fixed: [Video/Audio Converter] Wouldn't encode video if video stream wasn't the first stream
+-Fixed: [General] Many memory leaks
+-Fixed: [General] Version info shown in the interface was wrong
+-Fixed: [General] 32bit versions would report memory leaks on exit
+
 --4.5.0
 -Added: [Video/Audio Converter] Support for embedded subtitles
 -Added: [Video/Audio Converter] Support for ".ts" files

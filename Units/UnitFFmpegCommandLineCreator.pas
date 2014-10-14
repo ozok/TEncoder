@@ -655,13 +655,6 @@ begin
     begin
       // two passes encoding
       // first pass
-      // for copy each extension must be defined
-      // indivually
-      if VideoEncoderList.ItemIndex = 9 then
-      begin
-        // OutExtension := ExtractFileExt(FFileName);
-      end;
-
       OutName := CreateFileName(FFileName, OutExtension);
 
       // pass log file
@@ -671,13 +664,6 @@ begin
         VCodec + Container + ' -an "' + OutName + '"';
 
       // second pass
-      // for copy each extension must be defined
-      // indivually
-      if VideoEncoderList.ItemIndex = 9 then
-      begin
-        // OutExtension := ExtractFileExt(FFileName);
-      end;
-
       OutName := CreateFileName(FFileName, OutExtension);
 
       // pass log file
@@ -707,14 +693,7 @@ begin
         end
         else
         begin
-          if ConvertItems[FFileIndex].FFMmpegVideoID > -1 then
-          begin
-            AudioCMD := ' -map 0:0 -map 0:' + ConvertItems[FFileIndex].SelectedAudio + ' ';
-          end
-          else
-          begin
-            AudioCMD := ' -map 0:' + FloatToStr(ConvertItems[FFileIndex].FFMmpegVideoID) + ' -map 0:' + ConvertItems[FFileIndex].SelectedAudio + ' ';
-          end;
+          AudioCMD := ' -map 0:' + FloatToStr(ConvertItems[FFileIndex].FFMmpegVideoID) + ' -map 0:' + ConvertItems[FFileIndex].SelectedAudio + ' ';
         end;
       end;
       Result.SeconPassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD + ' -i "' + FFileName + '" -pass 2 -passlogfile "' + PassFile + '" ' + CreateRangeCMD(ConvertItems[FFileIndex].StartPosition, ConvertItems[FFileIndex].EndPosition) +
@@ -725,12 +704,7 @@ begin
       // single pass encoding
       // for copy each extension must be defined
       // indivually
-      if VideoEncoderList.ItemIndex = 9 then
-      begin
-        // OutExtension := ExtractFileExt(FFileName);
-      end
-      // for audio only mode
-      else if VideoEncoderList.ItemIndex = 11 then
+      if VideoEncoderList.ItemIndex = 11 then
       begin
         case AudioEncoderList.ItemIndex of
           1:
@@ -781,14 +755,7 @@ begin
         end
         else
         begin
-          if ConvertItems[FFileIndex].FFMmpegVideoID > -1 then
-          begin
-            AudioCMD := ' -map 0:0 -map 0:' + ConvertItems[FFileIndex].SelectedAudio + ' ';
-          end
-          else
-          begin
-            AudioCMD := ' -map 0:' + FloatToStr(ConvertItems[FFileIndex].FFMmpegVideoID) + ' -map 0:' + ConvertItems[FFileIndex].SelectedAudio + ' ';
-          end;
+          AudioCMD := ' -map 0:' + FloatToStr(ConvertItems[FFileIndex].FFMmpegVideoID) + ' -map 0:' + ConvertItems[FFileIndex].SelectedAudio + ' ';
         end;
       end;
       Result.SinglePassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD + ' -i "' + FFileName + '" ' + CustomArgs + ' ' + CreateRangeCMD(ConvertItems[FFileIndex].StartPosition, ConvertItems[FFileIndex].EndPosition) + VCodec + Container +

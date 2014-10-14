@@ -513,7 +513,7 @@ type
     procedure AddFile(const FileName: string);
     // adds files from a text file.
     // not an exposed feature that may be used to automate TEncoder in the
-    // futureç
+    // future
     procedure AddFilesForQueue(const FileListName: string);
     // enable/disable controls according to encoding state
     procedure SwitchToEncoding();
@@ -612,7 +612,7 @@ type
     // converts hh:mm:ss to integer
     function TimeToInt(TimeStr: string): Integer;
     // converts hh:mm:ss.ms to integer
-//    function TimeToIntEx(TimeStr: string): Integer;
+    // function TimeToIntEx(TimeStr: string): Integer;
     // checks if a given string is numeric
     function IsStringNumeric(Str: String): Boolean;
     // backend progress related
@@ -647,7 +647,7 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
 
 const
   Portable = True;
-  Build = 4931;
+  Build = 4940;
 
 {$R *.dfm}
 
@@ -1213,7 +1213,7 @@ begin
       end
       else
       begin
-        AddToLog(0, 'Duration is zero: ' + ExtractFileName(FileName) );
+        AddToLog(0, 'Duration is zero: ' + ExtractFileName(FileName));
         LConvertItem.Free;
         Exit;
       end;
@@ -2002,6 +2002,10 @@ begin
     FVideoDownloadListItems[i].Free;
   end;
   FVideoDownloadListItems.Clear;
+  for I := 0 to FDownloadItems.Count - 1 do
+  begin
+    FDownloadItems[i].Free;
+  end;
   FDownloadItems.Clear;
 end;
 
@@ -3329,12 +3333,19 @@ end;
 
 procedure TMainForm.DeleteBtnClick(Sender: TObject);
 var
-  LItemIndex: integer;
+  LItemIndex, i: integer;
 begin
   LItemIndex := (Sender as TsButton).Tag;
   FVideoDownloadListItems[LItemIndex].Panel.Visible := False;
   FVideoDownloadListItems.Delete(LItemIndex);
   FDownloadItems.Delete(LItemIndex);
+  for I := 0 to FVideoDownloadListItems.Count-1 do
+  begin
+    if FVideoDownloadListItems[i].DeleteButton.Tag > LItemIndex then
+    begin
+      FVideoDownloadListItems[i].DeleteButton.Tag := FVideoDownloadListItems[i].DeleteButton.Tag - 1;
+    end;
+  end;
 end;
 
 procedure TMainForm.DeleteTempFiles;
@@ -4561,6 +4572,15 @@ begin
       FVideoDownloadProcesses[i].Stop;
     end;
   end;
+  for I := 0 to FVideoDownloadListItems.Count - 1 do
+  begin
+    FVideoDownloadListItems[i].Free;
+  end;
+  for I := 0 to FDownloadItems.Count - 1 do
+  begin
+    FDownloadItems[i].Free;
+  end;
+
   ClearDownloadImages;
   RemoveLogs;
   SaveEncoderLogs;
@@ -4759,6 +4779,10 @@ var
 begin
   FreeAndNil(FTempFilesToDelete);
   FreeAndNil(FFilesToCheck);
+  for I := 0 to FTitles.Count - 1 do
+  begin
+    FTitles[i].Free;
+  end;
   FreeAndNil(FTitles);
   for I := Low(FEncoders) to High(FEncoders) do
     FEncoders[i].Free;
