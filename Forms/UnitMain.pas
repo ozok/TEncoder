@@ -633,7 +633,7 @@ type
     // for both mencoder and ffmpeg
     function CreateDeintCMD(const Preview: Boolean): string;
     // ffmpeg and mencoder thread commands
-    function ThreadCMD: string;
+    function ThreadCMD(const EncoderIndex: integer): string;
   end;
 
 var
@@ -1535,7 +1535,12 @@ begin
           // load program icon if download of thumb fails or user selected not to load it
           if FileExists(YIE.ImageName) then
           begin
-            LVideoDownloaderItem.PrevievImg.Picture.LoadFromFile(YIE.ImageName);
+            try
+              LVideoDownloaderItem.PrevievImg.Picture.LoadFromFile(YIE.ImageName);
+            except
+              // load default image in case of an error
+              LVideoDownloaderItem.PrevievImg.Picture.LoadFromFile(ExtractFileDir(Application.ExeName) + '\icon.ico');
+            end;
           end
           else
           begin
@@ -3339,7 +3344,7 @@ begin
   FVideoDownloadListItems[LItemIndex].Panel.Visible := False;
   FVideoDownloadListItems.Delete(LItemIndex);
   FDownloadItems.Delete(LItemIndex);
-  for I := 0 to FVideoDownloadListItems.Count-1 do
+  for I := 0 to FVideoDownloadListItems.Count - 1 do
   begin
     if FVideoDownloadListItems[i].DeleteButton.Tag > LItemIndex then
     begin
@@ -7408,37 +7413,31 @@ begin
   FuncPagesChange(Self);
 end;
 
-function TMainForm.ThreadCMD: string;
+function TMainForm.ThreadCMD(const EncoderIndex: integer): string;
 var
   NumberOfCores: Integer; // system value
   NumberOfThreads: Integer; // resultant value
   NumberOfSelectedThreads: Integer;
 begin
-  case EncoderList.ItemIndex of
+  case EncoderIndex of
     0:
       Result := '';
     1:
       Result := ' ';
   end;
-
   NumberOfCores := Info.CPU.ProcessorCount;
   NumberOfSelectedThreads := SettingsForm.NumberOfThreadsList.ItemIndex + 1;
-
   if FileList.Items.Count >= NumberOfCores then
   begin
-
     // if user selected less then available cores
     if NumberOfCores > NumberOfSelectedThreads then
     begin
       if NumberOfSelectedThreads < 0 then
         NumberOfSelectedThreads := 1;
-
       NumberOfThreads := NumberOfCores div NumberOfSelectedThreads;
-
       if NumberOfThreads > 1 then
       begin
-
-        case EncoderList.ItemIndex of
+        case EncoderIndex of
           0: // mencoder
             begin
               Result := ':threads=' + IntToStr(NumberOfThreads);
@@ -7448,27 +7447,22 @@ begin
               Result := ' -threads ' + IntToStr(NumberOfThreads) + ' ';
             end;
         end;
-
       end;
     end;
-
   end
   else
   begin
     if (FileList.Items.Count < NumberOfCores) then
     begin
       NumberOfThreads := NumberOfCores div FileList.Items.Count;
-
       if NumberOfThreads > 1 then
       begin
-
         // in any case
         if NumberOfThreads > 8 then
         begin
           NumberOfThreads := 8;
         end;
-
-        case EncoderList.ItemIndex of
+        case EncoderIndex of
           0: // mencoder
             begin
               Result := ':threads=' + IntToStr(NumberOfThreads);

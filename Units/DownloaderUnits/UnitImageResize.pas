@@ -21,7 +21,7 @@ unit UnitImageResize;
 
 interface
 
-uses Classes, Windows, SysUtils, Messages, StrUtils, Jpeg, Graphics;
+uses Classes, Windows, SysUtils, Messages, StrUtils, Jpeg, Graphics, madGraphics, PNGImage;
 
 type
   TImageResizer = class(TObject)
@@ -73,73 +73,57 @@ end;
 // code is from http://jetcracker.wordpress.com/2012/03/05/my-old-trash-resizing-images-in-delphi/
 function TImageResizer.ResizeJpg(const inFile, outFile: TFileName; const aQuality: TJPEGQualityRange): Boolean;
 var
-  Jpeg: TJPEGImage;
-  BMP: TBitmap;
-  LAR: double;
-  LARHeight: integer;
+  LJpeg: TJPEGImage;
+  LBMP: TBitmap;
+  LJpegBMP: TBitmap;
+  LOutJpeg: TJPEGImage;
 begin
   Result := FileExists(inFile);
-  if not Result then
-    Exit;
 
-  Jpeg := TJPEGImage.Create;
-  BMP := TBitmap.Create;
+  LJpeg := TJPEGImage.Create;
+  LBMP := TBitmap.Create;
+  LJpegBMP := TBitmap.Create;
   try
+    // try to load jpg from file
     try
-      // Load
-      Jpeg.LoadFromFile(inFile);
+      LJpeg.LoadFromFile(inFile);
     except
       Result := False;
       Exit;
     end;
-    if FHeight = -1 then
-    begin
-      // keep aspect ratio
-      LAR := Jpeg.Height / Jpeg.Width;
-      LARHeight := Round(FWidth * LAR);
+    // output bitmap
+    LBMP.PixelFormat := pf24bit;
+    LBMP.Width := 150;
+    LBMP.Height := Round(150 * (LJpeg.Height / LJpeg.Width));
+    // bitmap to hold data from jpeg
+    LJpegBMP.PixelFormat := pf24bit;
+    LJpegBMP.Width := LJpeg.Width;
+    LJpegBMP.Height :=LJpeg.Height;
+    LJpegBMP.Assign(LJpeg);
 
-      BMP.Width := FWidth;
-      BMP.Height := LARHeight;
-      BMP.PixelFormat := pf32bit;
-      // Change size
-      with BMP.Canvas do
-        StretchDraw(ClipRect, Jpeg);
-      // Move from Bitmap to Jpeg
-      Jpeg.Assign(BMP);
-      // Change quality
-      Jpeg.CompressionQuality := aQuality;
-      Jpeg.Compress;
+    try
+      StretchBitmap(LJpegBMP, LBMP, nil, nil, sqVeryHigh);
+    except
+      Result := False;
+      Exit;
+    end;
+
+    LOutJpeg := TJPEGImage.Create;
+    try
+      LOutJpeg.Assign(LBMP);
       try
-        // Save file
-        Jpeg.SaveToFile(outFile);
+        LOutJpeg.SaveToFile(outFile);
       except
         Result := False;
+        Exit;
       end;
-    end
-    else
-    begin
-      // dont keep aspect ratio
-      BMP.Width := FWidth;
-      BMP.Height := FHeight;
-      BMP.PixelFormat := pf24bit;
-      // Change size
-      with BMP.Canvas do
-        StretchDraw(ClipRect, Jpeg);
-      // Move from Bitmap to Jpeg
-      Jpeg.Assign(BMP);
-      // Change quality
-      Jpeg.CompressionQuality := aQuality;
-      Jpeg.Compress;
-      try
-        // Save file
-        Jpeg.SaveToFile(outFile);
-      except
-        Result := False;
-      end;
+    finally
+      LOutJpeg.Free;
     end;
   finally
-    FreeAndNil(Jpeg);
-    FreeAndNil(BMP);
+    LJpeg.Free;
+    LBMP.Free;
+    LJpegBMP.Free;
   end;
 end;
 

@@ -299,6 +299,7 @@ procedure TFileInfoExtractor.ProcessTerminate2(Sender: TObject; ExitCode: Cardin
 const
   LINE_START = 'Stream #';
   AUDIO_LINE = 'Audio:';
+  AUDIO_LINE2 = ': Audio:';
   DURATION_LINE = 'Duration: ';
   START_LINE = ', start:';
   VIDEO_LINE = ': Video:';
@@ -326,28 +327,70 @@ begin
           LPos1 := Pos('(', LLine);
           LPos2 := Pos(')', LLine);
           LLangStr := UpperCase(Copy(LLine, LPos1 + 1, LPos2 - LPos1 - 1));
-          LMapStr := Copy(LLine, 1, LPos1 - 1);
-          FMapStrSplit.DelimitedText := LMapStr;
-          if FMapStrSplit.Count >= 2 then
+          LMapStr := Trim(Copy(LLine, 1, LPos1 - 1));
+          if Length(LMapStr) > 0 then
           begin
-            LPos1 := Pos(AUDIO_LINE, LLine);
-            LLine := UpperCase(Trim(Copy(LLine, LPos1 + 1 + Length(AUDIO_LINE), MaxInt)));
-            LPos1 := Pos(',', LLine);
-            if LPos1 > 0 then
+            // video+audio
+            FMapStrSplit.DelimitedText := LMapStr;
+            if FMapStrSplit.Count >= 2 then
             begin
+              LPos1 := Pos(AUDIO_LINE, LLine);
+              LLine := UpperCase(Trim(Copy(LLine, LPos1 + 1 + Length(AUDIO_LINE), MaxInt)));
               LPos1 := Pos(',', LLine);
               if LPos1 > 0 then
               begin
-                LCodec := Copy(LLine, 1, LPos1 - 1);
-                FAudioExtensions.Add(CodecToExtension(LowerCase(LCodec)));
-                LPos1 := Pos('[', FMapStrSplit[1]);
+                LPos1 := Pos(',', LLine);
                 if LPos1 > 0 then
                 begin
-                  FMapStrSplit[1] := Copy(FMapStrSplit[1], 1, LPos1-1);
+                  LCodec := Copy(LLine, 1, LPos1 - 1);
+                  FAudioExtensions.Add(CodecToExtension(LowerCase(LCodec)));
+                  LPos1 := Pos('[', FMapStrSplit[1]);
+                  if LPos1 > 0 then
+                  begin
+                    FMapStrSplit[1] := Copy(FMapStrSplit[1], 1, LPos1-1);
+                  end;
+                  FAudioIndexes.Add(StrToInt(FMapStrSplit[1]));
+                  FAudioStreams.Add(LLangStr + ', ' + LLine);
                 end;
-                FAudioIndexes.Add(StrToInt(FMapStrSplit[1]));
-                FAudioStreams.Add(LLangStr + ', ' + LLine);
               end;
+            end;
+          end
+          else
+          begin
+            // probably audio only
+            LPos1 := Pos(AUDIO_LINE2, LLine);
+            LPos2 := Pos(')', LLine);
+            LLangStr := 'Und';
+            LMapStr := Trim(Copy(LLine, 1, LPos1));
+            if Length(LMapStr) > 0 then
+            begin
+              FMapStrSplit.DelimitedText := LMapStr;
+              if FMapStrSplit.Count >= 2 then
+              begin
+                LPos1 := Pos(AUDIO_LINE, LLine);
+                LLine := UpperCase(Trim(Copy(LLine, LPos1 + 1 + Length(AUDIO_LINE), MaxInt)));
+                LPos1 := Pos(',', LLine);
+                if LPos1 > 0 then
+                begin
+                  LPos1 := Pos(',', LLine);
+                  if LPos1 > 0 then
+                  begin
+                    LCodec := Copy(LLine, 1, LPos1 - 1);
+                    FAudioExtensions.Add(CodecToExtension(LowerCase(LCodec)));
+                    LPos1 := Pos('[', FMapStrSplit[1]);
+                    if LPos1 > 0 then
+                    begin
+                      FMapStrSplit[1] := Copy(FMapStrSplit[1], 1, LPos1-1);
+                    end;
+                    FAudioIndexes.Add(StrToInt(FMapStrSplit[1]));
+                    FAudioStreams.Add(LLangStr + ', ' + LLine);
+                  end;
+                end;
+              end;
+            end
+            else
+            begin
+              // todo: cant get file info error
             end;
           end;
         end
@@ -413,6 +456,9 @@ begin
   FSubtitleTrackIndexes.Clear;
   FAudioExtensions.Clear;
   FAudioMencoderIndexes.Clear;
+  FFFmpegVideoIndex := -1;
+  FMencoderVideoIndex := -1;
+  FDurationStr := '00:00:00.00';
 
   FFileName := FileName;
   GetSubtitles;

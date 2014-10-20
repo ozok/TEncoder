@@ -1,6 +1,7 @@
 TEncoder Change Log
 
 --4.5.3
+-Fixed: [Video/Audio Converter] Encoding audio files would fail
 -Fixed: [Video Downloader] "Access violation" errors when removing items from the list
 -Updated: youtube-dl
 

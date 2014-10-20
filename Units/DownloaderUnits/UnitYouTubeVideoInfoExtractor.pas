@@ -556,7 +556,7 @@ begin
   LIR := TImageResizer.Create(FImageName, FImageName);
   try
     LIR.Width := 150;
-    LIR.Height := -1;
+    LIR.Height := 150;
     LIR.Resize;
   finally
     LIR.Free;

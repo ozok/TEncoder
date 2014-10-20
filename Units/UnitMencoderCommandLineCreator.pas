@@ -544,23 +544,23 @@ begin
     case VideoEncoderList.ItemIndex of
       0: // mpeg 1
         begin
-          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc lavc -lavcopts vcodec=mpeg1video:vbitrate=' + VBitrate + MainForm.ThreadCMD;
+          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc lavc -lavcopts vcodec=mpeg1video:vbitrate=' + VBitrate + MainForm.ThreadCMD(0);
           VCodecPart2 := VAspect + ':' + CustomVideoArg + CreateAdvancedOptions;
         end;
       1: // mpeg 2
         begin
-          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc lavc -lavcopts  vcodec=mpeg2video:vbitrate=' + VBitrate + MainForm.ThreadCMD;
+          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc lavc -lavcopts  vcodec=mpeg2video:vbitrate=' + VBitrate + MainForm.ThreadCMD(0);
           VCodecPart2 := VAspect + ':vrc_buf_size=1835:vstrict=0' + ':' + CustomVideoArg + CreateAdvancedOptions;
         end;
       2: // xvid
         begin
-          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc xvid -xvidencopts bitrate=' + VBitrate + MainForm.ThreadCMD;
+          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc xvid -xvidencopts bitrate=' + VBitrate + MainForm.ThreadCMD(0);
           if (Length(VAspect) > 0) or (Length(CustomVideoArg) > 0) then
             VCodecPart2 := VAspect + ':' + CustomVideoArg + CreateAdvancedOptions;
         end;
       3: // mpeg 4
         begin
-          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc lavc -lavcopts  vcodec=mpeg4:vbitrate=' + VBitrate + MainForm.ThreadCMD;
+          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc lavc -lavcopts  vcodec=mpeg4:vbitrate=' + VBitrate + MainForm.ThreadCMD(0);
           VCodecPart2 := VAspect + ':' + CustomVideoArg + CreateAdvancedOptions;
           // ' -of lavf -lavfopts format=mp4 ';
         end;
@@ -568,12 +568,12 @@ begin
         begin
           if AdvancedOptionsForm.x264CRFBtn.Checked and AdvancedOptionsForm.x264Btn.Checked then
           begin
-            VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc x264 -x264encopts crf=' + StringReplace(AdvancedOptionsForm.x264CRFEdit.Text, ',', '.', []) + MainForm.ThreadCMD;
+            VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc x264 -x264encopts crf=' + StringReplace(AdvancedOptionsForm.x264CRFEdit.Text, ',', '.', []) + MainForm.ThreadCMD(0);
             VCodecPart2 := '' + ':' + CustomVideoArg + CreateAdvancedOptions;
           end
           else
           begin
-            VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc x264 -x264encopts bitrate=' + VBitrate + MainForm.ThreadCMD;
+            VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc x264 -x264encopts bitrate=' + VBitrate + MainForm.ThreadCMD(0);
             VCodecPart2 := '' + ':' + CustomVideoArg + CreateAdvancedOptions;
           end;
           // ' -of lavf -lavfopts format=mp4 ';
@@ -590,12 +590,12 @@ begin
         end;
       7: // vp8
         begin
-          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ffourcc VP80 -ovc lavc -lavcopts  vcodec=libvpx:vbitrate=' + VBitrate + MainForm.ThreadCMD;
+          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ffourcc VP80 -ovc lavc -lavcopts  vcodec=libvpx:vbitrate=' + VBitrate + MainForm.ThreadCMD(0);
           VCodecPart2 := VAspect + ':' + CustomVideoArg + CreateAdvancedOptions;
         end;
       8: // huffyuv
         begin
-          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc lavc -lavcopts  vcodec=ffvhuff' + MainForm.ThreadCMD;
+          VCodecPart1 := LVideoID + FilterCMD + VFPS + ' -ovc lavc -lavcopts  vcodec=ffvhuff' + MainForm.ThreadCMD(0);
           VCodecPart2 := VAspect + ':' + CustomVideoArg + CreateAdvancedOptions;
         end;
       10: // copy
