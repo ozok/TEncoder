@@ -647,7 +647,7 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
 
 const
   Portable = True;
-  Build = 4940;
+  Build = 4973;
 
 {$R *.dfm}
 
@@ -4605,6 +4605,7 @@ end;
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   AdvancedOptionsForm.SaveSettings;
+  FStopAddingLink := True;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);

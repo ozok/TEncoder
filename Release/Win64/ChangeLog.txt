@@ -1,8 +1,11 @@
 TEncoder Change Log
 
 --4.5.3
+-Added: [Video Downloader] Video thumbnails will be resized more smoothly
 -Fixed: [Video/Audio Converter] Encoding audio files would fail
 -Fixed: [Video Downloader] "Access violation" errors when removing items from the list
+-Fixed: [Video Downloader] Couldn't close the program while adding files
+-Fixed: [General] A few minor bugs
 -Updated: youtube-dl
 
 --4.5.2
