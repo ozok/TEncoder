@@ -36,7 +36,7 @@ uses
   sScrollBox, UnitYouTubeVideoInfoExtractor, UnitCommonTypes, acImage, UnitFileNameExtractor, Jpeg, Winapi.MMSystem,
   sMaskEdit, sCustomComboEdit, sToolEdit, sGroupBox, UnitDVDReader,
   JvUrlListGrabber, JvUrlGrabbers, JvThread, sStatusBar, UnitDownloadProcess, UnitDVDRipperProcess, UnitFileInfoExtractor,
-  sDialogs, RegularExpressions;
+  sDialogs, UnitDVDJob;
 
 type
   TFileInfoForAdding = packed record
@@ -336,6 +336,18 @@ type
     PostEncodeList3: TsComboBox;
     DVDFilterBtn: TsBitBtn;
     SubtitleTypesList: TsComboBox;
+    sPageControl1: TsPageControl;
+    sTabSheet4: TsTabSheet;
+    sTabSheet5: TsTabSheet;
+    DVDAddtoBatchBtn: TsBitBtn;
+    sPanel7: TsPanel;
+    DVDBatchRemoveBtn: TsBitBtn;
+    DVDBatchStartBtn: TsBitBtn;
+    DVDBatchStopBtn: TsBitBtn;
+    DVDBatchClearBtn: TsBitBtn;
+    DVDJobList: TsListView;
+    DVDPreTitleBtn: TsButton;
+    DVDNextTitleBtn: TsButton;
     procedure RemoveBtnClick(Sender: TObject);
     procedure RemoveAllBtnClick(Sender: TObject);
     procedure UpBtnClick(Sender: TObject);
@@ -444,6 +456,9 @@ type
     procedure DVDFolderEditAfterDialog(Sender: TObject; var Name: string; var Action: Boolean);
     procedure FuncPagesChange(Sender: TObject);
     procedure SubtitleTypesListChange(Sender: TObject);
+    procedure DVDAddtoBatchBtnClick(Sender: TObject);
+    procedure DVDPreTitleBtnClick(Sender: TObject);
+    procedure DVDNextTitleBtnClick(Sender: TObject);
 {$ENDREGION}
   private
     { Private declarations }
@@ -480,6 +495,7 @@ type
     FTitles: TList<TTitle>;
     // currently selected title
     FCurrentTitle: TTitle;
+    FDVDJobs: TDVDJobs;
 
     // removes temp files created during encoding.
     // list is populated by TEncoder.
@@ -3688,6 +3704,268 @@ begin
   end;
 end;
 
+procedure TMainForm.DVDAddtoBatchBtnClick(Sender: TObject);
+var
+  LCMD: TCommandLine;
+  LMp4CMD: string;
+  LExtractAudioFile: string;
+  LMEncoderMp4MuxExt: string;
+  LOggAudioCMD: string;
+  LOggRemuxExtension: string;
+  LRenameFile: TStringList;
+  LDVDJob: TDVDJob;
+  LItem: TListItem;
+  LOutputFileName: string;
+begin
+{$REGION 'Codec checks etc'}
+  // must choose a video codec
+  if (VideoEncoderList.ItemIndex = 10) or (VideoEncoderList.ItemIndex = 11) then
+  begin
+    Application.MessageBox('Select a video codec.', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+  // must choose an audio codec
+  if (AudioEncoderList.ItemIndex = 0) or (AudioEncoderList.ItemIndex = 10) then
+  begin
+    Application.MessageBox('Select an audio codec.', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+  // mencoder does not support speex encoding
+  if (AudioEncoderList.ItemIndex = 8) then
+  begin
+    Application.MessageBox('Mencoder does not support encoding audio with Speex codec!', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+  // mencoder does not support opus encoding
+  if (AudioEncoderList.ItemIndex = 9) then
+  begin
+    Application.MessageBox('Mencoder does not support encoding audio with Opus codec!', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+  // mencoder does not support prores encoding
+  if (VideoEncoderList.ItemIndex = 9) then
+  begin
+    Application.MessageBox('Mencoder does not support encoding video with ProRes codec!', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+  // check if given birate values are valid
+  if (VideoEncoderList.ItemIndex <> 9) and (VideoEncoderList.ItemIndex <> 10) then
+  begin
+    if not IsStringNumeric(AdvancedOptionsForm.VideobitrateList.Text) then
+    begin
+      Application.MessageBox('Please enter a valid video bitrate value!', 'Error', MB_ICONERROR);
+    end;
+  end;
+  if (AudioEncoderList.ItemIndex <> 9) and (AudioEncoderList.ItemIndex <> 0) then
+  begin
+    if not IsStringNumeric(AdvancedOptionsForm.AudioBitrateList.Text) then
+    begin
+      Application.MessageBox('Please enter a valid audio bitrate value!', 'Error', MB_ICONERROR);
+    end;
+  end;
+  // crf and two pass wont work
+  if (VideoEncoderList.ItemIndex = 4) and (AdvancedOptionsForm.x264Btn.Checked) and (AdvancedOptionsForm.x264CRFBtn.Checked) and (DoTwoPassBtn.Checked) then
+  begin
+    Application.MessageBox('CRF is incompatible with two pass!', 'Warning', MB_ICONWARNING);
+    Exit;
+  end;
+  // vp8 & mencoder & two pass
+  if DoTwoPassBtn.Checked and (VideoEncoderList.ItemIndex = 7) then
+  begin
+    if ID_YES = Application.MessageBox('Two pass VP8 encoding with Mencoder is problematic at the moment. Would you like to do a single pass?', 'Warning', MB_ICONWARNING or MB_YESNO) then
+    begin
+      DoTwoPassBtn.Checked := False;
+    end;
+  end;
+  // vp8 ogg vorbis webm
+  if (VideoEncoderList.ItemIndex = 7) and ((AudioEncoderList.ItemIndex <> 3) or (ContainerList.ItemIndex <> 7)) then
+  begin
+    Application.MessageBox('VP8 video codec works with only OggVorbis as audio codec and Webm as container.', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+{$ENDREGION}
+  // a title must be selected
+  if FCurrentTitle <> nil then
+  begin
+    if Length(OutputFileNameEdit.Text) > 0 then
+    begin
+      LDVDJob := TDVDJob.Create;
+      LOutputFileName := '"' + DVDFolderEdit.Text + '"';
+
+      // create command lines
+      LCMD := CreateDVDCMD;
+
+      if DoTwoPassBtn.Checked then
+      begin
+        // two pass
+        // first pass
+        LDVDJob.CMDs.Add(LCMD.FirstPassCMD);
+        LDVDJob.ProcessTypes.Add(dvdmencoder);
+        LDVDJob.EncoderPaths.Add(MencoderPath64);
+        LDVDJob.FilePaths.Add(DVDFolderEdit.Text);
+        LDVDJob.Infos.Add('First pass');
+        AddToLog(6, '1st pass command: ' + LCMD.FirstPassCMD);
+        // second pass
+        LDVDJob.CMDs.Add(LCMD.SeconPassCMD);
+        LDVDJob.ProcessTypes.Add(dvdmencoder);
+        LDVDJob.EncoderPaths.Add(MencoderPath64);
+        LDVDJob.FilePaths.Add(DVDFolderEdit.Text);
+        LDVDJob.Infos.Add('Second pass');
+        AddToLog(6, '2nd pass command: ' + LCMD.SeconPassCMD);
+      end
+      else
+      begin
+        // single pass
+        LDVDJob.CMDs.Add(LCMD.SinglePassCMD);
+        LDVDJob.ProcessTypes.Add(dvdmencoder);
+        LDVDJob.EncoderPaths.Add(MencoderPath64);
+        LDVDJob.FilePaths.Add(DVDFolderEdit.Text);
+        LDVDJob.Infos.Add('Encoding');
+        AddToLog(6, 'Single pass command: ' + LCMD.SinglePassCMD);
+      end;
+      // mencoder doesn't seem to be able produce valid ogg streams.
+      // we first convert to flac then to ogg using ffmpeg
+      if AudioEncoderList.ItemIndex = 3 then
+      begin
+        // convert flac audio to ogg usingffmpeg
+        LOggRemuxExtension := ExtractFileExt(LCMD.OutputFile);
+        LOggAudioCMD := '-y -i "' + LCMD.OutputFile + '" -c:v copy -c:a libvorbis -ab ' + AdvancedOptionsForm.AudioBitrateList.Text + 'k "' + ChangeFileExt(LCMD.OutputFile, '_temp' + LOggRemuxExtension) + '"';
+        LDVDJob.CMDs.Add(LOggAudioCMD);
+        LDVDJob.ProcessTypes.Add(dvdffmpeg);
+        LDVDJob.EncoderPaths.Add(FFMpegPath);
+        LDVDJob.FilePaths.Add(DVDFolderEdit.Text);
+        LDVDJob.Infos.Add('Encoding');
+        AddToLog(6, 'Ogg encoding command: ' + LOggAudioCMD);
+        // rename converted file to original output file name
+        LRenameFile := TStringList.Create;
+        try
+          LRenameFile.Add(LCMD.OutputFile);
+          LRenameFile.Add(ChangeFileExt(LCMD.OutputFile, '_temp' + LOggRemuxExtension));
+          LRenameFile.SaveToFile(FTempFolder + '\dvdogg.txt', TEncoding.UTF8);
+          LDVDJob.CMDs.Add('"' + FDVDRenamePath + '" "' + FTempFolder + '\dvdogg.txt"');
+          LDVDJob.ProcessTypes.Add(dvdrenametool);
+          LDVDJob.EncoderPaths.Add('');
+          LDVDJob.Infos.Add('Renaming');
+          AddToLog(6, 'Renaming command: "' + FDVDRenamePath + '" "' + FTempFolder + '\dvdogg.txt"');
+          LDVDJob.TempFiles.Add(FDVDRenamePath + '" "' + FTempFolder + '\dvdogg.txt');
+        finally
+          LRenameFile.Free;
+        end;
+      end;
+
+      // mux to mp4
+      if ContainerList.ItemIndex = 2 then
+      begin
+        // raw temp video extension
+        if VideoEncoderList.ItemIndex = 4 then
+        begin
+          // h264
+          LMEncoderMp4MuxExt := '_.h264'
+        end
+        else if VideoEncoderList.ItemIndex = 3 then
+        begin
+          // mpeg4
+          LMEncoderMp4MuxExt := '_.m4v'
+        end
+        else if VideoEncoderList.ItemIndex = 2 then
+        begin
+          LMEncoderMp4MuxExt := '_.h263';
+        end
+        else
+        begin
+          LMEncoderMp4MuxExt := '_.avi'
+        end;
+        LMp4CMD := ' -y -i "' + LCMD.OutputFile + '" -vn -f mp4 ';
+        case AudioEncoderList.ItemIndex of
+          1:
+            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.mp3');
+          2:
+            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.m4a');
+          3:
+            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.ogg');
+          4:
+            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.wav');
+          5:
+            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.ac3');
+          6:
+            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.mp2');
+          7:
+            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.wma');
+          8:
+            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.spx');
+          9:
+            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.opus');
+          11:
+            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.flac');
+        end;
+        LMp4CMD := LMp4CMD + ' "' + ExtractFileDir(LExtractAudioFile) + '\' + ExtractFileName(LExtractAudioFile) + '"';
+        LDVDJob.CMDs.Add(LMp4CMD);
+        LDVDJob.ProcessTypes.Add(dvdffmpeg);
+        LDVDJob.Infos.Add('Extracting audio');
+        LDVDJob.EncoderPaths.Add(FFMpegPath);
+        LDVDJob.OutputFiles.Add(LCMD.OutputFile);
+        AddToLog(6, 'Audio extraction command: ' + LMp4CMD);
+
+        // extract video
+        LMp4CMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LCMD.OutputFile) + '\' + ExtractFileName(LCMD.OutputFile) + '" -o "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' +
+          ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
+        LDVDJob.CMDs.Add(LMp4CMD);
+        LDVDJob.ProcessTypes.Add(dvdmencoder);
+        LDVDJob.Infos.Add('Extracting video');
+        LDVDJob.EncoderPaths.Add(MencoderPath64);
+        LDVDJob.OutputFiles.Add(LCMD.OutputFile);
+        AddToLog(6, 'Video extraction command: ' + LMp4CMD);
+        if (not DisableAudioBtn.Checked) and (DVDAudioTracksList.ItemIndex > -1) then
+        begin
+          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' + ExtractFileDir(LExtractAudioFile) + '\' +
+            ExtractFileName(LExtractAudioFile) + '" -new "' + CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
+        end
+        else
+        begin
+          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' + CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
+        end;
+        LDVDJob.CMDs.Add(LMp4CMD);
+        LDVDJob.ProcessTypes.Add(dvdmp4box);
+        LDVDJob.Infos.Add('Muxing');
+        LDVDJob.EncoderPaths.Add(Mp4BoxPath);
+        LDVDJob.OutputFiles.Add(LCMD.OutputFile);
+        AddToLog(6, 'MP4 muxing command: ' + LMp4CMD);
+        // delete temp files
+        LDVDJob.TempFiles.Add(ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)));
+        LDVDJob.TempFiles.Add(ExtractFileDir(LExtractAudioFile) + '\' + ExtractFileName(LExtractAudioFile));
+        LDVDJob.TempFiles.Add(ExtractFileDir(LCMD.OutputFile) + '\' + ExtractFileName(LCMD.OutputFile));
+        LDVDJob.TempFiles.Add(ExtractFileDir(LExtractAudioFile) + '\');
+        // output file to be checked
+        LDVDJob.FilesToCheck.Add(CreateDVDFileName(LCMD.OutputFile, '.mp4'));
+        LOutputFileName := LOutputFileName + ' ' + TitlesList.Text + ' to "' + ExtractFileName(CreateDVDFileName(LCMD.OutputFile, '.mp4')) + '"';
+      end
+      else if ContainerList.ItemIndex = 7 then
+      begin
+
+      end
+      else
+      begin
+        // output file to be checked
+        LDVDJob.FilesToCheck.Add(LCMD.OutputFile);
+        LOutputFileName := LOutputFileName + ' ' + TitlesList.Text + ' to "' + ExtractFileName(LCMD.OutputFile) + '"';
+      end;
+      FDVDJobs.Add(LDVDJob);
+      LItem := DVDJobList.Items.Add;
+      LItem.Caption := LOutputFileName;
+      LItem.SubItems.Add('Waiting');
+      LItem.StateIndex := 1;
+    end
+    else
+    begin
+      Application.MessageBox('Please enter a valid output file name.', 'Error', MB_ICONERROR);
+    end;
+  end
+  else
+  begin
+    Application.MessageBox('Please select a title.', 'Error', MB_ICONERROR);
+  end;
+end;
+
 procedure TMainForm.DVDDoneUI;
 var
   I: Integer;
@@ -3771,257 +4049,39 @@ var
   LOggAudioCMD: string;
   LOggRemuxExtension: string;
   LRenameFile: TStringList;
+  I: Integer;
 begin
-  // must choose a video codec
-  if (VideoEncoderList.ItemIndex = 10) or (VideoEncoderList.ItemIndex = 11) then
+  if FDVDJobs.Count > 0 then
   begin
-    Application.MessageBox('Select a video codec.', 'Error', MB_ICONERROR);
-    Exit;
-  end;
-  // must choose an audio codec
-  if (AudioEncoderList.ItemIndex = 0) or (AudioEncoderList.ItemIndex = 10) then
-  begin
-    Application.MessageBox('Select an audio codec.', 'Error', MB_ICONERROR);
-    Exit;
-  end;
-  // mencoder does not support speex encoding
-  if (AudioEncoderList.ItemIndex = 8) then
-  begin
-    Application.MessageBox('Mencoder does not support encoding audio with Speex codec!', 'Error', MB_ICONERROR);
-    Exit;
-  end;
-  // mencoder does not support opus encoding
-  if (AudioEncoderList.ItemIndex = 9) then
-  begin
-    Application.MessageBox('Mencoder does not support encoding audio with Opus codec!', 'Error', MB_ICONERROR);
-    Exit;
-  end;
-  // mencoder does not support prores encoding
-  if (VideoEncoderList.ItemIndex = 9) then
-  begin
-    Application.MessageBox('Mencoder does not support encoding video with ProRes codec!', 'Error', MB_ICONERROR);
-    Exit;
-  end;
-  // check if given birate values are valid
-  if (VideoEncoderList.ItemIndex <> 9) and (VideoEncoderList.ItemIndex <> 10) then
-  begin
-    if not IsStringNumeric(AdvancedOptionsForm.VideobitrateList.Text) then
+    // reset
+    FDVDRipperProcess.ResetValues;
+    FTimePassed := 0;
+    FTempFilesToDelete.Clear;
+    FFilesToCheck.Clear;
+
+    for I := 0 to FDVDJobs.Count - 1 do
     begin
-      Application.MessageBox('Please enter a valid video bitrate value!', 'Error', MB_ICONERROR);
+      FDVDRipperProcess.CommandLines.AddStrings(FDVDJobs[i].CMDs);
+      FDVDRipperProcess.EncoderPaths.AddStrings(FDVDJobs[i].EncoderPaths);
+      FDVDRipperProcess.FileNames.AddStrings(FDVDJobs[i].FilePaths);
+      FDVDRipperProcess.OutputFiles.AddStrings(FDVDJobs[i].OutputFiles);
+      FDVDRipperProcess.ProcessTypes.AddRange(FDVDJobs[i].ProcessTypes.ToArray);
+      FDVDRipperProcess.Infos.AddStrings(FDVDJobs[i].Infos);
+      FTempFilesToDelete.AddStrings(FDVDJobs[i].TempFiles);
+      FFilesToCheck.AddStrings(FDVDJobs[i].FilesToCheck);
     end;
-  end;
-  if (AudioEncoderList.ItemIndex <> 9) and (AudioEncoderList.ItemIndex <> 0) then
-  begin
-    if not IsStringNumeric(AdvancedOptionsForm.AudioBitrateList.Text) then
+
+    if FDVDRipperProcess.CommandLines.Count > 0 then
     begin
-      Application.MessageBox('Please enter a valid audio bitrate value!', 'Error', MB_ICONERROR);
-    end;
-  end;
-  // crf and two pass wont work
-  if (VideoEncoderList.ItemIndex = 4) and (AdvancedOptionsForm.x264Btn.Checked) and (AdvancedOptionsForm.x264CRFBtn.Checked) and (DoTwoPassBtn.Checked) then
-  begin
-    Application.MessageBox('CRF is incompatible with two pass!', 'Warning', MB_ICONWARNING);
-    Exit;
-  end;
-  // vp8 & mencoder & two pass
-  if DoTwoPassBtn.Checked and (VideoEncoderList.ItemIndex = 7) then
-  begin
-    if ID_YES = Application.MessageBox('Two pass VP8 encoding with Mencoder is problematic at the moment. Would you like to do a single pass?', 'Warning', MB_ICONWARNING or MB_YESNO) then
-    begin
-      DoTwoPassBtn.Checked := False;
-    end;
-  end;
-  // vp8 ogg vorbis webm
-  if (VideoEncoderList.ItemIndex = 7) and ((AudioEncoderList.ItemIndex <> 3) or (ContainerList.ItemIndex <> 7)) then
-  begin
-    Application.MessageBox('VP8 video codec works with only OggVorbis as audio codec and Webm as container.', 'Error', MB_ICONERROR);
-    Exit;
-  end;
-  // a title must be selected
-  if FCurrentTitle <> nil then
-  begin
-    if Length(OutputFileNameEdit.Text) > 0 then
-    begin
-      // reset
-      FDVDRipperProcess.ResetValues;
-      FTimePassed := 0;
-      FTempFilesToDelete.Clear;
-      FFilesToCheck.Clear;
-
-      // create command lines
-      LCMD := CreateDVDCMD;
-
-      if DoTwoPassBtn.Checked then
-      begin
-        // two pass
-        // first pass
-        FDVDRipperProcess.CommandLines.Add(LCMD.FirstPassCMD);
-        FDVDRipperProcess.ProcessTypes.Add(dvdmencoder);
-        FDVDRipperProcess.EncoderPaths.Add(MencoderPath64);
-        FDVDRipperProcess.FileNames.Add(DVDFolderEdit.Text);
-        FDVDRipperProcess.Infos.Add('First pass');
-        AddToLog(6, '1st pass command: ' + LCMD.FirstPassCMD);
-        // second pass
-        FDVDRipperProcess.CommandLines.Add(LCMD.SeconPassCMD);
-        FDVDRipperProcess.ProcessTypes.Add(dvdmencoder);
-        FDVDRipperProcess.EncoderPaths.Add(MencoderPath64);
-        FDVDRipperProcess.FileNames.Add(DVDFolderEdit.Text);
-        FDVDRipperProcess.Infos.Add('Second pass');
-        AddToLog(6, '2nd pass command: ' + LCMD.SeconPassCMD);
-      end
-      else
-      begin
-        // single pass
-        FDVDRipperProcess.CommandLines.Add(LCMD.SinglePassCMD);
-        FDVDRipperProcess.ProcessTypes.Add(dvdmencoder);
-        FDVDRipperProcess.EncoderPaths.Add(MencoderPath64);
-        FDVDRipperProcess.FileNames.Add(DVDFolderEdit.Text);
-        FDVDRipperProcess.Infos.Add('Encoding');
-        AddToLog(6, 'Single pass command: ' + LCMD.SinglePassCMD);
-      end;
-      // mencoder doesn't seem to be able produce valid ogg streams.
-      // we first convert to flac then to ogg using ffmpeg
-      if AudioEncoderList.ItemIndex = 3 then
-      begin
-        // convert flac audio to ogg usingffmpeg
-        LOggRemuxExtension := ExtractFileExt(LCMD.OutputFile);
-        LOggAudioCMD := '-y -i "' + LCMD.OutputFile + '" -c:v copy -c:a libvorbis -ab ' + AdvancedOptionsForm.AudioBitrateList.Text + 'k "' + ChangeFileExt(LCMD.OutputFile, '_temp' + LOggRemuxExtension) + '"';
-        FDVDRipperProcess.CommandLines.Add(LOggAudioCMD);
-        FDVDRipperProcess.ProcessTypes.Add(dvdffmpeg);
-        FDVDRipperProcess.EncoderPaths.Add(FFMpegPath);
-        FDVDRipperProcess.FileNames.Add(DVDFolderEdit.Text);
-        FDVDRipperProcess.Infos.Add('Encoding');
-        AddToLog(6, 'Ogg encoding command: ' + LOggAudioCMD);
-        // rename converted file to original output file name
-        LRenameFile := TStringList.Create;
-        try
-          LRenameFile.Add(LCMD.OutputFile);
-          LRenameFile.Add(ChangeFileExt(LCMD.OutputFile, '_temp' + LOggRemuxExtension));
-          LRenameFile.SaveToFile(FTempFolder + '\dvdogg.txt', TEncoding.UTF8);
-          FDVDRipperProcess.CommandLines.Add('"' + FDVDRenamePath + '" "' + FTempFolder + '\dvdogg.txt"');
-          FDVDRipperProcess.ProcessTypes.Add(dvdrenametool);
-          FDVDRipperProcess.EncoderPaths.Add('');
-          FDVDRipperProcess.Infos.Add('Renaming');
-          AddToLog(6, 'Renaming command: "' + FDVDRenamePath + '" "' + FTempFolder + '\dvdogg.txt"');
-          FTempFilesToDelete.Add(FDVDRenamePath + '" "' + FTempFolder + '\dvdogg.txt');
-        finally
-          LRenameFile.Free;
-        end;
-      end;
-
-      // mux to mp4
-      if ContainerList.ItemIndex = 2 then
-      begin
-        // raw temp video extension
-        if VideoEncoderList.ItemIndex = 4 then
-        begin
-          // h264
-          LMEncoderMp4MuxExt := '_.h264'
-        end
-        else if VideoEncoderList.ItemIndex = 3 then
-        begin
-          // mpeg4
-          LMEncoderMp4MuxExt := '_.m4v'
-        end
-        else if VideoEncoderList.ItemIndex = 2 then
-        begin
-          LMEncoderMp4MuxExt := '_.h263';
-        end
-        else
-        begin
-          LMEncoderMp4MuxExt := '_.avi'
-        end;
-        LMp4CMD := ' -y -i "' + LCMD.OutputFile + '" -vn -f mp4 ';
-        case AudioEncoderList.ItemIndex of
-          1:
-            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.mp3');
-          2:
-            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.m4a');
-          3:
-            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.ogg');
-          4:
-            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.wav');
-          5:
-            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.ac3');
-          6:
-            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.mp2');
-          7:
-            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.wma');
-          8:
-            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.spx');
-          9:
-            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.opus');
-          11:
-            LExtractAudioFile := ChangeFileExt(LCMD.OutputFile, '_.flac');
-        end;
-        LMp4CMD := LMp4CMD + ' "' + ExtractFileDir(LExtractAudioFile) + '\' + ExtractFileName(LExtractAudioFile) + '"';
-        FDVDRipperProcess.CommandLines.Add(LMp4CMD);
-        FDVDRipperProcess.ProcessTypes.Add(dvdffmpeg);
-        FDVDRipperProcess.Infos.Add('Extracting audio');
-        FDVDRipperProcess.EncoderPaths.Add(FFMpegPath);
-        FDVDRipperProcess.OutputFiles.Add(LCMD.OutputFile);
-        AddToLog(6, 'Audio extraction command: ' + LMp4CMD);
-
-        // extract video
-        LMp4CMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LCMD.OutputFile) + '\' + ExtractFileName(LCMD.OutputFile) + '" -o "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' +
-          ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
-        FDVDRipperProcess.CommandLines.Add(LMp4CMD);
-        FDVDRipperProcess.ProcessTypes.Add(dvdmencoder);
-        FDVDRipperProcess.Infos.Add('Extracting video');
-        FDVDRipperProcess.EncoderPaths.Add(MencoderPath64);
-        FDVDRipperProcess.OutputFiles.Add(LCMD.OutputFile);
-        AddToLog(6, 'Video extraction command: ' + LMp4CMD);
-        if (not DisableAudioBtn.Checked) and (DVDAudioTracksList.ItemIndex > -1) then
-        begin
-          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' + ExtractFileDir(LExtractAudioFile) + '\' +
-            ExtractFileName(LExtractAudioFile) + '" -new "' + CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
-        end
-        else
-        begin
-          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' + CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
-        end;
-        FDVDRipperProcess.CommandLines.Add(LMp4CMD);
-        FDVDRipperProcess.ProcessTypes.Add(dvdmp4box);
-        FDVDRipperProcess.Infos.Add('Muxing');
-        FDVDRipperProcess.EncoderPaths.Add(Mp4BoxPath);
-        FDVDRipperProcess.OutputFiles.Add(LCMD.OutputFile);
-        AddToLog(6, 'MP4 muxing command: ' + LMp4CMD);
-        // delete temp files
-        FTempFilesToDelete.Add(ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)));
-        FTempFilesToDelete.Add(ExtractFileDir(LExtractAudioFile) + '\' + ExtractFileName(LExtractAudioFile));
-        FTempFilesToDelete.Add(ExtractFileDir(LCMD.OutputFile) + '\' + ExtractFileName(LCMD.OutputFile));
-        FTempFilesToDelete.Add(ExtractFileDir(LExtractAudioFile) + '\');
-        // output file to be checked
-        FFilesToCheck.Add(CreateDVDFileName(LCMD.OutputFile, '.mp4'));
-      end
-      else if ContainerList.ItemIndex = 7 then
-      begin
-
-      end
-      else
-      begin
-        // output file to be checked
-        FFilesToCheck.Add(LCMD.OutputFile);
-      end;
-
       AddToLog(6, '');
       DVDRipUI;
-      AddToLog(0, 'Starting to rip DVD.');
+      AddToLog(0, 'Starting to rip DVDs.');
       FDVDRipperProcess.Start;
       DVDPosTimer.Enabled := True;
       Timer.Enabled := True;
-      DVDStopBtn.Enabled := True;
-    end
-    else
-    begin
-      Application.MessageBox('Please enter a valid output file name.', 'Error', MB_ICONERROR);
+      DVDBatchStopBtn.Enabled := True;
     end;
-  end
-  else
-  begin
-    Application.MessageBox('Please select a title.', 'Error', MB_ICONERROR);
   end;
-
 end;
 
 procedure TMainForm.DVDFilterBtnClick(Sender: TObject);
@@ -4038,6 +4098,18 @@ begin
   DVDSubtitleTracksList.Items.Clear;
   FCurrentTitle := nil;
   OutputFileNameEdit.Text := '';
+end;
+
+procedure TMainForm.DVDNextTitleBtnClick(Sender: TObject);
+begin
+  if TitlesList.Items.Count > 0 then
+  begin
+    if TitlesList.ItemIndex < TitlesList.Items.Count - 1 then
+    begin
+      TitlesList.ItemIndex := TitlesList.ItemIndex + 1;
+      TitlesListChange(self);
+    end;
+  end;
 end;
 
 procedure TMainForm.DVDPosTimerTimer(Sender: TObject);
@@ -4177,6 +4249,18 @@ begin
     end;
     SetProgressValue(Handle, DVDTotalProgressBar.Position, DVDTotalProgressBar.Max);
     Self.Caption := FloatToStr(DVDTotalProgressBar.Position) + '% TEncoder';
+  end;
+end;
+
+procedure TMainForm.DVDPreTitleBtnClick(Sender: TObject);
+begin
+  if TitlesList.Items.Count > 0 then
+  begin
+    if TitlesList.ItemIndex > 0 then
+    begin
+      TitlesList.ItemIndex := TitlesList.ItemIndex - 1;
+      TitlesListChange(self);
+    end;
   end;
 end;
 
@@ -4755,6 +4839,7 @@ begin
   for I := Low(FVideoDownloadProcesses) to High(FVideoDownloadProcesses) do
     FVideoDownloadProcesses[i] := TDownloadProcess.Create;
   FDVDRipperProcess := TDVDRipProcess.Create;
+  FDVDJobs := TDVDJobs.Create;
 
   FTempFilesToDelete := TStringList.Create;
   FFilesToCheck := TStringList.Create;
@@ -4799,6 +4884,8 @@ begin
   FDVDRipperProcess.Free;
   for I := 0 to ConvertItems.Count - 1 do
     ConvertItems[i].Free;
+  for I := 0 to FDVDJobs.Count - 1 do
+    FDVDJobs[i].Free;
   ConvertItems.Free;
   FFileInfo.Free;
 end;
@@ -4830,6 +4917,7 @@ begin
   ProgressList.Columns[0].Width := ProgressList.ClientWidth - ProgressList.Columns[1].Width - ProgressList.Columns[2].Width - 20;
   FileList.Columns[0].Width := FileList.ClientWidth - FileList.Columns[1].Width - FileList.Columns[2].Width - FileList.Columns[3].Width - 20;
   sStatusBar1.Panels[0].Width := sStatusBar1.ClientWidth - sStatusBar1.Panels[1].Width;
+  DVDJobList.Columns[0].Width := DVDJobList.ClientWidth - DVDJobList.Columns[1].Width - 20;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
@@ -5246,16 +5334,21 @@ begin
   Result := 0;
   if FileExists(FilePath) then
   begin
-    LFS := TFileStream.Create(FilePath, fmOpenRead and fmShareDenyNone);
     try
+      LFS := TFileStream.Create(FilePath, fmOpenRead and fmShareDenyNone);
       try
-        Result := LFS.Size;
-      except
-        on E: EFOpenError do
-          AddToLog(0, 'Unable to check file size for ' + ExtractFileName(FilePath) + ' because it is in use.');
+        try
+          Result := LFS.Size;
+        except
+          on E: EFOpenError do
+            AddToLog(0, 'Unable to check file size for ' + ExtractFileName(FilePath) + ' because it is in use.');
+        end;
+      finally
+        LFS.Free;
       end;
-    finally
-      LFS.Free;
+    except
+      on E: EFOpenError do
+        AddToLog(0, 'Unable to check file size for ' + ExtractFileName(FilePath) + ' because it is in use.');
     end;
   end;
 end;
@@ -5841,11 +5934,16 @@ begin
 end;
 
 procedure TMainForm.OpenDVDBtnClick(Sender: TObject);
+var
+  i: integer;
 begin
-  if SelectDirectoryDialog.Execute then
+  for I := FDVDJobs.Count - 1 downto 0 do
   begin
-    DVDFolderEdit.Text := SelectDirectoryDialog.Directory;
-    ReadDVDBtnClick(Self);
+    if DVDJobList.Items[i].Selected then
+    begin
+      DVDJobList.Items.Delete(i);
+      FDVDJobs.Delete(i);
+    end;
   end;
 end;
 

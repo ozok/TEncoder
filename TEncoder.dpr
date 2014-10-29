@@ -36,7 +36,8 @@ uses
   UnitWatermark in 'Forms\UnitWatermark.pas' {WatermarkForm} ,
   UnitDownloadProcess in 'Units\UnitDownloadProcess.pas',
   UnitDVDRipperProcess in 'Units\UnitDVDRipperProcess.pas',
-  UnitFileInfoExtractor in 'Units\UnitFileInfoExtractor.pas';
+  UnitFileInfoExtractor in 'Units\UnitFileInfoExtractor.pas',
+  UnitDVDJob in 'Units\UnitDVDJob.pas';
 
 {$R *.res}
 

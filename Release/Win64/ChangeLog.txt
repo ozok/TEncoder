@@ -1,5 +1,8 @@
 TEncoder Change Log
 
+-4.5.4
+-Updated: youtube-dl
+
 --4.5.3
 -Added: [Video Downloader] Video thumbnails will be resized more smoothly
 -Fixed: [Video/Audio Converter] Encoding audio files would fail
