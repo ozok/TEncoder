@@ -245,8 +245,9 @@ var
   LAudioID: string;
   LSubLang: string;
   LSubTitle: string;
+  LPos, LPos2: integer;
 begin
-//  FMencoderProcess.ConsoleOutput.SaveToFile('C:\mencoder.txt');
+  FMencoderProcess.ConsoleOutput.SaveToFile('C:\mencoder.txt');
   FMEncoderStatus := Reading;
   try
     for I := 0 to FMencoderProcess.ConsoleOutput.Count - 1 do
@@ -257,19 +258,46 @@ begin
       // found a subtitle stream
       if SUBTITLE_1_LINE = Copy(LLine, 1, Length(SUBTITLE_1_LINE)) then
       begin
+        // subtitles ID
         LSubID := Copy(LLine, Length(SUBTITLE_1_LINE) + 1, MaxInt);
         if (i + 1) < FMencoderProcess.ConsoleOutput.Count then
         begin
           LLine := Trim(FMencoderProcess.ConsoleOutput[i + 1]);
           if ('ID_SID_' + LSubID + '_LANG=') = Copy(LLine, 1, Length('ID_SID_' + LSubID + '_LANG=')) then
           begin
+            // subtitle lang
             LSubLang := Copy(LLine, Length('ID_SID_' + LSubID + '_LANG=') + 1, MaxInt);
             if (i + 2) < FMencoderProcess.ConsoleOutput.Count then
             begin
+              // add to lists
               LLine := Trim(FMencoderProcess.ConsoleOutput[i + 2]);
+              // this is the general rule
               if ('ID_SID_' + LSubID + '_NAME=') = Copy(LLine, 1, Length('ID_SID_' + LSubID + '_NAME=')) then
               begin
                 LSubTitle := Copy(LLine, Length('ID_SID_' + LSubID + '_NAME=') + 1, MaxInt);
+                FSubtitleTrackIndexes.Add(StrToInt(LSubID));
+                FSubtitleTracks.Add(UpperCase(LSubLang + ', ' + LSubTitle));
+              end
+              // this is an expection to the rule
+              else if ('[lavf] stream ') = Copy(LLine, 1, Length('[lavf] stream ')) then
+              begin
+                LPos := Pos(':', LLine);
+                if LPos > 0 then
+                begin
+                  LPos2 := Pos(',', LLine);
+                  if LPos2 > 0 then
+                  begin
+                    LSubTitle := Trim(Copy(LLine, LPos + 1, LPos2-LPos-1));
+                  end
+                  else
+                  begin
+                    LSubTitle := Trim(Copy(LLine, LPos + 1, MaxInt));
+                  end;
+                end
+                else
+                begin
+                  LSubTitle := 'Subtitle ' + FloatToStr(FSubtitleTracks.Count + 1);
+                end;
                 FSubtitleTrackIndexes.Add(StrToInt(LSubID));
                 FSubtitleTracks.Add(UpperCase(LSubLang + ', ' + LSubTitle));
               end;

@@ -1,7 +1,9 @@
 TEncoder Change Log
 
 -4.5.4
+-Fixed: Couldn't get subtitle tracks from some mkv files
 -Updated: youtube-dl
+-Updated: MediaInfo to 0.7.71
 
 --4.5.3
 -Added: [Video Downloader] Video thumbnails will be resized more smoothly
