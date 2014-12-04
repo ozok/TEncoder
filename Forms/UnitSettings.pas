@@ -423,7 +423,7 @@ begin
       DontTrimBtn.Checked := ReadBool('options', 'trim', True);
       PlaySoundBtn.Checked := ReadBool('options', 'playsound', True);
 
-      PreferedFormatEdit.Text := ReadString('options', 'downloadformat', 'mp4, 1080p, DASH, video');
+      PreferedFormatEdit.Text := ReadString('options', 'downloadformat', 'mp4, 1920x1080, DASH, video');
       ProcessCountBar.Position := ReadInteger('options', 'downloadcount', 1);
       DontDoubleDownloadBtn.Checked := ReadBool('options', 'doubledownload', True);
       DontPreviewImgBtn.Checked := ReadBool('options', 'noimg', False);

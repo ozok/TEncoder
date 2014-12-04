@@ -6110,8 +6110,6 @@ begin
   end
   else
   begin
-    // all progress code is here
-    // TotalProgress.Position := UpdateProgressUI;
     SetProgressValue(Handle, TotalProgress.Position, TotalProgress.Max);
     TrayIcon.Hint := FloatToStr((TotalProgress.Position * 100) div TotalProgress.Max) + '%';
   end;

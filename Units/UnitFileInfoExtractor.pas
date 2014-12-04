@@ -247,7 +247,7 @@ var
   LSubTitle: string;
   LPos, LPos2: integer;
 begin
-  FMencoderProcess.ConsoleOutput.SaveToFile('C:\mencoder.txt');
+//  FMencoderProcess.ConsoleOutput.SaveToFile('C:\mencoder.txt');
   FMEncoderStatus := Reading;
   try
     for I := 0 to FMencoderProcess.ConsoleOutput.Count - 1 do
