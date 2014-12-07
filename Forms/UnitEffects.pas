@@ -124,7 +124,7 @@ var
   SettingsFile: TIniFile;
 begin
 
-  SettingsFile := TIniFile.Create(MainForm.AppDataFolder + '\Settings.ini');
+  SettingsFile := TIniFile.Create(MainForm.FAppDataFolder + '\Settings.ini');
   try
     DeintEnblBtn.Checked := SettingsFile.ReadBool('Effect', 'Deint', False);
     DeintMethodList.ItemIndex := SettingsFile.ReadInteger('Effects', 'Deint2', 0);
@@ -162,13 +162,13 @@ begin
 
     if FileIndex < MainForm.FileList.Items.Count then
     begin
-      FileName := MainForm.ConvertItems[FileIndex].FilePath;
+      FileName := MainForm.FMasterFileInfoList[FileIndex].FilePath;
 
       with PreviewForm do
       begin
         VideoName := FileName;
         VideoIndex := FileIndex;
-        SubIndex := MainForm.ConvertItems[FileIndex].SubtitleIndex;
+        SubIndex := MainForm.FMasterFileInfoList[FileIndex].SubtitleIndex;
       end;
 
       EffectForm.Enabled := False;
@@ -185,7 +185,7 @@ var
   SettingsFile: TIniFile;
 begin
 
-  SettingsFile := TIniFile.Create(MainForm.AppDataFolder + '\Settings.ini');
+  SettingsFile := TIniFile.Create(MainForm.FAppDataFolder + '\Settings.ini');
   try
     SettingsFile.WriteBool('Effect', 'Deint', DeintEnblBtn.Checked);
     SettingsFile.WriteInteger('Effects', 'Deint2', DeintMethodList.ItemIndex);

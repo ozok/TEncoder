@@ -31,7 +31,7 @@ type
   TProcessType = (mencoder, ffmpeg, mp4box, renametool, imagemagick);
 
 type
-  TEncoder = class(TObject)
+  TMyProcess = class(TObject)
   private
     // process
     FProcess: TJvCreateProcess;
@@ -110,11 +110,11 @@ type
 
 implementation
 
-{ TEncoder }
+{ TMyProcess }
 
 uses UnitMain;
 
-constructor TEncoder.Create;
+constructor TMyProcess.Create;
 begin
   inherited Create;
 
@@ -152,7 +152,7 @@ begin
   FOutputFiles := TStringList.Create;
 end;
 
-destructor TEncoder.Destroy;
+destructor TMyProcess.Destroy;
 begin
 
   inherited Destroy;
@@ -168,55 +168,55 @@ begin
 
 end;
 
-function TEncoder.GetCommandCount: integer;
+function TMyProcess.GetCommandCount: integer;
 begin
   Result := FCommandLines.Count;
 end;
 
-function TEncoder.GetConsoleOutput: TStrings;
+function TMyProcess.GetConsoleOutput: TStrings;
 begin
   Result := FProcess.ConsoleOutput;
 end;
 
-function TEncoder.GetCurrentDuration: integer;
+function TMyProcess.GetCurrentDuration: integer;
 begin
   if FCommandIndex < FDurations.Count then
     Result := FDurations[FDurationIndex];
 end;
 
-function TEncoder.GetCurrentProcessType: TProcessType;
+function TMyProcess.GetCurrentProcessType: TProcessType;
 begin
   Result := ffmpeg;
   if FCommandIndex < FProcessTypes.Count then
     Result := FProcessTypes[FCommandIndex];
 end;
 
-function TEncoder.GetExeName: string;
+function TMyProcess.GetExeName: string;
 begin
   if FCommandIndex < FPaths.Count then
     Result := FPaths[FCommandIndex];
 end;
 
-function TEncoder.GetFileIndex: Integer;
+function TMyProcess.GetFileIndex: Integer;
 begin
   Result := 0;
   if FCommandIndex < FFileIndexes.Count then
     Result := StrToInt(FFileIndexes[FCommandIndex]);
 end;
 
-function TEncoder.GetFileName: string;
+function TMyProcess.GetFileName: string;
 begin
   if FCommandIndex < FFileNames.Count then
     Result := FFileNames[FCommandIndex];
 end;
 
-function TEncoder.GetInfo: string;
+function TMyProcess.GetInfo: string;
 begin
   if FCommandIndex < FInfos.Count then
     Result := FInfos[FCommandIndex];
 end;
 
-function TEncoder.GetPercentage: integer;
+function TMyProcess.GetPercentage: integer;
 var
   LPercentageStr: string;
   LPercentageInt: Integer;
@@ -248,12 +248,12 @@ begin
   end;
 end;
 
-function TEncoder.GetProcessID: integer;
+function TMyProcess.GetProcessID: integer;
 begin
   Result := FProcess.ProcessInfo.hProcess;
 end;
 
-procedure TEncoder.ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
+procedure TMyProcess.ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
 var
   LCurrVal: integer;
 begin
@@ -271,7 +271,7 @@ begin
   end;
 end;
 
-procedure TEncoder.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
+procedure TMyProcess.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 begin
   FEncoderStatus := esStopped;
   if FStoppedByUser then
@@ -335,7 +335,7 @@ begin
   end;
 end;
 
-procedure TEncoder.ResetValues;
+procedure TMyProcess.ResetValues;
 begin
   // reset all lists, indexes etc
   FCommandLines.Clear;
@@ -352,7 +352,7 @@ begin
   FTerminateCounter := 0;
 end;
 
-procedure TEncoder.Start;
+procedure TMyProcess.Start;
 begin
   if FProcess.ProcessInfo.hProcess = 0 then
   begin
@@ -381,7 +381,7 @@ begin
     FConsoleOutput := 'not 0'
 end;
 
-procedure TEncoder.Stop;
+procedure TMyProcess.Stop;
 begin
   if FProcess.ProcessInfo.hProcess > 0 then
   begin

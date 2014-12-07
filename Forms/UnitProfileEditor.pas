@@ -104,7 +104,7 @@ begin
   if Copy(ProfileList.Text, 1, Length(UserStr)) = UserStr then
   begin
     // user created profile
-    ProfileFilePath := MainForm.AppDataFolder + ProfileList.Text + '.pdo';
+    ProfileFilePath := MainForm.FAppDataFolder + ProfileList.Text + '.pdo';
   end
   else
   begin
@@ -182,7 +182,7 @@ begin
   if USER_Pref = Copy(ProfileList.Text, 1, Length(USER_Pref)) then
   begin
     // user created profiles
-    ProfileNameToDelete := MainForm.AppDataFolder + '\' + ProfileList.Text + '.pdo';
+    ProfileNameToDelete := MainForm.FAppDataFolder + '\' + ProfileList.Text + '.pdo';
   end
   else
   begin
@@ -391,7 +391,7 @@ begin
   if Copy(ProfileList.Text, 1, Length(UserStr)) = UserStr then
   begin
     // user created profile
-    ProfileNameToSave := MainForm.AppDataFolder + ProfileList.Text + '.pdo';
+    ProfileNameToSave := MainForm.FAppDataFolder + ProfileList.Text + '.pdo';
   end
   else
   begin

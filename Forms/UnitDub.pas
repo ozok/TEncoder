@@ -46,7 +46,7 @@ type
     procedure StopBtnClick(Sender: TObject);
   private
     { Private declarations }
-    FEncoder: TEncoder;
+    FEncoder: TMyProcess;
     FDuration: string;
     FOutputFile: string;
 
@@ -77,7 +77,7 @@ begin
   // get video without the audio
   LCMD := ' -y -i "' + VideoEdit.Text + '" -an -c:v copy "' + MainForm.DirectoryEdit.Text + '\TEncoder_temp.mkv"';
   FEncoder.CommandLines.Add(LCMD);
-  FEncoder.EncoderPaths.Add(MainForm.FFMpegPath);
+  FEncoder.EncoderPaths.Add(MainForm.FFFMpegPath);
   FEncoder.ProcessTypes.Add(ffmpeg);
   FEncoder.Infos.Add('Dubbing');
   FEncoder.OutputFiles.Add(FOutputFile);
@@ -133,7 +133,7 @@ begin
   end;
   LCMD := LCMD + ' "' + ImageAudiotoVideoForm.CreateFileName(OutputEdit.Text, LExt) + '"';
   FEncoder.CommandLines.Add(LCMD);
-  FEncoder.EncoderPaths.Add(MainForm.FFMpegPath);
+  FEncoder.EncoderPaths.Add(MainForm.FFFMpegPath);
   FEncoder.ProcessTypes.Add(ffmpeg);
   FEncoder.Infos.Add('Dubbing');
   FEncoder.OutputFiles.Add(FOutputFile);
@@ -170,7 +170,7 @@ end;
 
 procedure TDubForm.FormCreate(Sender: TObject);
 begin
-  FEncoder := TEncoder.Create;
+  FEncoder := TMyProcess.Create;
   VideoEdit.Dialog.Filter := 'Video Files|*.flv;*.m2v;*.avi;*.mkv;*.mpeg;*.mpg;*.mov;*.wmv;*.mp4;' + '*.m4v;*.dat;*.vob;*.rmvb;*.mts;*.mxf';
   AudioEdit.Dialog.Filter := 'Audio Files|*.mp3;*.wav;*.aac;*.m4a;*.m4b;*.ac3;*.ogg;*.flac;*.mp2;*.opus;*.spx';
   DeleteTempFile;

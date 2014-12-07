@@ -237,7 +237,7 @@ var
   OptionFile: TIniFile;
 begin
 
-  OptionFile := TIniFile.Create(MainForm.AppDataFolder + 'Settings.ini');
+  OptionFile := TIniFile.Create(MainForm.FAppDataFolder + 'Settings.ini');
   try
 
     with OptionFile do
@@ -371,7 +371,7 @@ var
   NumberOfCores: Integer;
 begin
 
-  OptionFile := TIniFile.Create(MainForm.AppDataFolder + 'Settings.ini');
+  OptionFile := TIniFile.Create(MainForm.FAppDataFolder + 'Settings.ini');
   try
 
     NumberOfCores := MainForm.Info.CPU.ProcessorCount;

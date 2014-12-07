@@ -7,6 +7,7 @@ TEncoder Change Log
 -Fixed: Updated default video downloader format
 -Updated: youtube-dl
 -Updated: MediaInfo to 0.7.71
+-Updated: FFmpeg
 
 --4.5.3
 -Added: [Video Downloader] Video thumbnails will be resized more smoothly

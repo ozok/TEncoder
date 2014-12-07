@@ -58,7 +58,7 @@ begin
   end
   else
   begin
-    MainForm.AddingStoppedByUser := True;
+    MainForm.FFileAddingStoppedByUser := True;
   end;
 
 end;

@@ -21,7 +21,7 @@ unit UnitDVDRipperProcess;
 
 interface
 
-uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, UnitSettings, Generics.Collections;
+uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, UnitSettings, Generics.Collections, ComCtrls;
 
 // current state of the process
 type
@@ -38,7 +38,7 @@ type
     // list of command lines to be executed
     FCommandLines: TStringList;
     // list of executables
-    FPaths: TStringList;
+    FEncoderPaths: TStringList;
     // index of current command line. Also progress.
     FCommandIndex: integer;
     // last line backend has written to console
@@ -51,12 +51,13 @@ type
     FFileNames: TStringList;
     // a list of types of encoders to be run.
     FProcessTypes: TList<TDVDProcessType>;
-    // index of currently used duration
-    FDurationIndex: integer;
     // list of informations about steps.
     FInfos: TStringList;
     // a list of output files. generally to check if they are created.
     FOutputFiles: TStringList;
+    FTerminateCounter: integer;
+    FItem: TListItem;
+    FListItemIndexes: TList<Integer>;
 
     // process events
     procedure ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
@@ -69,11 +70,12 @@ type
     function GetInfo: string;
     function GetCommandCount: integer;
     function GetExeName: string;
+    function GetPercentage: integer;
   public
     property ConsoleOutput: string read FConsoleOutput;
     property EncoderStatus: TEncoderStatus read FEncoderStatus;
     property CommandLines: TStringList read FCommandLines write FCommandLines;
-    property EncoderPaths: TStringList read FPaths write FPaths;
+    property EncoderPaths: TStringList read FEncoderPaths write FEncoderPaths;
     property FileNames: TStringList read FFileNames;
     property FilesDone: integer read FCommandIndex;
     property ProcessID: integer read GetProcessID;
@@ -85,6 +87,7 @@ type
     property CommandCount: integer read GetCommandCount;
     property ExeName: string read GetExeName;
     property OutputFiles: TStringList read FOutputFiles write FOutputFiles;
+    property ListItemIndexes: TList<Integer> read FListItemIndexes write FListItemIndexes;
 
     constructor Create();
     destructor Destroy(); override;
@@ -97,7 +100,7 @@ type
 
 implementation
 
-{ TEncoder }
+{ TDVDRipProcess }
 
 uses UnitMain;
 
@@ -126,29 +129,29 @@ begin
   end;
 
   FCommandLines := TStringList.Create;
-  FPaths := TStringList.Create;
+  FEncoderPaths := TStringList.Create;
   FFileNames := TStringList.Create;
   FEncoderStatus := esStopped;
   FStoppedByUser := False;
   FProcessTypes := TList<TDVDProcessType>.Create;
   FInfos := TStringList.Create;
-  FDurationIndex := 0;
   FCommandIndex := 0;
   FOutputFiles := TStringList.Create;
+  FListItemIndexes := TList<Integer>.Create;
 end;
 
 destructor TDVDRipProcess.Destroy;
 begin
-
-  inherited Destroy;
   FreeAndNil(FCommandLines);
-  FreeAndNil(FPaths);
+  FreeAndNil(FEncoderPaths);
   FreeAndNil(FInfos);
   FreeAndNil(FFileNames);
   FreeAndNil(FProcessTypes);
   FreeAndNil(FOutputFiles);
   FProcess.Free;
+  FListItemIndexes.Free;
 
+  inherited Destroy;
 end;
 
 function TDVDRipProcess.GetCommandCount: integer;
@@ -170,8 +173,8 @@ end;
 
 function TDVDRipProcess.GetExeName: string;
 begin
-  if FCommandIndex < FPaths.Count then
-    Result := FPaths[FCommandIndex];
+  if FCommandIndex < FEncoderPaths.Count then
+    Result := FEncoderPaths[FCommandIndex];
 end;
 
 function TDVDRipProcess.GetFileName: string;
@@ -186,59 +189,105 @@ begin
     Result := FInfos[FCommandIndex];
 end;
 
+function TDVDRipProcess.GetPercentage: integer;
+var
+  LPercentageStr: string;
+  LPercentageInt: Integer;
+begin
+  Result := 0;
+  if Length(FConsoleOutput) > 0 then
+  begin
+    if FProcess.ProcessInfo.hProcess > 0 then
+    begin
+      // decide running process kind
+      if (GetCurrentProcessType = dvdffmpeg) then
+      begin
+        LPercentageStr := '0';
+        // LPercentageStr := MainForm.GetFFmpegPosition(FConsoleOutput, GetCurrentDuration);
+      end
+      else if GetCurrentProcessType = dvdmencoder then
+      begin
+        LPercentageStr := MainForm.GetMencoderPosition(FConsoleOutput);
+      end
+      else if GetCurrentProcessType = dvdmp4box then
+      begin
+        LPercentageStr := MainForm.GetMp4Progress(FConsoleOutput);
+      end;
+      // make sure str is actually a number
+      if TryStrToInt(LPercentageStr, LPercentageInt) then
+      begin
+        Result := LPercentageInt;
+      end;
+    end;
+  end;
+end;
+
 function TDVDRipProcess.GetProcessID: integer;
 begin
   Result := FProcess.ProcessInfo.hProcess;
 end;
 
 procedure TDVDRipProcess.ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
+var
+  LCurrVal: integer;
 begin
-  FConsoleOutput := Trim(S);
+  Inc(FTerminateCounter);
+  if (FTerminateCounter mod 5) = 0 then
+  begin
+    FConsoleOutput := Trim(S);
+
+    if MainForm.FDVDBatchMode then
+    begin
+      if TryStrToInt(FItem.SubItems[0], LCurrVal) then
+      begin
+        if GetPercentage > LCurrVal then
+        begin
+          FItem.SubItems[0] := FloatToStr(GetPercentage);
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TDVDRipProcess.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 begin
+  FProcess.ConsoleOutput.Add('=============================================');
+  FProcess.ConsoleOutput.SaveToFile('C:\dadfdcdc.txt');
   FEncoderStatus := esStopped;
   MainForm.DVDProgressBar.Position := 0;
   if FStoppedByUser then
   begin
-    FEncoderStatus := esStopped;
-    // delete unfinished files.
-    if SettingsForm.DeleteUnfinBtn.Checked then
+    if MainForm.FDVDBatchMode then
     begin
-      if FCommandIndex < FOutputFiles.Count then
-      begin
-        if FileExists(FOutputFiles[FCommandIndex]) then
-        begin
-          if not DeleteFile(FOutputFiles[FCommandIndex]) then
-          begin
-            RaiseLastOSError;
-          end
-          else
-          begin
-            MainForm.AddToLog(0, 'Deleted unfinished file: ' + ExtractFileName(FOutputFiles[FCommandIndex]));
-          end;
-        end;
-      end;
+      FItem.SubItems[0] := 'Stopped';
+      FItem.StateIndex := 3;
     end;
+    FEncoderStatus := esStopped;
   end
   else
   begin
-    MainForm.UpdateProgress;
-    // processed that need duration information
-    if GetCurrentProcessType = dvdffmpeg then
-    begin
-      Inc(FDurationIndex);
-    end;
 
     // run next command
     inc(FCommandIndex);
+
+    if MainForm.FDVDBatchMode then
+    begin
+      FItem.SubItems[0] := '100';
+      FItem.StateIndex := 2;
+    end;
     if FCommandIndex < FCommandLines.Count then
     begin
       FProcess.CommandLine := FCommandLines[FCommandIndex];
-      FProcess.ApplicationName := FPaths[FCommandIndex];
+      FProcess.ApplicationName := FEncoderPaths[FCommandIndex];
       FEncoderStatus := esEncoding;
       FConsoleOutput := '';
+      if MainForm.FDVDBatchMode then
+      begin
+        FItem := MainForm.DVDJobList.Items[FListItemIndexes[FCommandIndex]];
+        FItem.SubItems[0] := '0';
+        FItem.StateIndex := 0;
+        FItem.MakeVisible(False);
+      end;
       FProcess.Run;
     end
     else
@@ -254,14 +303,15 @@ procedure TDVDRipProcess.ResetValues;
 begin
   // reset all lists, indexes etc
   FCommandLines.Clear;
-  FPaths.Clear;
+  FEncoderPaths.Clear;
   FCommandIndex := 0;
-  FDurationIndex := 0;
   FConsoleOutput := '';
   FProcess.ConsoleOutput.Clear;
   FProcessTypes.Clear;
   FStoppedByUser := False;
   FInfos.Clear;
+  FListItemIndexes.Clear;
+  FItem := nil;
 end;
 
 procedure TDVDRipProcess.Start;
@@ -270,9 +320,15 @@ begin
   begin
     if FCommandLines.Count > 0 then
     begin
-      FProcess.ApplicationName := FPaths[0];
+      FProcess.ApplicationName := FEncoderPaths[0];
       FProcess.CommandLine := FCommandLines[0];
       FEncoderStatus := esEncoding;
+      if MainForm.FDVDBatchMode then
+      begin
+        FItem := MainForm.DVDJobList.Items[FListItemIndexes[0]];
+        FItem.SubItems[0] := '0';
+        FItem.StateIndex := 0;
+      end;
       FProcess.Run;
     end
     else

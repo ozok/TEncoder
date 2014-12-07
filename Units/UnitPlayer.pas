@@ -328,14 +328,14 @@ begin
     begin
       with MainForm do
       begin
-        case ConvertItems[Options.FileIndex].SelectedSubtitleType of
+        case FMasterFileInfoList[Options.FileIndex].SelectedSubtitleType of
           embedded:
             begin
               if MainForm.EnableSubBtn.Checked then
               begin
-                if ConvertItems[Options.FileIndex].SubtitleTrackIndex > -1 then
+                if FMasterFileInfoList[Options.FileIndex].SubtitleTrackIndex > -1 then
                 begin
-                  SubtitleCMD := ' -sid ' + ConvertItems[Options.FileIndex].SelectedSubtitleTrack;
+                  SubtitleCMD := ' -sid ' + FMasterFileInfoList[Options.FileIndex].SelectedSubtitleTrack;
                 end;
               end;
             end;
@@ -343,16 +343,17 @@ begin
             begin
               with Options.SubtitleOptions do
               begin
-                if FileExists(ConvertItems[Options.FileIndex].SelectedSubtitleFile) then
+                if FileExists(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile) then
                 begin
-                  if UseSSAStyle and ((LowerCase(ExtractFileExt(ConvertItems[Options.FileIndex].SelectedSubtitleFile)) = '.ass') or (LowerCase(ExtractFileExt(ConvertItems[Options.FileIndex].SelectedSubtitleFile)) = '.ssa')) then
+                  if UseSSAStyle and ((LowerCase(ExtractFileExt(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile)) = '.ass') or (LowerCase(ExtractFileExt(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile)) = '.ssa'))
+                  then
                   begin
-                    SubtitleCMD := ' -ass -sub "' + ConvertItems[Options.FileIndex].SelectedSubtitleFile + '" -ass-styles "' + ConvertItems[Options.FileIndex].SelectedSubtitleFile + '"'
+                    SubtitleCMD := ' -ass -sub "' + FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '" -ass-styles "' + FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '"'
                   end
                   else
                   begin
                     SubtitleCMD := ' -subfont-autoscale ' + FontAutoScale + ' -subfont-blur 2 -subfont-outline 2 -subfont "' + FontPath + '" -subcp ' + SubEncoding + ' -subfont-text-scale ' + TextScale + ' -sub "' +
-                      ConvertItems[Options.FileIndex].SelectedSubtitleFile + '"';
+                      FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '"';
 
                     if length(SubEncoding) > 0 then
                     begin

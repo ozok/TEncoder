@@ -109,9 +109,9 @@ uses UnitMain, UnitEffects, UnitSettings, UnitLogs, UnitAdvancedOptions;
 procedure TRangeEditorForm.ClearBtnClick(Sender: TObject);
 begin
   StartBar.Progress := 0;
-  StartBar.MaxValue := MainForm.ConvertItems[VideoIndex].ConstDuration;
-  EndBar.MaxValue := MainForm.ConvertItems[VideoIndex].ConstDuration;
-  EndBar.Progress := MainForm.ConvertItems[VideoIndex].ConstDuration;
+  StartBar.MaxValue := MainForm.FMasterFileInfoList[VideoIndex].ConstDuration;
+  EndBar.MaxValue := MainForm.FMasterFileInfoList[VideoIndex].ConstDuration;
+  EndBar.Progress := MainForm.FMasterFileInfoList[VideoIndex].ConstDuration;
 
   StartValue := 0;
   EndValue := EndBar.MaxValue;
@@ -187,7 +187,7 @@ procedure TRangeEditorForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   MainForm.Enabled := True;
   Player.Stop();
-  if (EndValue <> MainForm.ConvertItems[VideoIndex].EndPosition) or (StartValue <> MainForm.ConvertItems[VideoIndex].StartPosition) then
+  if (EndValue <> MainForm.FMasterFileInfoList[VideoIndex].EndPosition) or (StartValue <> MainForm.FMasterFileInfoList[VideoIndex].StartPosition) then
   begin
     if ID_YES = Application.MessageBox('Values changed. Would you like to save them?', 'Confirm', MB_ICONQUESTION or MB_YESNO) then
     begin
@@ -201,7 +201,7 @@ end;
 
 procedure TRangeEditorForm.FormCreate(Sender: TObject);
 begin
-  Player := TPlayer.Create(DisplayPanel.Handle, MainForm.MplayerPath);;
+  Player := TPlayer.Create(DisplayPanel.Handle, MainForm.FMPlayerPath);;
 end;
 
 procedure TRangeEditorForm.FormDestroy(Sender: TObject);
@@ -245,9 +245,9 @@ begin
       VideoVolumeLevel := VolumeBar.Progress;
       EnableDeint := EffectForm.DeintEnblBtn.Checked;
       DeintMethodIndex := EffectForm.DeintMethodList.ItemIndex;
-      AudioDelay := MainForm.ConvertItems[VideoIndex].AudioDelay;
-      StartTime := MainForm.ConvertItems[VideoIndex].StartPosition;
-      EndTime := MainForm.ConvertItems[VideoIndex].EndPosition;
+      AudioDelay := MainForm.FMasterFileInfoList[VideoIndex].AudioDelay;
+      StartTime := MainForm.FMasterFileInfoList[VideoIndex].StartPosition;
+      EndTime := MainForm.FMasterFileInfoList[VideoIndex].EndPosition;
       RotateMode := EffectForm.RotateList.ItemIndex;
 
       // subtitle options
@@ -259,7 +259,7 @@ begin
         FontAutoScale := FloatToStr(SettingsForm.AutoScaleList.ItemIndex);
         TextScale := SettingsForm.DefScaleEdit.Text;
         SubtilePosition := FloatToStr(SettingsForm.SubposBar.Position);
-        Delay := MainForm.ConvertItems[VideoIndex].SubtitleDelay;
+        Delay := MainForm.FMasterFileInfoList[VideoIndex].SubtitleDelay;
       end;
     end;
 
@@ -339,8 +339,8 @@ begin
 
   with MainForm do
   begin
-    ConvertItems[VideoIndex].StartPosition := StartValue;
-    ConvertItems[VideoIndex].EndPosition := EndValue;
+    FMasterFileInfoList[VideoIndex].StartPosition := StartValue;
+    FMasterFileInfoList[VideoIndex].EndPosition := EndValue;
   end;
 
 end;

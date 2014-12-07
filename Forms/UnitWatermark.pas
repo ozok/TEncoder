@@ -34,7 +34,7 @@ type
     procedure StopBtnClick(Sender: TObject);
   private
     { Private declarations }
-    FEncoder: TEncoder;
+    FEncoder: TMyProcess;
     FDuration: string;
     FOutputFile: string;
 
@@ -651,7 +651,7 @@ end;
 
 procedure TWatermarkForm.FormCreate(Sender: TObject);
 begin
-  FEncoder := TEncoder.Create;
+  FEncoder := TMyProcess.Create;
   VideoPathEdit.Dialog.Filter := 'Video Files|*.flv;*.m2v;*.avi;*.mkv;*.mpeg;*.mpg;*.mov;*.wmv;*.mp4;' + '*.m4v;*.dat;*.vob;*.rmvb;*.mts;*.mxf';
   ImagePathEdit.Dialog.Filter := 'Image Files|*.jpeg;*.jpg;*.bmp;*.gif;*.png';
 end;
@@ -771,7 +771,7 @@ begin
             if Length(LCMD) > 0 then
             begin
               FEncoder.CommandLines.Add(LCMD);
-              FEncoder.EncoderPaths.Add(MainForm.FFMpegPath);
+              FEncoder.EncoderPaths.Add(MainForm.FFFMpegPath);
               FEncoder.ProcessTypes.Add(ffmpeg);
               FEncoder.Infos.Add('Watermark');
               FEncoder.OutputFiles.Add(FOutputFile);

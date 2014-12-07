@@ -31,6 +31,7 @@ type
     FilePaths: TStringList;
     OutputFiles: TStringList;
     ProcessTypes: TList<TDVDProcessType>;
+    ListItemIndexes: TList<integer>;
     TempFiles: TStringList;
     FilesToCheck: TStringList;
     constructor Create;
@@ -53,11 +54,11 @@ begin
   TempFiles := TStringList.Create;
   FilesToCheck := TStringList.Create;
   ProcessTypes := TList<TDVDProcessType>.Create;
+  ListItemIndexes := TList<Integer>.Create;
 end;
 
 destructor TDVDJob.Destroy;
 begin
-  inherited;
   CMDs.Free;
   ProcessTypes.Free;
   Infos.Free;
@@ -66,6 +67,8 @@ begin
   OutputFiles.Free;
   TempFiles.Free;
   FilesToCheck.Free;
+  ListItemIndexes.Free;
+  inherited;
 end;
 
 end.

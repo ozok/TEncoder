@@ -68,7 +68,7 @@ type
     FDuration: Integer;
     FStart: Integer;
     FEnd: Integer;
-    FConverter: TEncoder;
+    FConverter: TMyProcess;
 
     function GetDuration(const FileName: string): integer;
     function TimetoStrEx(const Time: Integer): string;
@@ -149,7 +149,7 @@ end;
 
 procedure TVideoToGIFForm.FormCreate(Sender: TObject);
 begin
-  FConverter := TEncoder.Create;
+  FConverter := TMyProcess.Create;
   ImageMagickPath := ExtractFileDir(Application.ExeName) + '\convert.exe';
   SourceEdit.Filter := 'Video Files|*.flv;*.m2v;*.avi;*.mkv;*.mpeg;*.mpg;*.mov;*.wmv;*.mp4;' + '*.m4v;*.dat;*.vob;*.rmvb;*.mts;*.mxf';
   LoadSettings;
@@ -227,7 +227,7 @@ procedure TVideoToGIFForm.LoadSettings;
 var
   LSet: TIniFile;
 begin
-  LSet := TIniFile.Create(MainForm.AppDataFolder + '\settings.ini');
+  LSet := TIniFile.Create(MainForm.FAppDataFolder + '\settings.ini');
   try
     with LSet do
     begin
@@ -307,7 +307,7 @@ procedure TVideoToGIFForm.SaveSettings;
 var
   LSet: TIniFile;
 begin
-  LSet := TIniFile.Create(MainForm.AppDataFolder + '\settings.ini');
+  LSet := TIniFile.Create(MainForm.FAppDataFolder + '\settings.ini');
   try
     with LSet do
     begin

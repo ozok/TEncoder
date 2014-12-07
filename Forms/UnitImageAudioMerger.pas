@@ -47,7 +47,7 @@ type
     procedure StopBtnClick(Sender: TObject);
   private
     { Private declarations }
-    FEncoder: TEncoder;
+    FEncoder: TMyProcess;
     FDuration: string;
     FOutputFile: string;
 
@@ -640,7 +640,7 @@ end;
 
 procedure TImageAudiotoVideoForm.FormCreate(Sender: TObject);
 begin
-  FEncoder := TEncoder.Create;
+  FEncoder := TMyProcess.Create;
   AudioEdit.Dialog.Filter := 'Audio Files|*.mp3;*.wav;*.aac;*.m4a;*.m4b;*.ac3;*.ogg;*.flac;*.mp2;*.opus;*.spx';
   ImageEdit.Dialog.Filter := 'Image Files|*.jpeg;*.jpg;*.bmp;*.gif;*.png';
 end;
@@ -759,7 +759,7 @@ begin
             if Length(LCMD) > 0 then
             begin
               FEncoder.CommandLines.Add(LCMD);
-              FEncoder.EncoderPaths.Add(MainForm.FFMpegPath);
+              FEncoder.EncoderPaths.Add(MainForm.FFFMpegPath);
               FEncoder.ProcessTypes.Add(ffmpeg);
               FEncoder.Infos.Add('Image+Audio=Video');
               FEncoder.OutputFiles.Add(FOutputFile);

@@ -201,16 +201,16 @@ begin
   DownloadLog.Lines.Clear;
   if LogList.ItemIndex = (LogList.Items.Count - 1) then
   begin
-    if FileExists(MainForm.LogFolder + '\cmd.txt') then
+    if FileExists(MainForm.FLogFolder + '\cmd.txt') then
     begin
-      DownloadLog.Lines.LoadFromFile(MainForm.LogFolder + '\cmd.txt');
+      DownloadLog.Lines.LoadFromFile(MainForm.FLogFolder + '\cmd.txt');
     end;
   end
   else
   begin
-    if FileExists(MainForm.LogFolder + '\' + FloatToStr(LogList.ItemIndex + 1) + 'log.txt') then
+    if FileExists(MainForm.FLogFolder + '\' + FloatToStr(LogList.ItemIndex + 1) + 'log.txt') then
     begin
-      DownloadLog.Lines.LoadFromFile(MainForm.LogFolder + '\' + FloatToStr(LogList.ItemIndex + 1) + 'log.txt');
+      DownloadLog.Lines.LoadFromFile(MainForm.FLogFolder + '\' + FloatToStr(LogList.ItemIndex + 1) + 'log.txt');
     end;
   end;
 end;

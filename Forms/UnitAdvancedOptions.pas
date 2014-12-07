@@ -196,7 +196,7 @@ var
   SettingsFile: TIniFile;
 begin
 
-  SettingsFile := TIniFile.Create(MainForm.AppDataFolder + '\Settings.ini');
+  SettingsFile := TIniFile.Create(MainForm.FAppDataFolder + '\Settings.ini');
   try
     with SettingsFile do
     begin
@@ -266,7 +266,7 @@ var
   SettingsFile: TIniFile;
 begin
 
-  SettingsFile := TIniFile.Create(MainForm.AppDataFolder + '\Settings.ini');
+  SettingsFile := TIniFile.Create(MainForm.FAppDataFolder + '\Settings.ini');
   try
     with SettingsFile do
     begin

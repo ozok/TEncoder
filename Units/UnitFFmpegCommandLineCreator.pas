@@ -65,7 +65,7 @@ constructor TFFMpegCommandLineCreator.Create(const FileIndex: integer);
 begin
   inherited Create;
 
-  FFileName := MainForm.ConvertItems[FileIndex].FilePath;
+  FFileName := MainForm.FMasterFileInfoList[FileIndex].FilePath;
   FFileIndex := FileIndex;
 end;
 
@@ -353,7 +353,7 @@ begin
     end;
 {$ENDREGION}
 {$REGION 'audio'}
-    if ConvertItems[FFileIndex].AudioIndex > -1 then
+    if FMasterFileInfoList[FFileIndex].AudioIndex > -1 then
     begin
 
       Abitrate := AdvancedOptionsForm.AudioBitrateList.Text;
@@ -456,7 +456,7 @@ begin
     // get file extension from file info
     if (VideoEncoderList.ItemIndex = 11) and (AudioEncoderList.ItemIndex = 0) then
     begin
-      OutExtension := ConvertItems[FFileIndex].SelectedAudioExt;
+      OutExtension := FMasterFileInfoList[FFileIndex].SelectedAudioExt;
     end;
 
     // Video Options
@@ -623,7 +623,7 @@ begin
     end;
 {$ENDREGION}
     // audio only source
-    if ConvertItems[FFileIndex].FFMmpegVideoID = -1 then
+    if FMasterFileInfoList[FFileIndex].FFMmpegVideoID = -1 then
     begin
       VCodec := ' -vn ';
 
@@ -651,7 +651,7 @@ begin
       end;
     end;
 
-    if ConvertItems[FFileIndex].FFMmpegVideoID < 1 then
+    if FMasterFileInfoList[FFileIndex].FFMmpegVideoID < 1 then
     begin
       Container := '';
     end;
@@ -663,19 +663,19 @@ begin
       OutName := CreateFileName(FFileName, OutExtension);
 
       // pass log file
-      PassFile := AppDataFolder + ExtractFileName(ChangeFileExt(FFileName, '.log'));
+      PassFile := FAppDataFolder + ExtractFileName(ChangeFileExt(FFileName, '.log'));
 
-      Result.FirstPassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" -pass 1 -passlogfile "' + PassFile + '" ' + CreateRangeCMD(ConvertItems[FFileIndex].StartPosition, ConvertItems[FFileIndex].EndPosition)
-        + VCodec + Container + ' -an "' + OutName + '"';
+      Result.FirstPassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" -pass 1 -passlogfile "' + PassFile + '" ' + CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition,
+        FMasterFileInfoList[FFileIndex].EndPosition) + VCodec + Container + ' -an "' + OutName + '"';
 
       // second pass
       OutName := CreateFileName(FFileName, OutExtension);
 
       // pass log file
-      PassFile := AppDataFolder + ExtractFileName(ChangeFileExt(FFileName, '.log'));
+      PassFile := FAppDataFolder + ExtractFileName(ChangeFileExt(FFileName, '.log'));
 
       // audio track selection
-      if ConvertItems[FFileIndex].AudioIndex < 0 then
+      if FMasterFileInfoList[FFileIndex].AudioIndex < 0 then
       begin
         AudioCMD := ' ';
       end
@@ -688,21 +688,21 @@ begin
         end
         else
         begin
-          AudioDelayCMD := ' -itsoffset ' + StringReplace(FloatToStr(ConvertItems[FFileIndex].AudioDelay), ',', '.', []);
+          AudioDelayCMD := ' -itsoffset ' + StringReplace(FloatToStr(FMasterFileInfoList[FFileIndex].AudioDelay), ',', '.', []);
         end;
 
         // if video is none or there are no video streams
-        if (VideoEncoderList.ItemIndex = 11) or (ConvertItems[FFileIndex].FFMmpegVideoID = -1) then
+        if (VideoEncoderList.ItemIndex = 11) or (FMasterFileInfoList[FFileIndex].FFMmpegVideoID = -1) then
         begin
-          AudioCMD := ' -map 0:' + ConvertItems[FFileIndex].SelectedAudio + ' ';
+          AudioCMD := ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
         end
         else
         begin
-          AudioCMD := ' -map 0:' + FloatToStr(ConvertItems[FFileIndex].FFMmpegVideoID) + ' -map 0:' + ConvertItems[FFileIndex].SelectedAudio + ' ';
+          AudioCMD := ' -map 0:' + FloatToStr(FMasterFileInfoList[FFileIndex].FFMmpegVideoID) + ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
         end;
       end;
-      Result.SeconPassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" -pass 2 -passlogfile "' + PassFile + '" ' + CreateRangeCMD(ConvertItems[FFileIndex].StartPosition, ConvertItems[FFileIndex].EndPosition)
-        + VCodec + Container + AudioCMD + ACodec + ' "' + OutName + '"';
+      Result.SeconPassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" -pass 2 -passlogfile "' + PassFile + '" ' + CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition,
+        FMasterFileInfoList[FFileIndex].EndPosition) + VCodec + Container + AudioCMD + ACodec + ' "' + OutName + '"';
     end
     else
     begin
@@ -737,7 +737,7 @@ begin
 
       OutName := CreateFileName(FFileName, OutExtension);
       // audio track selection
-      if ConvertItems[FFileIndex].AudioIndex < 0 then
+      if FMasterFileInfoList[FFileIndex].AudioIndex < 0 then
       begin
         AudioCMD := ' ';
       end
@@ -750,21 +750,21 @@ begin
         end
         else
         begin
-          AudioDelayCMD := ' -itsoffset ' + StringReplace(FloatToStr(ConvertItems[FFileIndex].AudioDelay), ',', '.', []);
+          AudioDelayCMD := ' -itsoffset ' + StringReplace(FloatToStr(FMasterFileInfoList[FFileIndex].AudioDelay), ',', '.', []);
         end;
 
         // if video is none
-        if (VideoEncoderList.ItemIndex = 11) or (ConvertItems[FFileIndex].FFMmpegVideoID = -1) then
+        if (VideoEncoderList.ItemIndex = 11) or (FMasterFileInfoList[FFileIndex].FFMmpegVideoID = -1) then
         begin
-          AudioCMD := ' -map 0:' + (ConvertItems[FFileIndex].SelectedAudio) + ' ';
+          AudioCMD := ' -map 0:' + (FMasterFileInfoList[FFileIndex].SelectedAudio) + ' ';
         end
         else
         begin
-          AudioCMD := ' -map 0:' + FloatToStr(ConvertItems[FFileIndex].FFMmpegVideoID) + ' -map 0:' + ConvertItems[FFileIndex].SelectedAudio + ' ';
+          AudioCMD := ' -map 0:' + FloatToStr(FMasterFileInfoList[FFileIndex].FFMmpegVideoID) + ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
         end;
       end;
-      Result.SinglePassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" ' + CustomArgs + ' ' + CreateRangeCMD(ConvertItems[FFileIndex].StartPosition, ConvertItems[FFileIndex].EndPosition) + VCodec + Container
-        + AudioCMD + ACodec + ' "' + OutName + '"';
+      Result.SinglePassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" ' + CustomArgs + ' ' + CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition, FMasterFileInfoList[FFileIndex].EndPosition) +
+        VCodec + Container + AudioCMD + ACodec + ' "' + OutName + '"';
     end;
   end;
 end;
