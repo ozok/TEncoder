@@ -348,6 +348,10 @@ type
     DVDJobList: TsListView;
     DVDPreTitleBtn: TsButton;
     DVDNextTitleBtn: TsButton;
+    sPanel8: TsPanel;
+    LinkEdit: TsEdit;
+    LinkTypeList: TsComboBox;
+    AddSingleLinkBtn: TsBitBtn;
     procedure RemoveBtnClick(Sender: TObject);
     procedure RemoveAllBtnClick(Sender: TObject);
     procedure UpBtnClick(Sender: TObject);
@@ -459,6 +463,8 @@ type
     procedure DVDAddtoBatchBtnClick(Sender: TObject);
     procedure DVDPreTitleBtnClick(Sender: TObject);
     procedure DVDNextTitleBtnClick(Sender: TObject);
+    procedure AddSingleLinkBtnClick(Sender: TObject);
+    procedure LinkEditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 {$ENDREGION}
   private
     { Private declarations }
@@ -1457,6 +1463,101 @@ begin
   P := AddLinkBtn.ClientToScreen(Point(0, 0));
 
   AddLinkMenu.Popup(P.X, P.Y + AddLinkBtn.Height)
+end;
+
+procedure TMainForm.AddSingleLinkBtnClick(Sender: TObject);
+var
+  LURL: string;
+  LYIE: TYouTubeVideoInfoExtractor;
+  I: Integer;
+  LPass: TUserPass;
+begin
+  LURL := Trim(LinkEdit.Text);
+  if Length(LURL) > 0 then
+  begin
+    case LinkTypeList.ItemIndex of
+      0: // single link
+        begin
+          AbortVideoAddBtn.Top := (LoadPanel.Height div 2) - (AbortVideoAddBtn.Height div 2);
+          LoadPanel.Visible := True;
+          LoadPanel.BringToFront;
+          MenuState(False);
+          FStopAddingLink := False;
+          // SendMessage(LinkList.Handle, WM_SETREDRAW, 0, 0);
+          try
+            LoadPanel.Caption := 'Adding given URL to list...';
+            AddURL(Trim(LURL));
+          finally
+            Self.Enabled := True;
+            LoadPanel.Visible := False;
+            // SendMessage(LinkList.Handle, WM_SETREDRAW, 1, 0);
+            RedrawWindow(VideoDownloaderList.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_FRAME or RDW_ALLCHILDREN);
+            MenuState(true);
+            Self.Width := Self.Width + 1;
+            Self.Width := Self.Width - 1;
+          end;
+        end;
+      1: // playlist/user
+        begin
+          LPass.UserName := UserEdit.Text;
+          LPass.Password := PassEdit.Text;
+          LYIE := TYouTubeVideoInfoExtractor.Create(LURL, YouTubePath, FTempFolder, LPass, not SettingsForm.DontPreviewImgBtn.Checked);
+          LYIE.GetPlayListInfo;
+          AbortVideoAddBtn.Top := (LoadPanel.Height div 2) - (AbortVideoAddBtn.Height div 2);
+          LoadPanel.Visible := True;
+          LoadPanel.BringToFront;
+          MenuState(false);
+          FStopAddingLink := False;
+          try
+            LoadPanel.Caption := 'Extracting video links from playlist, this may take a while...';
+            while LYIE.PlaylistStatus = stReading do
+            begin
+              if FStopAddingLink then
+              begin
+                LYIE.StopAll;
+                Break;
+              end;
+              Application.ProcessMessages;
+              Sleep(100);
+            end;
+            if not FStopAddingLink then
+            begin
+              if LYIE.PlayListVideoLinks.Count > 0 then
+              begin
+                if LogForm.DownloadLog.Lines.Count > 0 then
+                begin
+                  AddToLog(0, '');
+                end;
+                AddToLog(0, 'Found ' + FloatToStr(LYIE.PlayListVideoLinks.Count) + ' videos.');
+                AddToLog(0, '');
+                for I := 0 to LYIE.PlayListVideoLinks.Count - 1 do
+                begin
+                  if FStopAddingLink then
+                  begin
+                    Break;
+                  end;
+                  LoadPanel.Caption := 'Adding videos to the list...(' + FloatToStr(i + 1) + '/' + FloatToStr(LYIE.PlayListVideoLinks.Count) + ')';
+                  AddURL('http://www.youtube.com/watch?v=' + LYIE.PlayListVideoLinks[i]);
+                end;
+              end
+              else
+              begin
+                Application.MessageBox('Could not get any links from playlist.', 'Error', MB_ICONERROR);
+              end;
+            end;
+          finally
+            LYIE.Free;
+            Self.Enabled := True;
+            LoadPanel.Visible := False;
+            // SendMessage(LinkList.Handle, WM_SETREDRAW, 1, 0);
+            RedrawWindow(VideoDownloaderList.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_FRAME or RDW_ALLCHILDREN);
+            MenuState(true);
+            Self.Width := Self.Width + 1;
+            Self.Width := Self.Width - 1;
+          end;
+        end;
+    end;
+  end;
 end;
 
 procedure TMainForm.AddToLog(const LogID: Integer; const Msg: string);
@@ -5742,6 +5843,14 @@ end;
 procedure TMainForm.LabelClick(Sender: TObject);
 begin
   ShellExecute(Handle, 'open', PWideChar(TsLabel(Sender).Caption), nil, nil, SW_SHOWNORMAL);
+end;
+
+procedure TMainForm.LinkEditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+  begin
+    AddSingleLinkBtnClick(Self);
+  end;
 end;
 
 procedure TMainForm.LoadOptions;

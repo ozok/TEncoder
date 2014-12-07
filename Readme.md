@@ -33,4 +33,4 @@ Version and download location
 
 Licence
 ---
-OooPlayer is released under GPLv2
+TEncoder is released under GPLv2

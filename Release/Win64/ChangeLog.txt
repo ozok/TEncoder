@@ -2,6 +2,7 @@ TEncoder Change Log
 
 -4.5.4
 -Added: Batch DVD ripping
+-Added: A faster way to add links to video downloader
 -Fixed: Couldn't get subtitle tracks from some mkv files
 -Fixed: Updated default video downloader format
 -Updated: youtube-dl
