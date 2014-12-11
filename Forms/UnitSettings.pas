@@ -90,6 +90,7 @@ type
     SubSSABtn: TsCheckBox;
     DontDoubleDownloadBtn: TsCheckBox;
     DontPreviewImgBtn: TsCheckBox;
+    OverwriteList: TsComboBox;
     procedure FormCreate(Sender: TObject);
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

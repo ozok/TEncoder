@@ -72,16 +72,18 @@ function TDubForm.CreateCMD: string;
 var
   LExt: string;
   LCMD: string;
+  LEncodeJob: TEncodeJob;
 begin
 
   // get video without the audio
   LCMD := ' -y -i "' + VideoEdit.Text + '" -an -c:v copy "' + MainForm.DirectoryEdit.Text + '\TEncoder_temp.mkv"';
-  FEncoder.CommandLines.Add(LCMD);
-  FEncoder.EncoderPaths.Add(MainForm.FFFMpegPath);
-  FEncoder.ProcessTypes.Add(ffmpeg);
-  FEncoder.Infos.Add('Dubbing');
-  FEncoder.OutputFiles.Add(FOutputFile);
-  FEncoder.FileNames.Add('');
+  LEncodeJob.CommandLine := LCMD;
+  LEncodeJob.ProcessPath := MainForm.FFFMpegPath;
+  LEncodeJob.ProcessType := ffmpeg;
+  LEncodeJob.EncodingInformation := 'Dubbing';
+  LEncodeJob.EncodingOutputFilePath := FOutputFile;
+  LEncodeJob.SourceFileName := '';
+  FEncoder.EncodeJobs.Add(LEncodeJob);
 
   LCMD := ' -y -i "' + AudioEdit.Text + '" -i "' + MainForm.DirectoryEdit.Text + '\TEncoder_temp.mkv" -c:v copy -c:a copy ';
   case ContainerList.ItemIndex of
@@ -132,12 +134,13 @@ begin
       end;
   end;
   LCMD := LCMD + ' "' + ImageAudiotoVideoForm.CreateFileName(OutputEdit.Text, LExt) + '"';
-  FEncoder.CommandLines.Add(LCMD);
-  FEncoder.EncoderPaths.Add(MainForm.FFFMpegPath);
-  FEncoder.ProcessTypes.Add(ffmpeg);
-  FEncoder.Infos.Add('Dubbing');
-  FEncoder.OutputFiles.Add(FOutputFile);
-  FEncoder.FileNames.Add('');
+  LEncodeJob.CommandLine := LCMD;
+  LEncodeJob.ProcessPath := MainForm.FFFMpegPath;
+  LEncodeJob.ProcessType := ffmpeg;
+  LEncodeJob.EncodingInformation := 'Dubbing';
+  LEncodeJob.EncodingOutputFilePath := FOutputFile;
+  LEncodeJob.SourceFileName := '';
+  FEncoder.EncodeJobs.Add(LEncodeJob);
 end;
 
 procedure TDubForm.DeleteTempFile;

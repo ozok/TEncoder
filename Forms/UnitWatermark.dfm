@@ -53,8 +53,9 @@ object WatermarkForm: TWatermarkForm
     Height = 21
     Anchors = [akLeft, akTop, akRight]
     AutoSize = False
+    Color = clWhite
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
@@ -84,8 +85,9 @@ object WatermarkForm: TWatermarkForm
     Height = 21
     Anchors = [akLeft, akTop, akRight]
     AutoSize = False
+    Color = clWhite
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
@@ -128,8 +130,9 @@ object WatermarkForm: TWatermarkForm
     SkinData.SkinSection = 'COMBOBOX'
     VerticalAlignment = taAlignTop
     Style = csDropDownList
+    Color = clWhite
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
@@ -156,9 +159,10 @@ object WatermarkForm: TWatermarkForm
     Width = 75
     Height = 21
     Alignment = taCenter
+    Color = clWhite
     Enabled = False
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
@@ -188,9 +192,10 @@ object WatermarkForm: TWatermarkForm
     Width = 75
     Height = 21
     Alignment = taCenter
+    Color = clWhite
     Enabled = False
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
@@ -220,8 +225,9 @@ object WatermarkForm: TWatermarkForm
     Width = 581
     Height = 21
     Anchors = [akLeft, akTop, akRight]
+    Color = clWhite
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []

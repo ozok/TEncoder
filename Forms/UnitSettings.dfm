@@ -189,10 +189,6 @@ object SettingsForm: TSettingsForm
       Caption = 'General'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GeneralPanel: TsPanel
         Left = 0
         Top = 0
@@ -299,10 +295,6 @@ object SettingsForm: TSettingsForm
       Caption = 'Subtitle'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object SubtitlePanel: TsPanel
         Left = 0
         Top = 0
@@ -544,10 +536,6 @@ object SettingsForm: TSettingsForm
       Caption = 'Encoding'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object EncodingPanel: TsPanel
         Left = 0
         Top = 0
@@ -750,16 +738,47 @@ object SettingsForm: TSettingsForm
           ImgChecked = 0
           ImgUnchecked = 0
         end
+        object OverwriteList: TsComboBox
+          Left = 355
+          Top = 144
+          Width = 75
+          Height = 21
+          Alignment = taLeftJustify
+          BoundLabel.Active = True
+          BoundLabel.Caption = 'If output file already exists:'
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+          SkinData.SkinSection = 'COMBOBOX'
+          VerticalAlignment = taAlignTop
+          Style = csDropDownList
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 0
+          ParentFont = False
+          TabOrder = 10
+          Text = 'Add index'
+          Visible = False
+          Items.Strings = (
+            'Add index'
+            'Skip')
+        end
       end
     end
     object sTabSheet4: TsTabSheet
       Caption = 'Skin'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object SkinPanel: TsPanel
         Left = 0
         Top = 0
@@ -890,10 +909,6 @@ object SettingsForm: TSettingsForm
       Caption = 'Video Downloader'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object PreferedFormatEdit: TsEdit
         Left = 100
         Top = 3

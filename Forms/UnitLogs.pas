@@ -69,7 +69,7 @@ type
     { Private declarations }
   public
     { Public declarations }
-    EncoderLogs: array [0 .. 15] of TStringList;
+    FEncoderLogs: array [0 .. 15] of TStringList;
   end;
 
 var
@@ -86,9 +86,9 @@ var
   I: Integer;
 begin
   MainLog.Lines.Clear;
-  for I := Low(EncoderLogs) to High(EncoderLogs) do
+  for I := Low(FEncoderLogs) to High(FEncoderLogs) do
   begin
-    EncoderLogs[i].Clear;
+    FEncoderLogs[i].Clear;
   end;
   VideoEncoderList.Lines.Clear;
   MPlayerLogList.Lines.Clear;
@@ -115,7 +115,7 @@ begin
       end;
     1:
       begin
-        EncoderLogs[VideoEncoderLogsList.ItemIndex].Clear;
+        FEncoderLogs[VideoEncoderLogsList.ItemIndex].Clear;
         VideoEncoderList.Lines.Clear;
       end;
     2:
@@ -147,10 +147,10 @@ var
   I: Integer;
 begin
   // encoder logs
-  for I := Low(EncoderLogs) to High(EncoderLogs) do
+  for I := Low(FEncoderLogs) to High(FEncoderLogs) do
   begin
-    EncoderLogs[i] := TStringList.Create;
-    EncoderLogs[i].Add(Format(' Encoder %d log', [i + 1]));
+    FEncoderLogs[i] := TStringList.Create;
+    FEncoderLogs[i].Add(Format(' Encoder %d log', [i + 1]));
   end;
 
   MPlayerLogList.Lines.Add(' Mplayer Log');
@@ -160,9 +160,9 @@ procedure TLogForm.FormDestroy(Sender: TObject);
 var
   I: Integer;
 begin
-  for I := Low(EncoderLogs) to High(EncoderLogs) do
+  for I := Low(FEncoderLogs) to High(FEncoderLogs) do
   begin
-    EncoderLogs[i].Free;
+    FEncoderLogs[i].Free;
   end;
 end;
 
@@ -173,9 +173,9 @@ begin
   Logs.Enabled := False;
   try
     // reset
-    for I := Low(EncoderLogs) to High(EncoderLogs) do
+    for I := Low(FEncoderLogs) to High(FEncoderLogs) do
     begin
-      EncoderLogs[i].Clear;
+      FEncoderLogs[i].Clear;
     end;
     // load command lines and console output
     VideoEncoderLogsListChange(Self);
@@ -232,7 +232,7 @@ begin
         end;
       1:
         begin
-          EncoderLogs[VideoEncoderLogsList.ItemIndex].SaveToFile(SaveDialog.FileName, TEncoding.UTF8);
+          FEncoderLogs[VideoEncoderLogsList.ItemIndex].SaveToFile(SaveDialog.FileName, TEncoding.UTF8);
         end;
       2:
         begin
@@ -261,11 +261,16 @@ begin
 end;
 
 procedure TLogForm.VideoEncoderLogsListChange(Sender: TObject);
+var
+  i: integer;
 begin
   VideoEncoderList.Lines.Clear;
   VideoEncoderList.Lines.Add(Format('Encoder %d log', [VideoEncoderLogsList.ItemIndex + 1]));
   VideoEncoderList.Lines.Add(Format('Encoder %d command lines:', [VideoEncoderLogsList.ItemIndex + 1]));
-  VideoEncoderList.Lines.AddStrings(MainForm.FEncoders[VideoEncoderLogsList.ItemIndex].CommandLines);
+  for I := 0 to MainForm.FEncoders[VideoEncoderLogsList.ItemIndex].EncodeJobs.Count-1 do
+  begin
+    VideoEncoderList.Lines.Add(MainForm.FEncoders[VideoEncoderLogsList.ItemIndex].EncodeJobs[i].CommandLine);
+  end;
   VideoEncoderList.Lines.Add('');
   VideoEncoderList.Lines.Add(Format('Encoder %d console outputs:', [VideoEncoderLogsList.ItemIndex + 1]));
   VideoEncoderList.Lines.AddStrings(MainForm.FEncoders[VideoEncoderLogsList.ItemIndex].GetConsoleOutput);

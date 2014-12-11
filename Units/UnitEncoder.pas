@@ -31,14 +31,27 @@ type
   TProcessType = (mencoder, ffmpeg, mp4box, renametool, imagemagick);
 
 type
+  TEncodeJob = packed record
+    CommandLine: string;
+    ProcessPath: string;
+    ProcessType: TProcessType;
+    SourceFileName: string;
+    SourceDuration: integer;
+    EncodingInformation: string;
+    FileListIndex: integer;
+    EncodingOutputFilePath: string;
+    FinalFilePath: string;
+  end;
+
+type
+  TEncodeJobs = TList<TEncodeJob>;
+
+type
   TMyProcess = class(TObject)
   private
     // process
     FProcess: TJvCreateProcess;
-    // list of command lines to be executed
-    FCommandLines: TStringList;
-    // list of executables
-    FPaths: TStringList;
+    FEncodeJobs: TEncodeJobs;
     // index of current command line. Also progress.
     FCommandIndex: integer;
     // last line backend has written to console
@@ -47,22 +60,11 @@ type
     FEncoderStatus: TEncoderStatus;
     // flag to indicate if encoding is stopped by user
     FStoppedByUser: Boolean;
-    // list of files to be processed.
-    FFileNames: TStringList;
-    // a list of types of encoders to be run.
-    FProcessTypes: TList<TProcessType>;
-    // a list of durations of files to be processed. generally to show progress.
-    FDurations: TList<integer>;
     // index of currently used duration
     FDurationIndex: integer;
-    // list of informations about steps.
-    FInfos: TStringList;
-    // a list of indexes indicating to the files in a list. to show progress in the list.
-    FFileIndexes: TStringList;
-    // a list of output files. generally to check if they are created.
-    FOutputFiles: TStringList;
     FItem: TListItem;
     FTerminateCounter: integer;
+    FFinalFileNames: TStringList;
 
     // process events
     procedure ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
@@ -81,23 +83,17 @@ type
   public
     property ConsoleOutput: string read FConsoleOutput;
     property EncoderStatus: TEncoderStatus read FEncoderStatus;
-    property CommandLines: TStringList read FCommandLines write FCommandLines;
-    property EncoderPaths: TStringList read FPaths write FPaths;
-    property FileNames: TStringList read FFileNames;
     property FilesDone: integer read FCommandIndex;
     property ProcessID: integer read GetProcessID;
     property CurrentFile: string read GetFileName;
-    property Durations: TList<integer> read FDurations write FDurations;
-    property ProcessTypes: TList<TProcessType> read FProcessTypes write FProcessTypes;
     property CurrentProcessType: TProcessType read GetCurrentProcessType;
     property CurrentDuration: integer read GetCurrentDuration;
     property Info: string read GetInfo;
-    property Infos: TStringList read FInfos write FInfos;
     property CommandCount: integer read GetCommandCount;
     property ExeName: string read GetExeName;
-    property FileIndexes: TStringList read FFileIndexes write FFileIndexes;
     property FileIndex: Integer read GetFileIndex;
-    property OutputFiles: TStringList read FOutputFiles write FOutputFiles;
+    property FinalFileNames: TStringList read FFinalFileNames write FFinalFileNames;
+    property EncodeJobs: TEncodeJobs read FEncodeJobs write FEncodeJobs;
 
     constructor Create();
     destructor Destroy(); override;
@@ -138,39 +134,25 @@ begin
     WaitForTerminate := true;
   end;
 
-  FCommandLines := TStringList.Create;
-  FPaths := TStringList.Create;
-  FFileNames := TStringList.Create;
+  FEncodeJobs := TEncodeJobs.Create;
   FEncoderStatus := esStopped;
   FStoppedByUser := False;
-  FProcessTypes := TList<TProcessType>.Create;
-  FDurations := TList<integer>.Create;
-  FInfos := TStringList.Create;
-  FFileIndexes := TStringList.Create;
   FDurationIndex := 0;
   FCommandIndex := 0;
-  FOutputFiles := TStringList.Create;
 end;
 
 destructor TMyProcess.Destroy;
 begin
-
-  inherited Destroy;
-  FreeAndNil(FCommandLines);
-  FreeAndNil(FPaths);
-  FreeAndNil(FInfos);
-  FreeAndNil(FFileNames);
-  FreeAndNil(FProcessTypes);
-  FreeAndNil(FDurations);
-  FreeAndNil(FFileIndexes);
-  FreeAndNil(FOutputFiles);
+  FreeAndNil(FEncodeJobs);
+  FreeAndNil(FFinalFileNames);
   FProcess.Free;
+  inherited Destroy;
 
 end;
 
 function TMyProcess.GetCommandCount: integer;
 begin
-  Result := FCommandLines.Count;
+  Result := FEncodeJobs.Count;
 end;
 
 function TMyProcess.GetConsoleOutput: TStrings;
@@ -180,40 +162,40 @@ end;
 
 function TMyProcess.GetCurrentDuration: integer;
 begin
-  if FCommandIndex < FDurations.Count then
-    Result := FDurations[FDurationIndex];
+  if FCommandIndex < FEncodeJobs.Count then
+    Result := FEncodeJobs[FDurationIndex].SourceDuration;
 end;
 
 function TMyProcess.GetCurrentProcessType: TProcessType;
 begin
   Result := ffmpeg;
-  if FCommandIndex < FProcessTypes.Count then
-    Result := FProcessTypes[FCommandIndex];
+  if FCommandIndex < FEncodeJobs.Count then
+    Result := FEncodeJobs[FCommandIndex].ProcessType;
 end;
 
 function TMyProcess.GetExeName: string;
 begin
-  if FCommandIndex < FPaths.Count then
-    Result := FPaths[FCommandIndex];
+  if FCommandIndex < FEncodeJobs.Count then
+    Result := FEncodeJobs[FCommandIndex].ProcessPath;
 end;
 
 function TMyProcess.GetFileIndex: Integer;
 begin
   Result := 0;
-  if FCommandIndex < FFileIndexes.Count then
-    Result := StrToInt(FFileIndexes[FCommandIndex]);
+  if FCommandIndex < FEncodeJobs.Count then
+    Result := FEncodeJobs[FCommandIndex].FileListIndex;
 end;
 
 function TMyProcess.GetFileName: string;
 begin
-  if FCommandIndex < FFileNames.Count then
-    Result := FFileNames[FCommandIndex];
+  if FCommandIndex < FEncodeJobs.Count then
+    Result := FEncodeJobs[FCommandIndex].SourceFileName;
 end;
 
 function TMyProcess.GetInfo: string;
 begin
-  if FCommandIndex < FInfos.Count then
-    Result := FInfos[FCommandIndex];
+  if FCommandIndex < FEncodeJobs.Count then
+    Result := FEncodeJobs[FCommandIndex].EncodingInformation;
 end;
 
 function TMyProcess.GetPercentage: integer;
@@ -282,17 +264,17 @@ begin
     // delete unfinished files.
     if SettingsForm.DeleteUnfinBtn.Checked then
     begin
-      if FCommandIndex < FOutputFiles.Count then
+      if FCommandIndex < FEncodeJobs.Count then
       begin
-        if FileExists(FOutputFiles[FCommandIndex]) then
+        if FileExists(FEncodeJobs[FCommandIndex].EncodingOutputFilePath) then
         begin
-          if not DeleteFile(FOutputFiles[FCommandIndex]) then
+          if not DeleteFile(FEncodeJobs[FCommandIndex].EncodingOutputFilePath) then
           begin
             RaiseLastOSError;
           end
           else
           begin
-            MainForm.AddToLog(0, 'Deleted unfinished file: ' + ExtractFileName(FOutputFiles[FCommandIndex]));
+            MainForm.AddToLog(0, 'Deleted unfinished file: ' + ExtractFileName(FEncodeJobs[FCommandIndex].EncodingOutputFilePath));
           end;
         end;
       end;
@@ -312,15 +294,15 @@ begin
     FItem.SubItems[0] := 'Done';
     FItem.SubItems[1] := '100';
     FItem.StateIndex := 2;
-    if FCommandIndex < FCommandLines.Count then
+    if FCommandIndex < FEncodeJobs.Count then
     begin
-      FProcess.CommandLine := FCommandLines[FCommandIndex];
-      FProcess.ApplicationName := FPaths[FCommandIndex];
+      FProcess.CommandLine := FEncodeJobs[FCommandIndex].CommandLine;
+      FProcess.ApplicationName := FEncodeJobs[FCommandIndex].ProcessPath;
       FEncoderStatus := esEncoding;
       FConsoleOutput := '';
       FItem := MainForm.ProgressList.Items.Add;
-      FItem.Caption := ExtractFileName(GetFileName);
-      FItem.SubItems.Add(GetInfo);
+      FItem.Caption := ExtractFileName(FEncodeJobs[FCommandIndex].SourceFileName);
+      FItem.SubItems.Add(FEncodeJobs[FCommandIndex].EncodingInformation);
       FItem.SubItems.Add('0');
       FItem.StateIndex := 0;
       FItem.MakeVisible(False);
@@ -329,7 +311,6 @@ begin
     else
     begin
       // done
-      FFileNames.Clear;
       FEncoderStatus := esDone;
     end;
   end;
@@ -338,30 +319,27 @@ end;
 procedure TMyProcess.ResetValues;
 begin
   // reset all lists, indexes etc
-  FCommandLines.Clear;
-  FPaths.Clear;
+  FEncodeJobs.Clear;
   FCommandIndex := 0;
   FDurationIndex := 0;
   FConsoleOutput := '';
   FProcess.ConsoleOutput.Clear;
-  FProcessTypes.Clear;
-  FDurations.Clear;
   FStoppedByUser := False;
-  FInfos.Clear;
   FItem := nil;
   FTerminateCounter := 0;
+  FFinalFileNames.Clear;
 end;
 
 procedure TMyProcess.Start;
 begin
   if FProcess.ProcessInfo.hProcess = 0 then
   begin
-    if FCommandLines.Count > 0 then
+    if FEncodeJobs.Count > 0 then
     begin
-      if FileExists(FPaths[0]) then
+      if FileExists(FEncodeJobs[0].ProcessPath) then
       begin
-        FProcess.ApplicationName := FPaths[0];
-        FProcess.CommandLine := FCommandLines[0];
+        FProcess.ApplicationName := FEncodeJobs[0].ProcessPath;
+        FProcess.CommandLine := FEncodeJobs[0].CommandLine;
         FEncoderStatus := esEncoding;
         FItem := MainForm.ProgressList.Items.Add;
         FItem.Caption := ExtractFileName(GetFileName);
@@ -386,7 +364,6 @@ begin
   if FProcess.ProcessInfo.hProcess > 0 then
   begin
     TerminateProcess(FProcess.ProcessInfo.hProcess, 0);
-    FFileNames.Clear;
     FEncoderStatus := esStopped;
     FStoppedByUser := true;
   end;

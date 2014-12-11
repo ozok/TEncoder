@@ -40,7 +40,6 @@ type
   TMencoderCommandLineCreator = class(TObject)
   private
     FFileName: string;
-    FMencoderCommandLine: TMencoderCommandLine;
     FPassStr: string;
     FOutputFile: string;
     FFileIndex: integer;
@@ -52,7 +51,7 @@ type
     function CreateAdvancedOptions(): string;
   public
 
-    property MencoderCommandLine: TMencoderCommandLine read CreateCommandline;
+    property CommandLines: TMencoderCommandLine read CreateCommandline;
     property OutputFile: string read FOutputFile;
     constructor Create(const FileIndex: integer);
     destructor Destroy; override;
@@ -69,7 +68,6 @@ begin
   inherited Create;
   FFileIndex := FileIndex;
   FFileName := MainForm.FMasterFileInfoList[FileIndex].FilePath;
-  FMencoderCommandLine := CreateCommandline;
 end;
 
 function TMencoderCommandLineCreator.CreateAdvancedOptions: string;
@@ -903,7 +901,6 @@ begin
 
   FOutputFile := OutFileName;
   Result := OutFileName;
-
 end;
 
 function TMencoderCommandLineCreator.CreateRangeCMD(StartTime, EndTime: Integer): string;

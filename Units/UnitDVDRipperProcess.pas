@@ -252,7 +252,6 @@ end;
 procedure TDVDRipProcess.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 begin
   FProcess.ConsoleOutput.Add('=============================================');
-  FProcess.ConsoleOutput.SaveToFile('C:\dadfdcdc.txt');
   FEncoderStatus := esStopped;
   MainForm.DVDProgressBar.Position := 0;
   if FStoppedByUser then

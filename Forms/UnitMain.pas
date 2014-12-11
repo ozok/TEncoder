@@ -559,7 +559,7 @@ type
     // listview item up/down
     procedure ExchangeItems(lv: TsListView; const i, j: Integer);
     // adds command line to TEncoder object
-    procedure AddCommandLine(Index: Integer; const EncoderIndex: integer);
+    procedure CreateEncodingCommands(FileIndex: Integer; const EncoderIndex: integer);
 
     // video download fncs.
     // download link
@@ -673,7 +673,7 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
   UnitVideotoGIF, UnitBatchAdd, UnitWatermark;
 
 const
-  Portable = True;
+  Portable = False;
   Build = 4973;
 
 {$R *.dfm}
@@ -781,29 +781,32 @@ begin
   MainForm.Enabled := False;
 end;
 
-procedure TMainForm.AddCommandLine(Index: Integer; const EncoderIndex: integer);
+procedure TMainForm.CreateEncodingCommands(FileIndex: Integer; const EncoderIndex: integer);
 var
-  FileName: string;
-  MencoderCommandLineCreator: TMencoderCommandLineCreator;
-  Mp4CMD: string;
-  FFMpegCommandLineCreator: TFFMpegCommandLineCreator;
-  ExtractAudioFile: string;
+  LSourceFileNamePath: string;
+  LMEncoderCMD: TMencoderCommandLineCreator;
+  LMp4MuxingCMD: string;
+  LFFMpegCMD: TFFMpegCommandLineCreator;
+  LExtractedAudioFileName: string;
   LMEncoderMp4MuxExt: string;
   LOggRemuxExtension: string;
   LOggAudioCMD: string;
   LRenameFile: TStringList;
   LMencoderFinalFileName: string;
   LEncoderIndex: integer;
+  LEncodeJobs: TEncodeJobs;
+  LEncodeJob: TEncodeJob;
 begin
 
   // if audio only then we must use ffmpeg and do single pass
-  if FMasterFileInfoList[Index].FFMmpegVideoID = -1 then
+  if FMasterFileInfoList[FileIndex].FFMmpegVideoID = -1 then
   begin
     LEncoderIndex := 1;
     DoTwoPassBtn.Checked := False;
   end
   else
   begin
+    // else use users choise
     LEncoderIndex := FConstEncoderIndex;
     DoTwoPassBtn.Checked := FConstTwoPassMode;
   end;
@@ -834,249 +837,302 @@ begin
 
         if DoTwoPassBtn.Checked then
         begin
-          FileName := FMasterFileInfoList[Index].FilePath;
-          AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(FileName) + ')';
+          LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
+          AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(LSourceFileNamePath) + ')';
           // add to infos
           // create command line
-          MencoderCommandLineCreator := TMencoderCommandLineCreator.Create(index);
+          LMEncoderCMD := TMencoderCommandLineCreator.Create(FileIndex);
           try
-            FEncoders[EncoderIndex].CommandLines.Add(MencoderCommandLineCreator.MencoderCommandLine.FirstPassCMD);
-            FEncoders[EncoderIndex].ProcessTypes.Add(mencoder);
-            FEncoders[EncoderIndex].EncoderPaths.Add(FMencoderPath);
-            FEncoders[EncoderIndex].FileNames.Add(FileName);
-            FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-            FEncoders[EncoderIndex].OutputFiles.Add(MencoderCommandLineCreator.OutputFile);
-            FEncoders[EncoderIndex].Infos.Add(' 1st pass of 2');
+            with LEncodeJob do
+            begin
+
+            end;
+            LEncodeJob.CommandLine := LMEncoderCMD.CommandLines.FirstPassCMD;
+            LEncodeJob.ProcessType := mencoder;
+            LEncodeJob.ProcessPath := FMencoderPath;
+            LEncodeJob.SourceFileName := LSourceFileNamePath;
+            LEncodeJob.FileListIndex := FileIndex;
+            LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+            LEncodeJob.EncodingInformation := ' 1st pass of 2';
           finally
-            MencoderCommandLineCreator.Free;
+            LMEncoderCMD.Free;
           end;
           // create command line
-          MencoderCommandLineCreator := TMencoderCommandLineCreator.Create(index);
+          LMEncoderCMD := TMencoderCommandLineCreator.Create(FileIndex);
           try
-            FEncoders[EncoderIndex].CommandLines.Add(MencoderCommandLineCreator.MencoderCommandLine.SeconPassCMD);
-            FEncoders[EncoderIndex].ProcessTypes.Add(mencoder);
-            FEncoders[EncoderIndex].EncoderPaths.Add(FMencoderPath);
-            FEncoders[EncoderIndex].FileNames.Add(FileName);
-            FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-            FEncoders[EncoderIndex].OutputFiles.Add(MencoderCommandLineCreator.OutputFile);
-            FEncoders[EncoderIndex].Infos.Add(' 2nd pass of 2');
-            // mp4box for mp4
+            with LEncodeJob do
+            begin
+
+            end;
+            LEncodeJob.CommandLine := LMEncoderCMD.CommandLines.SeconPassCMD;
+            LEncodeJob.ProcessType := mencoder;
+            LEncodeJob.ProcessPath := FMencoderPath;
+            LEncodeJob.SourceFileName := LSourceFileNamePath;
+            LEncodeJob.FileListIndex := FileIndex;
+            LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+            LEncodeJob.EncodingInformation := ' 2nd pass of 2';
+            // mux to mp4 using mp4box
             if ContainerList.ItemIndex = 2 then
             begin
               // extract audio
-              if (FMasterFileInfoList[Index].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
+              if (FMasterFileInfoList[FileIndex].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
               begin
-                Mp4CMD := ' -y -i "' + ExtractFileDir(MencoderCommandLineCreator.OutputFile) + '\' + ExtractFileName(MencoderCommandLineCreator.OutputFile) + '" -vn -f mp4 ';
+                LMp4MuxingCMD := ' -y -i "' + ExtractFileDir(LMEncoderCMD.OutputFile) + '\' + ExtractFileName(LMEncoderCMD.OutputFile) + '" -vn -f mp4 ';
+{$REGION 'extracted audio track file extension'}
                 case AudioEncoderList.ItemIndex of
                   1:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.mp3');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.mp3');
                   2:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.m4a');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.m4a');
                   3:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.ogg');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.ogg');
                   4:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.wav');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.wav');
                   5:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.ac3');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.ac3');
                   6:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.mp2');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.mp2');
                   7:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.wma');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.wma');
                   8:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.spx');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.spx');
                   9:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.opus');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.opus');
                   11:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.flac');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.flac');
                 end;
-                Mp4CMD := Mp4CMD + ' "' + ExtractFileDir(ExtractAudioFile) + '\' + ExtractFileName(ExtractAudioFile) + '"';
-                FEncoders[EncoderIndex].CommandLines.Add(Mp4CMD);
-                FEncoders[EncoderIndex].ProcessTypes.Add(ffmpeg);
-                FEncoders[EncoderIndex].Infos.Add('Extracting audio');
-                FEncoders[EncoderIndex].EncoderPaths.Add(FFFMpegPath);
-                FEncoders[EncoderIndex].FileNames.Add(FileName);
-                FEncoders[EncoderIndex].Durations.Add(GetFileDuration(Index));
-                FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-                FEncoders[EncoderIndex].OutputFiles.Add(MencoderCommandLineCreator.OutputFile);
+{$ENDREGION}
+                LMp4MuxingCMD := LMp4MuxingCMD + ' "' + ExtractFileDir(LExtractedAudioFileName) + '\' + ExtractFileName(LExtractedAudioFileName) + '"';
+
+                with LEncodeJob do
+                begin
+
+                end;
+                LEncodeJob.CommandLine := LMp4MuxingCMD;
+                LEncodeJob.ProcessType := ffmpeg;
+                LEncodeJob.EncodingInformation := 'Extracting audio';
+                LEncodeJob.ProcessPath := FFFMpegPath;
+                LEncodeJob.SourceFileName := LSourceFileNamePath;
+                LEncodeJob.SourceDuration := GetFileDuration(FileIndex);
+                LEncodeJob.FileListIndex := FileIndex;
+                LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
               end;
 
               // extract video
-              Mp4CMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(MencoderCommandLineCreator.OutputFile) + '\' + ExtractFileName(MencoderCommandLineCreator.OutputFile) + '" -o "' +
-                ExtractFileDir(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '"';
-              FEncoders[EncoderIndex].CommandLines.Add(Mp4CMD);
-              FEncoders[EncoderIndex].ProcessTypes.Add(mencoder);
-              FEncoders[EncoderIndex].Infos.Add('Extracting video');
-              FEncoders[EncoderIndex].EncoderPaths.Add(FMencoderPath);
-              FEncoders[EncoderIndex].FileNames.Add(FileName);
-              FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-              FEncoders[EncoderIndex].OutputFiles.Add(MencoderCommandLineCreator.OutputFile);
-              if (FMasterFileInfoList[Index].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
+              LMp4MuxingCMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LMEncoderCMD.OutputFile) + '\' + ExtractFileName(LMEncoderCMD.OutputFile) + '" -o "' +
+                ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
+
+              with LEncodeJob do
               begin
-                Mp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' +
-                  ExtractFileDir(ExtractAudioFile) + '\' + ExtractFileName(ExtractAudioFile) + '" -new "' + CreateFileName(MencoderCommandLineCreator.OutputFile, '.mp4') + '"';
+
+              end;
+              LEncodeJob.CommandLine := LMp4MuxingCMD;
+              LEncodeJob.ProcessType := mencoder;
+              LEncodeJob.EncodingInformation := 'Extracting video';
+              LEncodeJob.ProcessPath := FMencoderPath;
+              LEncodeJob.SourceFileName := LSourceFileNamePath;
+              LEncodeJob.FileListIndex := FileIndex;
+              LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+              // muxing all
+              if (FMasterFileInfoList[FileIndex].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
+              begin
+                // with audio
+                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' +
+                  ExtractFileDir(LExtractedAudioFileName) + '\' + ExtractFileName(LExtractedAudioFileName) + '" -new "' + CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
               end
               else
               begin
-                Mp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' +
-                  CreateFileName(MencoderCommandLineCreator.OutputFile, '.mp4') + '"';
+                // without audio
+                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' +
+                  CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
               end;
-              FEncoders[EncoderIndex].CommandLines.Add(Mp4CMD);
-              FEncoders[EncoderIndex].ProcessTypes.Add(mp4box);
-              FEncoders[EncoderIndex].Infos.Add('Muxing');
-              FEncoders[EncoderIndex].EncoderPaths.Add(FMp4BoxPath);
-              FEncoders[EncoderIndex].FileNames.Add(FileName);
-              FEncoders[EncoderIndex].Durations.Add(GetFileDuration(Index));
-              FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-              FEncoders[EncoderIndex].OutputFiles.Add(MencoderCommandLineCreator.OutputFile);
-              // delete temp files
-              FTempFilesToDelete.Add(ExtractFileDir(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)));
-              FTempFilesToDelete.Add(ExtractFileDir(ExtractAudioFile) + '\' + ExtractFileName(ExtractAudioFile));
-              FTempFilesToDelete.Add(ExtractFileDir(MencoderCommandLineCreator.OutputFile) + '\' + ExtractFileName(MencoderCommandLineCreator.OutputFile));
-              FTempFilesToDelete.Add(ExtractFileDir(ExtractAudioFile) + '\');
+              with LEncodeJob do
+              begin
+
+              end;
+              LEncodeJob.CommandLine := LMp4MuxingCMD;
+              LEncodeJob.ProcessType := mp4box;
+              LEncodeJob.EncodingInformation := 'Muxing';
+              LEncodeJob.ProcessPath := FMp4BoxPath;
+              LEncodeJob.SourceFileName := LSourceFileNamePath;
+              LEncodeJob.SourceDuration := GetFileDuration(FileIndex);
+              LEncodeJob.FileListIndex := FileIndex;
+              LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+              // temp files to be deleted
+              FTempFilesToDelete.Add(ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)));
+              FTempFilesToDelete.Add(ExtractFileDir(LExtractedAudioFileName) + '\' + ExtractFileName(LExtractedAudioFileName));
+              FTempFilesToDelete.Add(ExtractFileDir(LMEncoderCMD.OutputFile) + '\' + ExtractFileName(LMEncoderCMD.OutputFile));
+              FTempFilesToDelete.Add(ExtractFileDir(LExtractedAudioFileName) + '\');
               // output file to be checked
-              FFilesToCheck.Add(CreateFileName(MencoderCommandLineCreator.OutputFile, '.mp4'));
-              LMencoderFinalFileName := CreateFileName(MencoderCommandLineCreator.OutputFile, '.mp4');
+              FFilesToCheck.Add(CreateFileName(LMEncoderCMD.OutputFile, '.mp4'));
+              LMencoderFinalFileName := CreateFileName(LMEncoderCMD.OutputFile, '.mp4');
             end
             else
             begin
               // output file to be checked
               // other than mp4 mode
-              FFilesToCheck.Add(MencoderCommandLineCreator.OutputFile);
-              LMencoderFinalFileName := MencoderCommandLineCreator.OutputFile;
+              FFilesToCheck.Add(LMEncoderCMD.OutputFile);
+              LMencoderFinalFileName := LMEncoderCMD.OutputFile;
             end;
-
           finally
-            MencoderCommandLineCreator.Free;
+            LMEncoderCMD.Free;
           end;
         end
         else
         begin
           // do a single pass
-          FileName := FMasterFileInfoList[Index].FilePath;
-          AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(FileName) + ')';
+          LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
+          AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(LSourceFileNamePath) + ')';
           // create command line
-          MencoderCommandLineCreator := TMencoderCommandLineCreator.Create(index);
+          LMEncoderCMD := TMencoderCommandLineCreator.Create(FileIndex);
           try
-            FEncoders[EncoderIndex].CommandLines.Add(MencoderCommandLineCreator.MencoderCommandLine.SinglePassCMD);
-            FEncoders[EncoderIndex].ProcessTypes.Add(mencoder);
-            FEncoders[EncoderIndex].Infos.Add(' Encoding');
-            FEncoders[EncoderIndex].EncoderPaths.Add(FMencoderPath);
-            FEncoders[EncoderIndex].FileNames.Add(FileName);
-            FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-            FEncoders[EncoderIndex].OutputFiles.Add(MencoderCommandLineCreator.OutputFile);
+            with LEncodeJob do
+            begin
+
+            end;
+            LEncodeJob.CommandLine := LMEncoderCMD.CommandLines.SinglePassCMD;
+            LEncodeJob.ProcessType := mencoder;
+            LEncodeJob.EncodingInformation := ' Encoding';
+            LEncodeJob.ProcessPath := FMencoderPath;
+            LEncodeJob.SourceFileName := LSourceFileNamePath;
+            LEncodeJob.FileListIndex := FileIndex;
+            LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
             // mp4box for mp4
             if ContainerList.ItemIndex = 2 then
             begin
               // extract audio
-              if (FMasterFileInfoList[Index].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
+              if (FMasterFileInfoList[FileIndex].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
               begin
-                Mp4CMD := ' -y -i "' + ExtractFileDir(MencoderCommandLineCreator.OutputFile) + '\' + ExtractFileName(MencoderCommandLineCreator.OutputFile) + '" -vn -f mp4 ';
+                LMp4MuxingCMD := ' -y -i "' + ExtractFileDir(LMEncoderCMD.OutputFile) + '\' + ExtractFileName(LMEncoderCMD.OutputFile) + '" -vn -f mp4 ';
                 case AudioEncoderList.ItemIndex of
                   1:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.mp3');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.mp3');
                   2:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.m4a');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.m4a');
                   3:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.ogg');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.ogg');
                   4:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.wav');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.wav');
                   5:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.ac3');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.ac3');
                   6:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.mp2');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.mp2');
                   7:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.wma');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.wma');
                   8:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.spx');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.spx');
                   9:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.opus');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.opus');
                   11:
-                    ExtractAudioFile := ChangeFileExt(MencoderCommandLineCreator.OutputFile, '_.opus');
+                    LExtractedAudioFileName := ChangeFileExt(LMEncoderCMD.OutputFile, '_.opus');
                 end;
-                Mp4CMD := Mp4CMD + ' "' + ExtractFileDir(ExtractAudioFile) + '\' + ExtractFileName(ExtractAudioFile) + '"';
-                FEncoders[EncoderIndex].CommandLines.Add(Mp4CMD);
-                FEncoders[EncoderIndex].ProcessTypes.Add(ffmpeg);
-                FEncoders[EncoderIndex].Infos.Add('Extracting audio');
-                FEncoders[EncoderIndex].EncoderPaths.Add(FFFMpegPath);
-                FEncoders[EncoderIndex].FileNames.Add(FileName);
-                FEncoders[EncoderIndex].Durations.Add(GetFileDuration(Index));
-                FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-                FEncoders[EncoderIndex].OutputFiles.Add(MencoderCommandLineCreator.OutputFile);
+                with LEncodeJob do
+                begin
+
+                end;
+                LMp4MuxingCMD := LMp4MuxingCMD + ' "' + ExtractFileDir(LExtractedAudioFileName) + '\' + ExtractFileName(LExtractedAudioFileName) + '"';
+                LEncodeJob.CommandLine := LMp4MuxingCMD;
+                LEncodeJob.ProcessType := ffmpeg;
+                LEncodeJob.EncodingInformation := 'Extracting audio';
+                LEncodeJob.ProcessPath := FFFMpegPath;
+                LEncodeJob.SourceFileName := LSourceFileNamePath;
+                LEncodeJob.SourceDuration := GetFileDuration(FileIndex);
+                LEncodeJob.FileListIndex := FileIndex;
+                LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
               end;
 
               // extract video
-              Mp4CMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(MencoderCommandLineCreator.OutputFile) + '\' + ExtractFileName(MencoderCommandLineCreator.OutputFile) + '" -o "' +
-                ExtractFileDir(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '"';
-              FEncoders[EncoderIndex].CommandLines.Add(Mp4CMD);
-              FEncoders[EncoderIndex].ProcessTypes.Add(mencoder);
-              FEncoders[EncoderIndex].Infos.Add('Extracting video');
-              FEncoders[EncoderIndex].EncoderPaths.Add(FMencoderPath);
-              FEncoders[EncoderIndex].FileNames.Add(FileName);
-              FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-              FEncoders[EncoderIndex].OutputFiles.Add(MencoderCommandLineCreator.OutputFile);
-              if (FMasterFileInfoList[Index].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
+              LMp4MuxingCMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LMEncoderCMD.OutputFile) + '\' + ExtractFileName(LMEncoderCMD.OutputFile) + '" -o "' +
+                ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
+
+              with LEncodeJob do
               begin
-                Mp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' +
-                  ExtractFileDir(ExtractAudioFile) + '\' + ExtractFileName(ExtractAudioFile) + '" -new "' + CreateFileName(MencoderCommandLineCreator.OutputFile, '.mp4') + '"';
+
+              end;
+              LEncodeJob.CommandLine := LMp4MuxingCMD;
+              LEncodeJob.ProcessType := mencoder;
+              LEncodeJob.EncodingInformation := 'Extracting video';
+              LEncodeJob.ProcessPath := FMencoderPath;
+              LEncodeJob.SourceFileName := LSourceFileNamePath;
+              LEncodeJob.FileListIndex := FileIndex;
+              LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+              if (FMasterFileInfoList[FileIndex].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
+              begin
+                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' +
+                  ExtractFileDir(LExtractedAudioFileName) + '\' + ExtractFileName(LExtractedAudioFileName) + '" -new "' + CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
               end
               else
               begin
-                Mp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' +
-                  CreateFileName(MencoderCommandLineCreator.OutputFile, '.mp4') + '"';
+                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' +
+                  CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
               end;
-              FEncoders[EncoderIndex].CommandLines.Add(Mp4CMD);
-              FEncoders[EncoderIndex].ProcessTypes.Add(mp4box);
-              FEncoders[EncoderIndex].Infos.Add('Muxing');
-              FEncoders[EncoderIndex].EncoderPaths.Add(FMp4BoxPath);
-              FEncoders[EncoderIndex].FileNames.Add(FileName);
-              FEncoders[EncoderIndex].Durations.Add(GetFileDuration(Index));
-              FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-              FEncoders[EncoderIndex].OutputFiles.Add(MencoderCommandLineCreator.OutputFile);
+              with LEncodeJob do
+              begin
+
+              end;
+              LEncodeJob.CommandLine := LMp4MuxingCMD;
+              LEncodeJob.ProcessType := mp4box;
+              LEncodeJob.EncodingInformation := 'Muxing';
+              LEncodeJob.ProcessPath := FMp4BoxPath;
+              LEncodeJob.SourceFileName := LSourceFileNamePath;
+              LEncodeJob.SourceDuration := GetFileDuration(FileIndex);
+              LEncodeJob.FileListIndex := FileIndex;
+              LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
               // delete temp files
-              FTempFilesToDelete.Add(ExtractFileDir(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(MencoderCommandLineCreator.OutputFile, LMEncoderMp4MuxExt)));
-              FTempFilesToDelete.Add(ExtractFileDir(ExtractAudioFile) + '\' + ExtractFileName(ExtractAudioFile));
-              FTempFilesToDelete.Add(ExtractFileDir(MencoderCommandLineCreator.OutputFile) + '\' + ExtractFileName(MencoderCommandLineCreator.OutputFile));
-              FTempFilesToDelete.Add(ExtractFileDir(ExtractAudioFile) + '\');
+              FTempFilesToDelete.Add(ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)));
+              FTempFilesToDelete.Add(ExtractFileDir(LExtractedAudioFileName) + '\' + ExtractFileName(LExtractedAudioFileName));
+              FTempFilesToDelete.Add(ExtractFileDir(LMEncoderCMD.OutputFile) + '\' + ExtractFileName(LMEncoderCMD.OutputFile));
+              FTempFilesToDelete.Add(ExtractFileDir(LExtractedAudioFileName) + '\');
               // output file to be checked
-              FFilesToCheck.Add(CreateFileName(MencoderCommandLineCreator.OutputFile, '.mp4'));
-              LMencoderFinalFileName := CreateFileName(MencoderCommandLineCreator.OutputFile, '.mp4');
+              FFilesToCheck.Add(CreateFileName(LMEncoderCMD.OutputFile, '.mp4'));
+              LMencoderFinalFileName := CreateFileName(LMEncoderCMD.OutputFile, '.mp4');
             end
             else
             begin
               // output file to be checked
               // other than mp4 mode
-              FFilesToCheck.Add(MencoderCommandLineCreator.OutputFile);
-              LMencoderFinalFileName := MencoderCommandLineCreator.OutputFile;
+              FFilesToCheck.Add(LMEncoderCMD.OutputFile);
+              LMencoderFinalFileName := LMEncoderCMD.OutputFile;
             end;
           finally
-            MencoderCommandLineCreator.Free;
+            LMEncoderCMD.Free;
           end;
-
         end;
+
         // mencoder doesn't seem to be able produce valid ogg streams.
         // first convert to flac then to ogg using ffmpeg
         if AudioEncoderList.ItemIndex = 3 then
         begin
-          // convert flac audio to ogg usingffmpeg
+          // convert flac audio to ogg using ffmpeg
           LOggRemuxExtension := ExtractFileExt(LMencoderFinalFileName);
           LOggAudioCMD := '-y -i "' + LMencoderFinalFileName + '" -c:v copy -c:a libvorbis -ab ' + AdvancedOptionsForm.AudioBitrateList.Text + 'k "' + ChangeFileExt(LMencoderFinalFileName, '_temp' + LOggRemuxExtension) + '"';
-          FEncoders[EncoderIndex].CommandLines.Add(LOggAudioCMD);
-          FEncoders[EncoderIndex].ProcessTypes.Add(ffmpeg);
-          FEncoders[EncoderIndex].EncoderPaths.Add(FFFMpegPath);
-          FEncoders[EncoderIndex].FileNames.Add(FileName);
-          FEncoders[EncoderIndex].Infos.Add('Encoding');
+
+          with LEncodeJob do
+          begin
+
+          end;
+          LEncodeJob.CommandLine := LOggAudioCMD;
+          LEncodeJob.ProcessType := ffmpeg;
+          LEncodeJob.ProcessPath := FFFMpegPath;
+          LEncodeJob.SourceFileName := LSourceFileNamePath;
+          LEncodeJob.EncodingInformation := 'Encoding';
           AddToLog(6, 'Ogg encoding command: ' + LOggAudioCMD);
           // rename converted file to original output file name
           LRenameFile := TStringList.Create;
           try
             LRenameFile.Add(LMencoderFinalFileName);
             LRenameFile.Add(ChangeFileExt(LMencoderFinalFileName, '_temp' + LOggRemuxExtension));
-            LRenameFile.SaveToFile(FTempFolder + '\' + FloatToStr(Index) + '.txt', TEncoding.UTF8);
-            FEncoders[EncoderIndex].CommandLines.Add('"' + FDVDRenamePath + '" "' + FTempFolder + '\' + FloatToStr(Index) + '.txt"');
-            FEncoders[EncoderIndex].ProcessTypes.Add(renametool);
-            FEncoders[EncoderIndex].FileNames.Add(FileName);
-            FEncoders[EncoderIndex].EncoderPaths.Add('');
-            FEncoders[EncoderIndex].Infos.Add('Renaming');
+            LRenameFile.SaveToFile(FTempFolder + '\' + FloatToStr(FileIndex) + '.txt', TEncoding.UTF8);
+
+            with LEncodeJob do
+            begin
+
+            end;
+            LEncodeJob.CommandLine := '"' + FDVDRenamePath + '" "' + FTempFolder + '\' + FloatToStr(FileIndex) + '.txt"';
+            LEncodeJob.ProcessType := renametool;
+            LEncodeJob.SourceFileName := LSourceFileNamePath;
+            LEncodeJob.ProcessPath := '';
+            LEncodeJob.EncodingInformation := 'Renaming';
             AddToLog(6, 'Renaming command: "' + FDVDRenamePath + '" "' + FTempFolder + '\dvdogg.txt"');
             FTempFilesToDelete.Add(FDVDRenamePath + '" "' + FTempFolder + '\dvdogg.txt');
           finally
@@ -1091,61 +1147,73 @@ begin
         begin
           // do two passes
           // first pass
-          FileName := FMasterFileInfoList[Index].FilePath;
-          AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(FileName) + ')';
+          LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
+          AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(LSourceFileNamePath) + ')';
           // create command line
-          FFMpegCommandLineCreator := TFFMpegCommandLineCreator.Create(index);
+          LFFMpegCMD := TFFMpegCommandLineCreator.Create(FileIndex);
           try
-            FEncoders[EncoderIndex].CommandLines.Add(FFMpegCommandLineCreator.FMpegCommandLine.FirstPassCMD);
-            FEncoders[EncoderIndex].Durations.Add(FMasterFileInfoList[Index].EndPosition - FMasterFileInfoList[Index].StartPosition);
-            FEncoders[EncoderIndex].ProcessTypes.Add(ffmpeg);
-            FEncoders[EncoderIndex].EncoderPaths.Add(FFFMpegPath);
-            FEncoders[EncoderIndex].FileNames.Add(FileName);
-            FEncoders[EncoderIndex].Infos.Add(' 1st pass of 2');
-            FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-            FEncoders[EncoderIndex].OutputFiles.Add(FFMpegCommandLineCreator.OutputFile);
+            with LEncodeJob do
+            begin
+
+            end;
+            LEncodeJob.CommandLine := LFFMpegCMD.FMpegCommandLine.FirstPassCMD;
+            LEncodeJob.SourceDuration := FMasterFileInfoList[FileIndex].EndPosition - FMasterFileInfoList[FileIndex].StartPosition;
+            LEncodeJob.ProcessType := ffmpeg;
+            LEncodeJob.ProcessPath := FFFMpegPath;
+            LEncodeJob.SourceFileName := LSourceFileNamePath;
+            LEncodeJob.EncodingInformation := ' 1st pass of 2';
+            LEncodeJob.FileListIndex := FileIndex;
+            LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
           finally
-            FFMpegCommandLineCreator.Free;
+            LFFMpegCMD.Free;
           end;
           // second pass
-          FileName := FMasterFileInfoList[Index].FilePath;
+          LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
           // create command line
-          FFMpegCommandLineCreator := TFFMpegCommandLineCreator.Create(Index);
+          LFFMpegCMD := TFFMpegCommandLineCreator.Create(FileIndex);
           try
-            FEncoders[EncoderIndex].CommandLines.Add(FFMpegCommandLineCreator.FMpegCommandLine.SeconPassCMD);
-            FEncoders[EncoderIndex].Durations.Add(FMasterFileInfoList[Index].EndPosition - FMasterFileInfoList[Index].StartPosition);
-            FEncoders[EncoderIndex].ProcessTypes.Add(ffmpeg);
-            FEncoders[EncoderIndex].EncoderPaths.Add(FFFMpegPath);
-            FEncoders[EncoderIndex].FileNames.Add(FileName);
-            FEncoders[EncoderIndex].Infos.Add(' 2nd pass of 2');
-            FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-            FEncoders[EncoderIndex].OutputFiles.Add(FFMpegCommandLineCreator.OutputFile);
+            with LEncodeJob do
+            begin
+
+            end;
+            LEncodeJob.CommandLine := LFFMpegCMD.FMpegCommandLine.SeconPassCMD;
+            LEncodeJob.SourceDuration := FMasterFileInfoList[FileIndex].EndPosition - FMasterFileInfoList[FileIndex].StartPosition;
+            LEncodeJob.ProcessType := ffmpeg;
+            LEncodeJob.ProcessPath := FFFMpegPath;
+            LEncodeJob.SourceFileName := LSourceFileNamePath;
+            LEncodeJob.EncodingInformation := ' 2nd pass of 2';
+            LEncodeJob.FileListIndex := FileIndex;
+            LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
             // output file to be checked
-            FFilesToCheck.Add(FFMpegCommandLineCreator.OutputFile);
+            FFilesToCheck.Add(LFFMpegCMD.OutputFile);
           finally
-            FFMpegCommandLineCreator.Free;
+            LFFMpegCMD.Free;
           end;
         end
         else
         begin
           // do single pass
-          FileName := FMasterFileInfoList[Index].FilePath;
-          AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(FileName) + ')';
+          LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
+          AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(LSourceFileNamePath) + ')';
           // create command line
-          FFMpegCommandLineCreator := TFFMpegCommandLineCreator.Create(Index);
+          LFFMpegCMD := TFFMpegCommandLineCreator.Create(FileIndex);
           try
-            FEncoders[EncoderIndex].CommandLines.Add(FFMpegCommandLineCreator.FMpegCommandLine.SinglePassCMD);
-            FEncoders[EncoderIndex].Durations.Add(FMasterFileInfoList[Index].EndPosition - FMasterFileInfoList[Index].StartPosition);
-            FEncoders[EncoderIndex].ProcessTypes.Add(ffmpeg);
-            FEncoders[EncoderIndex].EncoderPaths.Add(FFFMpegPath);
-            FEncoders[EncoderIndex].FileNames.Add(FileName);
-            FEncoders[EncoderIndex].Infos.Add(' Encoding');
-            FEncoders[EncoderIndex].FileIndexes.Add(FloatToStr(Index));
-            FEncoders[EncoderIndex].OutputFiles.Add(FFMpegCommandLineCreator.OutputFile);
+            with LEncodeJob do
+            begin
+
+            end;
+            LEncodeJob.CommandLine := LFFMpegCMD.FMpegCommandLine.SinglePassCMD;
+            LEncodeJob.SourceDuration := FMasterFileInfoList[FileIndex].EndPosition - FMasterFileInfoList[FileIndex].StartPosition;
+            LEncodeJob.ProcessType := ffmpeg;
+            LEncodeJob.ProcessPath := FFFMpegPath;
+            LEncodeJob.SourceFileName := LSourceFileNamePath;
+            LEncodeJob.EncodingInformation := ' Encoding';
+            LEncodeJob.FileListIndex := FileIndex;
+            LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
             // output file to be checked
-            FFilesToCheck.Add(FFMpegCommandLineCreator.OutputFile);
+            FFilesToCheck.Add(LFFMpegCMD.OutputFile);
           finally
-            FFMpegCommandLineCreator.Free;
+            LFFMpegCMD.Free;
           end;
         end;
       end;
@@ -1794,11 +1862,11 @@ begin
   begin
     for I := Low(FEncoders) to High(FEncoders) do
     begin
-      for j := 0 to FEncoders[i].OutputFiles.Count - 1 do
+      for j := 0 to FEncoders[i].EncodeJobs.Count - 1 do
       begin
-        if FileExists(FEncoders[i].OutputFiles[j]) then
+        if FileExists(FEncoders[i].EncodeJobs[j].EncodingOutputFilePath) then
         begin
-          SetFileCreationTime(FEncoders[i].OutputFiles[j], FMasterFileInfoList[StrToInt(FEncoders[i].FileIndexes[j])].FileDate);
+          SetFileCreationTime(FEncoders[i].EncodeJobs[j].EncodingOutputFilePath, FMasterFileInfoList[StrToInt(FEncoders[i].EncodeJobs[j].FileListIndex)].FileDate);
         end;
       end;
     end;
@@ -4244,11 +4312,11 @@ begin
       FTempFilesToDelete.AddStrings(FDVDJobs[i].TempFiles);
       FFilesToCheck.AddStrings(FDVDJobs[i].FilesToCheck);
     end;
-                 FDVDRipperProcess.CommandLines.SaveToFile('C:\adasd.txt');
-                 FDVDRipperProcess.EncoderPaths.SaveToFile('C:\adaadsadadsd.txt');
+    FDVDRipperProcess.CommandLines.SaveToFile('C:\adasd.txt');
+    FDVDRipperProcess.EncoderPaths.SaveToFile('C:\adaadsadadsd.txt');
     if FDVDRipperProcess.CommandLines.Count > 0 then
     begin
-      for I := 0 to DVDJobList.Items.Count-1 do
+      for I := 0 to DVDJobList.Items.Count - 1 do
       begin
         with DVDJobList.Items[i] do
         begin
@@ -4256,7 +4324,6 @@ begin
           SubItems[0] := 'Waiting...';
         end;
       end;
-
 
       AddToLog(6, '');
       DVDBatchRipUI;
@@ -4366,71 +4433,71 @@ var
   LRenameFile: TStringList;
 begin
 {$REGION 'codec checks'}
-    // must choose a video codec
-    if (VideoEncoderList.ItemIndex = 10) or (VideoEncoderList.ItemIndex = 11) then
+  // must choose a video codec
+  if (VideoEncoderList.ItemIndex = 10) or (VideoEncoderList.ItemIndex = 11) then
+  begin
+    Application.MessageBox('Select a video codec.', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+  // must choose an audio codec
+  if (AudioEncoderList.ItemIndex = 0) or (AudioEncoderList.ItemIndex = 10) then
+  begin
+    Application.MessageBox('Select an audio codec.', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+  // mencoder does not support speex encoding
+  if (AudioEncoderList.ItemIndex = 8) then
+  begin
+    Application.MessageBox('Mencoder does not support encoding audio with Speex codec!', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+  // mencoder does not support opus encoding
+  if (AudioEncoderList.ItemIndex = 9) then
+  begin
+    Application.MessageBox('Mencoder does not support encoding audio with Opus codec!', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+  // mencoder does not support prores encoding
+  if (VideoEncoderList.ItemIndex = 9) then
+  begin
+    Application.MessageBox('Mencoder does not support encoding video with ProRes codec!', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+  // check if given birate values are valid
+  if (VideoEncoderList.ItemIndex <> 9) and (VideoEncoderList.ItemIndex <> 10) then
+  begin
+    if not IsStringNumeric(AdvancedOptionsForm.VideobitrateList.Text) then
     begin
-      Application.MessageBox('Select a video codec.', 'Error', MB_ICONERROR);
-      Exit;
+      Application.MessageBox('Please enter a valid video bitrate value!', 'Error', MB_ICONERROR);
     end;
-    // must choose an audio codec
-    if (AudioEncoderList.ItemIndex = 0) or (AudioEncoderList.ItemIndex = 10) then
+  end;
+  if (AudioEncoderList.ItemIndex <> 9) and (AudioEncoderList.ItemIndex <> 0) then
+  begin
+    if not IsStringNumeric(AdvancedOptionsForm.AudioBitrateList.Text) then
     begin
-      Application.MessageBox('Select an audio codec.', 'Error', MB_ICONERROR);
-      Exit;
+      Application.MessageBox('Please enter a valid audio bitrate value!', 'Error', MB_ICONERROR);
     end;
-    // mencoder does not support speex encoding
-    if (AudioEncoderList.ItemIndex = 8) then
+  end;
+  // crf and two pass wont work
+  if (VideoEncoderList.ItemIndex = 4) and (AdvancedOptionsForm.x264Btn.Checked) and (AdvancedOptionsForm.x264CRFBtn.Checked) and (DoTwoPassBtn.Checked) then
+  begin
+    Application.MessageBox('CRF is incompatible with two pass!', 'Warning', MB_ICONWARNING);
+    Exit;
+  end;
+  // vp8 & mencoder & two pass
+  if DoTwoPassBtn.Checked and (VideoEncoderList.ItemIndex = 7) then
+  begin
+    if ID_YES = Application.MessageBox('Two pass VP8 encoding with Mencoder is problematic at the moment. Would you like to do a single pass?', 'Warning', MB_ICONWARNING or MB_YESNO) then
     begin
-      Application.MessageBox('Mencoder does not support encoding audio with Speex codec!', 'Error', MB_ICONERROR);
-      Exit;
+      DoTwoPassBtn.Checked := False;
     end;
-    // mencoder does not support opus encoding
-    if (AudioEncoderList.ItemIndex = 9) then
-    begin
-      Application.MessageBox('Mencoder does not support encoding audio with Opus codec!', 'Error', MB_ICONERROR);
-      Exit;
-    end;
-    // mencoder does not support prores encoding
-    if (VideoEncoderList.ItemIndex = 9) then
-    begin
-      Application.MessageBox('Mencoder does not support encoding video with ProRes codec!', 'Error', MB_ICONERROR);
-      Exit;
-    end;
-    // check if given birate values are valid
-    if (VideoEncoderList.ItemIndex <> 9) and (VideoEncoderList.ItemIndex <> 10) then
-    begin
-      if not IsStringNumeric(AdvancedOptionsForm.VideobitrateList.Text) then
-      begin
-        Application.MessageBox('Please enter a valid video bitrate value!', 'Error', MB_ICONERROR);
-      end;
-    end;
-    if (AudioEncoderList.ItemIndex <> 9) and (AudioEncoderList.ItemIndex <> 0) then
-    begin
-      if not IsStringNumeric(AdvancedOptionsForm.AudioBitrateList.Text) then
-      begin
-        Application.MessageBox('Please enter a valid audio bitrate value!', 'Error', MB_ICONERROR);
-      end;
-    end;
-    // crf and two pass wont work
-    if (VideoEncoderList.ItemIndex = 4) and (AdvancedOptionsForm.x264Btn.Checked) and (AdvancedOptionsForm.x264CRFBtn.Checked) and (DoTwoPassBtn.Checked) then
-    begin
-      Application.MessageBox('CRF is incompatible with two pass!', 'Warning', MB_ICONWARNING);
-      Exit;
-    end;
-    // vp8 & mencoder & two pass
-    if DoTwoPassBtn.Checked and (VideoEncoderList.ItemIndex = 7) then
-    begin
-      if ID_YES = Application.MessageBox('Two pass VP8 encoding with Mencoder is problematic at the moment. Would you like to do a single pass?', 'Warning', MB_ICONWARNING or MB_YESNO) then
-      begin
-        DoTwoPassBtn.Checked := False;
-      end;
-    end;
-    // vp8 ogg vorbis webm
-    if (VideoEncoderList.ItemIndex = 7) and ((AudioEncoderList.ItemIndex <> 3) or (ContainerList.ItemIndex <> 7)) then
-    begin
-      Application.MessageBox('VP8 video codec works with only OggVorbis as audio codec and Webm as container.', 'Error', MB_ICONERROR);
-      Exit;
-    end;
+  end;
+  // vp8 ogg vorbis webm
+  if (VideoEncoderList.ItemIndex = 7) and ((AudioEncoderList.ItemIndex <> 3) or (ContainerList.ItemIndex <> 7)) then
+  begin
+    Application.MessageBox('VP8 video codec works with only OggVorbis as audio codec and Webm as container.', 'Error', MB_ICONERROR);
+    Exit;
+  end;
 {$ENDREGION}
   // a title must be selected
   if FCurrentTitle <> nil then
@@ -5474,11 +5541,11 @@ procedure TMainForm.FormShow(Sender: TObject);
 var
   FilesListFile: string;
 begin
-  // get options
-  LoadOptions;
-
   // get profiles
   LoadProfiles(ProfileList);
+
+  // get options
+  LoadOptions;
 
   ClearDownloadImages;
 
@@ -5616,9 +5683,9 @@ begin
     with LogForm do
     begin
       MainLog.Lines.SaveToFile(info.Folders.Temp + '\main.txt', TEncoding.UTF8);
-      for I := Low(EncoderLogs) to High(EncoderLogs) do
+      for I := Low(FEncoderLogs) to High(FEncoderLogs) do
       begin
-        EncoderLogs[i].SaveToFile(Info.Folders.Temp + '\enc_log' + FloatToStr(i + 1) + '.txt', TEncoding.UTF8);
+        FEncoderLogs[i].SaveToFile(Info.Folders.Temp + '\enc_log' + FloatToStr(i + 1) + '.txt', TEncoding.UTF8);
       end;
       MPlayerLogList.Lines.SaveToFile(Info.Folders.Temp + '\mplayer.txt', TEncoding.UTF8);
       OtherLog.Lines.SaveToFile(Info.Folders.Temp + '\other.txt', TEncoding.UTF8);
@@ -5652,7 +5719,7 @@ begin
 
     // add to zip
     LZip.Add(info.Folders.Temp + '\main.txt');
-    for I := Low(LogForm.EncoderLogs) to High(LogForm.EncoderLogs) do
+    for I := Low(LogForm.FEncoderLogs) to High(LogForm.FEncoderLogs) do
     begin
       LZip.Add(Info.Folders.Temp + '\enc_log' + FloatToStr(i + 1) + '.txt');
     end;
@@ -5668,7 +5735,7 @@ begin
 
     // delete temp files
     DeleteFile(info.Folders.Temp + '\main.txt');
-    for I := Low(LogForm.EncoderLogs) to High(LogForm.EncoderLogs) do
+    for I := Low(LogForm.FEncoderLogs) to High(LogForm.FEncoderLogs) do
     begin
       DeleteFile(Info.Folders.Temp + '\enc_log' + FloatToStr(i + 1) + '.txt');
     end;
@@ -6325,7 +6392,6 @@ begin
       DoTwoPassBtn.Checked := ReadBool('Options', 'TwoPass', False);
 
       DirectoryEdit.Text := ReadString('Options', 'Out', FMyDocFolder);
-      // DirectoryEdit.Text := ReadString('Options', 'Out', ExtractFileDir(Application.ExeName));
       FLastOpenedDir := ReadString('Options', 'LastDir', Info.Folders.Personal);
 
       EncoderList.ItemIndex := ReadInteger('Options', 'Encoder', 0);
@@ -6354,7 +6420,7 @@ end;
 
 procedure TMainForm.LoadProfiles(ProfilesList: TsComboBox);
 var
-  Search: TSearchRec;
+  LSearchRec: TSearchRec;
 begin
 
   if DirectoryExists(ExtractFileDir(Application.ExeName) + '\Profiles') then
@@ -6362,26 +6428,24 @@ begin
 
     ProfilesList.Items.Clear;
 
-    SetCurrentDir(ExtractFileDir(Application.ExeName) + '\Profiles');
-    // search for files
-    if (FindFirst('*.pdo', faAnyFile, Search) = 0) then
+    // search for built in profiles
+    if (FindFirst(ExtractFileDir(Application.ExeName) + '\Profiles\*.pdo', faAnyFile, LSearchRec) = 0) then
     Begin
       repeat
         Application.ProcessMessages;
-        ProfilesList.Items.Add(ChangeFileExt(Search.Name, ''));
-      until (FindNext(Search) <> 0);
-      FindClose(Search);
+        ProfilesList.Items.Add(ChangeFileExt(LSearchRec.Name, ''));
+      until (FindNext(LSearchRec) <> 0);
+      FindClose(LSearchRec);
     end;
 
-    SetCurrentDir(FAppDataFolder);
-    // search for files
-    if (FindFirst('*.pdo', faAnyFile, Search) = 0) then
+    // search for user created profiles
+    if (FindFirst(FAppDataFolder + '\*.pdo', faAnyFile, LSearchRec) = 0) then
     Begin
       repeat
         Application.ProcessMessages;
-        ProfilesList.Items.Add(ChangeFileExt(Search.Name, ''));
-      until (FindNext(Search) <> 0);
-      FindClose(Search);
+        ProfilesList.Items.Add(ChangeFileExt(LSearchRec.Name, ''));
+      until (FindNext(LSearchRec) <> 0);
+      FindClose(LSearchRec);
     end;
 
   end
@@ -7042,9 +7106,9 @@ begin
     end;
     if LContinue then
     begin
-      for I := Low(EncoderLogs) to High(EncoderLogs) do
+      for I := Low(FEncoderLogs) to High(FEncoderLogs) do
       begin
-        EncoderLogs[i].SaveToFile(Info.Folders.Temp + '\Encoder' + FloatToStr(i + 1) + '.txt');
+        FEncoderLogs[i].SaveToFile(Info.Folders.Temp + '\Encoder' + FloatToStr(i + 1) + '.txt');
       end;
     end;
   end;
@@ -7307,6 +7371,7 @@ var
   j: Integer;
 begin
 
+{$REGION 'codec checks'}
   // if none is selected as both video and audio codec
   if (VideoEncoderList.ItemIndex = 11) and (AudioEncoderList.ItemIndex = 10) then
   begin
@@ -7401,7 +7466,7 @@ begin
       EncoderList.ItemIndex := 1;
     end;
   end;
-
+{$ENDREGION}
   // remove files that dont exist
   for i := FileList.Items.Count - 1 downto 0 do
   begin
@@ -7493,7 +7558,6 @@ begin
       if (VideoEncoderList.ItemIndex = 4) then
       begin
         If SettingsForm.x264Btn.Checked Then
-
         begin
           NumberOfProcesses := 1;
         end;
@@ -7506,7 +7570,7 @@ begin
       begin
         Application.ProcessMessages;
 
-        AddCommandLine(i, (i mod NumberOfProcesses));
+        CreateEncodingCommands(i, (i mod NumberOfProcesses));
       end;
 
       FConverterTotalCMDCount := 0;
@@ -7557,7 +7621,7 @@ begin
                   begin
                     for j := 0 to FEncoders[i].CommandCount - 1 do
                     begin
-                      ScriptFile.Add('"' + FEncoders[i].EncoderPaths[j] + '" ' + FEncoders[i].CommandLines[j]);
+                      ScriptFile.Add('"' + FEncoders[i].EncodeJobs[j].ProcessPath + '" ' + FEncoders[i].EncodeJobs[j].CommandLine);
                     end;
                   end;
 
@@ -7576,7 +7640,7 @@ begin
                   begin
                     for j := 0 to FEncoders[i].CommandCount - 1 do
                     begin
-                      ScriptFile.Add('"' + FEncoders[i].EncoderPaths[j] + '" ' + FEncoders[i].CommandLines[j]);
+                      ScriptFile.Add('"' + FEncoders[i].EncodeJobs[j].ProcessPath + '" ' + FEncoders[i].EncodeJobs[j].CommandLine);
                     end;
                   end;
                 end;
