@@ -102,7 +102,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     Top = 367
     Width = 486
     Height = 131
-    ActivePage = sTabSheet3
+    ActivePage = sTabSheet5
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
     SkinData.SkinSection = 'PAGECONTROL'
@@ -110,10 +110,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'General'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object MPEGAudioIDBtn: TsCheckBox
         Left = 8
         Top = 8
@@ -134,16 +130,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'x264'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object x264Btn: TsCheckBox
         Left = 8
         Top = 8
-        Width = 50
+        Width = 159
         Height = 19
-        Caption = 'x264'
+        Caption = 'Use advanced x264 options'
         TabOrder = 0
         OnClick = x264BtnClick
         SkinData.SkinSection = 'CHECKBOX'
@@ -371,10 +363,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'ProRes'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object sLabel1: TsLabel
         Left = 3
         Top = 44
@@ -482,10 +470,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'FLAC'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object FlacCompBar: TsTrackBar
         Left = 166
         Top = 4
@@ -527,6 +511,67 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         BoundLabel.Layout = sclLeft
         BoundLabel.MaxWidth = 0
         BoundLabel.UseSkinColor = True
+      end
+    end
+    object sTabSheet5: TsTabSheet
+      Caption = 'x265'
+      SkinData.CustomColor = False
+      SkinData.CustomFont = False
+      object x265Btn: TsCheckBox
+        Left = 8
+        Top = 8
+        Width = 159
+        Height = 19
+        Caption = 'Use advanced x265 options'
+        TabOrder = 0
+        OnClick = x265BtnClick
+        SkinData.SkinSection = 'CHECKBOX'
+        ImgChecked = 0
+        ImgUnchecked = 0
+      end
+      object x265PresetsList: TsComboBox
+        Left = 8
+        Top = 41
+        Width = 100
+        Height = 21
+        Alignment = taLeftJustify
+        BoundLabel.Active = True
+        BoundLabel.Caption = 'Preset:'
+        BoundLabel.Indent = 0
+        BoundLabel.Font.Charset = DEFAULT_CHARSET
+        BoundLabel.Font.Color = 2171169
+        BoundLabel.Font.Height = -11
+        BoundLabel.Font.Name = 'Tahoma'
+        BoundLabel.Font.Style = []
+        BoundLabel.Layout = sclTopLeft
+        BoundLabel.MaxWidth = 0
+        BoundLabel.UseSkinColor = True
+        SkinData.SkinSection = 'COMBOBOX'
+        VerticalAlignment = taAlignTop
+        Style = csDropDownList
+        Color = clWhite
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ItemIndex = 0
+        ParentFont = False
+        TabOrder = 1
+        Text = 'Auto'
+        Items.Strings = (
+          'Auto'
+          'Ultrafast'
+          'Superfast'
+          'Veryfast'
+          'Faster'
+          'Fast'
+          'Medium'
+          'Slow'
+          'Slower'
+          'Veryslow'
+          'Placebo')
       end
     end
   end

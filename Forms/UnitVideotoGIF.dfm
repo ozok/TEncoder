@@ -41,6 +41,7 @@ object VideoToGIFForm: TVideoToGIFForm
     ParentFont = False
     TabOrder = 0
     Text = ''
+    CheckOnExit = True
     BoundLabel.Active = True
     BoundLabel.Caption = 'Source:'
     BoundLabel.Indent = 0
@@ -74,6 +75,7 @@ object VideoToGIFForm: TVideoToGIFForm
     ParentFont = False
     TabOrder = 1
     Text = ''
+    CheckOnExit = True
     BoundLabel.Active = True
     BoundLabel.Caption = 'Destination:'
     BoundLabel.Indent = 0

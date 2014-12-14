@@ -80,6 +80,9 @@ type
     sTabSheet4: TsTabSheet;
     FlacCompBar: TsTrackBar;
     FlacCompEdit: TsEdit;
+    sTabSheet5: TsTabSheet;
+    x265Btn: TsCheckBox;
+    x265PresetsList: TsComboBox;
     procedure x264BtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -93,6 +96,7 @@ type
     procedure CustomMEncoderAudioBtnClick(Sender: TObject);
     procedure CustomMEncoderVideoBtnClick(Sender: TObject);
     procedure FlacCompBarChange(Sender: TObject);
+    procedure x265BtnClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -222,6 +226,9 @@ begin
       x264CRFBtn.Checked := ReadBool('x264', 'crf', False);
       x264CRFEdit.Text := ReadString('x264', 'crf2', '23');
 
+      x265Btn.Checked := ReadBool('x265', 'Enabled', False);
+      x265PresetsList.ItemIndex := ReadInteger('x265', 'Preset', 0);
+
       ProresProfileList.ItemIndex := ReadInteger('prores', 'Profile', 0);
       ProresQualityBar.Position := ReadInteger('prores', 'Quality', 13);
 
@@ -249,6 +256,7 @@ begin
   finally
     SettingsFile.Free;
     x264Btn.OnClick(Self);
+    x265BtnClick(self);
     ProresQualityEdit.Text := FloatToStr(ProresQualityBar.Position);
     FlacCompBarChange(Self);
   end;
@@ -277,6 +285,9 @@ begin
       WriteBool('x264', 'Enabled', x264Btn.Checked);
       WriteBool('x264', 'crf', x264CRFBtn.Checked);
       WriteString('x264', 'crf2', x264CRFEdit.Text);
+
+      WriteBool('x265', 'Enabled', x265Btn.Checked);
+      WriteInteger('x265', 'Preset', x265PresetsList.ItemIndex);
 
       WriteInteger('prores', 'Profile', ProresProfileList.ItemIndex);
       WriteInteger('prores', 'Quality', ProresQualityBar.Position);
@@ -511,6 +522,20 @@ end;
 procedure TAdvancedOptionsForm.x264CRFBtnClick(Sender: TObject);
 begin
   x264CRFEdit.Enabled := x264CRFBtn.Checked;
+end;
+
+procedure TAdvancedOptionsForm.x265BtnClick(Sender: TObject);
+begin
+    x265PresetsList.Enabled := x265Btn.Checked;
+
+//  if x264Btn.Checked then
+//  begin
+//    x264CRFEdit.Enabled := x264CRFBtn.Checked;
+//  end
+//  else
+//  begin
+//    x264CRFEdit.Enabled := False;
+//  end;
 end;
 
 end.

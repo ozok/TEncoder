@@ -21,7 +21,7 @@ unit UnitFileInfoExtractor;
 
 interface
 
-uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, Generics.Collections, dialogs;
+uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, Generics.Collections;
 
 type
   TStatus = (Reading, Done);
@@ -247,7 +247,7 @@ var
   LSubTitle: string;
   LPos, LPos2: integer;
 begin
-//  FMencoderProcess.ConsoleOutput.SaveToFile('C:\mencoder.txt');
+  FMencoderProcess.ConsoleOutput.SaveToFile('C:\mencoder.txt');
   FMEncoderStatus := Reading;
   try
     for I := 0 to FMencoderProcess.ConsoleOutput.Count - 1 do
@@ -341,7 +341,7 @@ var
 begin
   FFFMpegStatus := Reading;
   try
-//    FFFMpegProcess.ConsoleOutput.SaveToFile('C:\ffmpeg.txt');
+    FFFMpegProcess.ConsoleOutput.SaveToFile('C:\ffmpeg.txt');
     for I := 0 to FFFMpegProcess.ConsoleOutput.Count - 1 do
     begin
       LLine := Trim(FFFMpegProcess.ConsoleOutput[i]);

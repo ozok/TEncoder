@@ -49,6 +49,7 @@ object DubForm: TDubForm
     ParentFont = False
     TabOrder = 1
     Text = ''
+    CheckOnExit = True
     BoundLabel.Active = True
     BoundLabel.Caption = 'Audio File:'
     BoundLabel.Indent = 0
@@ -81,6 +82,7 @@ object DubForm: TDubForm
     ParentFont = False
     TabOrder = 0
     Text = ''
+    CheckOnExit = True
     BoundLabel.Active = True
     BoundLabel.Caption = 'Video File:'
     BoundLabel.Indent = 0

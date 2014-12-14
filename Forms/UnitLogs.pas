@@ -267,7 +267,7 @@ begin
   VideoEncoderList.Lines.Clear;
   VideoEncoderList.Lines.Add(Format('Encoder %d log', [VideoEncoderLogsList.ItemIndex + 1]));
   VideoEncoderList.Lines.Add(Format('Encoder %d command lines:', [VideoEncoderLogsList.ItemIndex + 1]));
-  for I := 0 to MainForm.FEncoders[VideoEncoderLogsList.ItemIndex].EncodeJobs.Count-1 do
+  for I := 0 to MainForm.FEncoders[VideoEncoderLogsList.ItemIndex].EncodeJobs.Count - 1 do
   begin
     VideoEncoderList.Lines.Add(MainForm.FEncoders[VideoEncoderLogsList.ItemIndex].EncodeJobs[i].CommandLine);
   end;

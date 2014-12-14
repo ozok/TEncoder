@@ -289,6 +289,60 @@ object SettingsForm: TSettingsForm
           OnClick = ClearTempFolderBtnClick
           SkinData.SkinSection = 'BUTTON'
         end
+        object DefaultAudioLangEdit: TsEdit
+          Left = 165
+          Top = 85
+          Width = 125
+          Height = 21
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+          Text = 'english;eng;en'
+          SkinData.SkinSection = 'EDIT'
+          BoundLabel.Active = True
+          BoundLabel.Caption = 'Default audio track language:'
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+        end
+        object DefaultSubLangEdit: TsEdit
+          Left = 165
+          Top = 112
+          Width = 125
+          Height = 21
+          Color = clWhite
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
+          Text = 'english;eng;en'
+          SkinData.SkinSection = 'EDIT'
+          BoundLabel.Active = True
+          BoundLabel.Caption = 'Default subtitle track language:'
+          BoundLabel.Indent = 0
+          BoundLabel.Font.Charset = DEFAULT_CHARSET
+          BoundLabel.Font.Color = clWindowText
+          BoundLabel.Font.Height = -11
+          BoundLabel.Font.Name = 'Tahoma'
+          BoundLabel.Font.Style = []
+          BoundLabel.Layout = sclLeft
+          BoundLabel.MaxWidth = 0
+          BoundLabel.UseSkinColor = True
+        end
       end
     end
     object sTabSheet2: TsTabSheet
@@ -768,7 +822,6 @@ object SettingsForm: TSettingsForm
           ParentFont = False
           TabOrder = 10
           Text = 'Add index'
-          Visible = False
           Items.Strings = (
             'Add index'
             'Skip')

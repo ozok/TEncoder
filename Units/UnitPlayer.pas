@@ -345,15 +345,15 @@ begin
               begin
                 if FileExists(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile) then
                 begin
-                  if UseSSAStyle and ((LowerCase(ExtractFileExt(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile)) = '.ass') or (LowerCase(ExtractFileExt(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile)) = '.ssa'))
-                  then
+                  if UseSSAStyle and ((LowerCase(ExtractFileExt(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile)) = '.ass') or
+                    (LowerCase(ExtractFileExt(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile)) = '.ssa')) then
                   begin
                     SubtitleCMD := ' -ass -sub "' + FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '" -ass-styles "' + FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '"'
                   end
                   else
                   begin
-                    SubtitleCMD := ' -subfont-autoscale ' + FontAutoScale + ' -subfont-blur 2 -subfont-outline 2 -subfont "' + FontPath + '" -subcp ' + SubEncoding + ' -subfont-text-scale ' + TextScale + ' -sub "' +
-                      FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '"';
+                    SubtitleCMD := ' -subfont-autoscale ' + FontAutoScale + ' -subfont-blur 2 -subfont-outline 2 -subfont "' + FontPath + '" -subcp ' + SubEncoding + ' -subfont-text-scale ' +
+                      TextScale + ' -sub "' + FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '"';
 
                     if length(SubEncoding) > 0 then
                     begin
@@ -407,8 +407,9 @@ begin
       VideoSize := VideoSize + ' -aid ' + (Options._AudioStream)
     end;
 
-    Params := ' -nofs -slave -noquiet -nomouseinput -identify -idx -osdlevel 1 ' + VideoSize + ' -colorkey 0x101010 ' + SubtitleCMD + ' -delay ' + StringReplace(FloatToStr(Options.AudioDelay), ',', '.', []) + ' ' + MPlayerRangeCMD(Options)
-      + ' -wid ' + FloatToStr(FDisplayHandle) + ' -vo direct3d  ' + VAspect + ' -softvol -softvol-max 300 ' + ' -volume ' + FloatToStr(Options.VideoVolumeLevel) + ' "' + Options.FileName + '"';;
+    Params := ' -nofs -slave -noquiet -nomouseinput -identify -idx -osdlevel 1 ' + VideoSize + ' -colorkey 0x101010 ' + SubtitleCMD + ' -delay ' +
+      StringReplace(FloatToStr(Options.AudioDelay), ',', '.', []) + ' ' + MPlayerRangeCMD(Options) + ' -wid ' + FloatToStr(FDisplayHandle) + ' -vo direct3d  ' + VAspect + ' -softvol -softvol-max 300 '
+      + ' -volume ' + FloatToStr(Options.VideoVolumeLevel) + ' "' + Options.FileName + '"';;
 
     Result := Params;
 

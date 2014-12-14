@@ -264,10 +264,6 @@ object LogForm: TLogForm
       Caption = 'Main'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object MainLog: TsMemo
         Left = 0
         Top = 0
@@ -538,10 +534,6 @@ object LogForm: TLogForm
           Caption = 'Console Output'
           SkinData.CustomColor = False
           SkinData.CustomFont = False
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 281
-          ExplicitHeight = 165
           object DVDLog: TsMemo
             Left = 0
             Top = 0

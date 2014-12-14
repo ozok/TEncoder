@@ -64,7 +64,6 @@ type
     FDurationIndex: integer;
     FItem: TListItem;
     FTerminateCounter: integer;
-    FFinalFileNames: TStringList;
 
     // process events
     procedure ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
@@ -92,7 +91,6 @@ type
     property CommandCount: integer read GetCommandCount;
     property ExeName: string read GetExeName;
     property FileIndex: Integer read GetFileIndex;
-    property FinalFileNames: TStringList read FFinalFileNames write FFinalFileNames;
     property EncodeJobs: TEncodeJobs read FEncodeJobs write FEncodeJobs;
 
     constructor Create();
@@ -144,7 +142,6 @@ end;
 destructor TMyProcess.Destroy;
 begin
   FreeAndNil(FEncodeJobs);
-  FreeAndNil(FFinalFileNames);
   FProcess.Free;
   inherited Destroy;
 
@@ -327,7 +324,6 @@ begin
   FStoppedByUser := False;
   FItem := nil;
   FTerminateCounter := 0;
-  FFinalFileNames.Clear;
 end;
 
 procedure TMyProcess.Start;

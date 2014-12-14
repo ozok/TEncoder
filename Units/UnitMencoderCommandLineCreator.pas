@@ -627,15 +627,16 @@ begin
                 // char encoding
                 SubEncoding := GetSubtitleEncoding(SettingsForm.LangIdList.ItemIndex);
                 // if user selects to use ass or ssa styles instead of options
-                if SettingsForm.SubSSABtn.Checked and ((LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ass') or (LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ssa'))
-                then
+                if SettingsForm.SubSSABtn.Checked and ((LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ass') or
+                  (LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ssa')) then
                 begin
                   SubtitleCMD := ' -ass -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '" -ass-styles "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"'
                 end
                 else
                 begin
-                  SubtitleCMD := ' -subfont-autoscale ' + FloatToStr(SettingsForm.AutoScaleList.ItemIndex) + ' -subfont-blur 2 -subfont-outline 2 -subfont "' + SettingsForm.FFontInfos[SettingsForm.FontList.ItemIndex].FontFilePath +
-                    '" -subcp ' + SubEncoding + ' -subpos ' + FloatToStr(SettingsForm.SubposBar.Position) + ' -subfont-text-scale ' + SettingsForm.DefScaleEdit.Text + ' -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"';
+                  SubtitleCMD := ' -subfont-autoscale ' + FloatToStr(SettingsForm.AutoScaleList.ItemIndex) + ' -subfont-blur 2 -subfont-outline 2 -subfont "' +
+                    SettingsForm.FFontInfos[SettingsForm.FontList.ItemIndex].FontFilePath + '" -subcp ' + SubEncoding + ' -subpos ' + FloatToStr(SettingsForm.SubposBar.Position) +
+                    ' -subfont-text-scale ' + SettingsForm.DefScaleEdit.Text + ' -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"';
 
                   // subtitle delay
                   if FMasterFileInfoList[FFileIndex].SubtitleDelay <> 0 then
@@ -675,8 +676,8 @@ begin
       begin
         FPassStr := Mencoder1stPass
       end;
-      Result.FirstPassCMD := CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition, FMasterFileInfoList[FFileIndex].EndPosition) + ' -mc 0 -priority idle ' + VCodecPart1 + FPassStr + VCodecPart2 + Container + ' -passlogfile "' +
-        PassFile + '" -nosound -o NUL "' + FFileName + '"';
+      Result.FirstPassCMD := CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition, FMasterFileInfoList[FFileIndex].EndPosition) + ' -mc 0 -priority idle ' + VCodecPart1 + FPassStr +
+        VCodecPart2 + Container + ' -passlogfile "' + PassFile + '" -nosound -o NUL "' + FFileName + '"';
 
       OutName := CreateFileName(FFileName, OutExtension);
       // create temp folder for x264
@@ -700,7 +701,8 @@ begin
         AudioCMD := ' -aid ' + FMasterFileInfoList[FFileIndex].SelectedMEncoderAudio + ' ';
       end;
 
-      if AdvancedOptionsForm.MPEGAudioIDBtn.Checked and ((LowerCase(ExtractFileExt(FFileName)) = '.mpeg') or (LowerCase(ExtractFileExt(FFileName)) = '.mpg') or (LowerCase(ExtractFileExt(FFileName)) = '.vob')) then
+      if AdvancedOptionsForm.MPEGAudioIDBtn.Checked and ((LowerCase(ExtractFileExt(FFileName)) = '.mpeg') or (LowerCase(ExtractFileExt(FFileName)) = '.mpg') or
+        (LowerCase(ExtractFileExt(FFileName)) = '.vob')) then
       begin
         AudioCMD := ' ';
       end;
@@ -716,15 +718,16 @@ begin
                 // char encoding
                 SubEncoding := GetSubtitleEncoding(SettingsForm.LangIdList.ItemIndex);
                 // if user selects to use ass or ssa styles instead of options
-                if SettingsForm.SubSSABtn.Checked and ((LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ass') or (LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ssa'))
-                then
+                if SettingsForm.SubSSABtn.Checked and ((LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ass') or
+                  (LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ssa')) then
                 begin
                   SubtitleCMD := ' -ass -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '" -ass-styles "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"'
                 end
                 else
                 begin
-                  SubtitleCMD := ' -subfont-autoscale ' + FloatToStr(SettingsForm.AutoScaleList.ItemIndex) + ' -subfont-blur 2 -subfont-outline 2 -subfont "' + SettingsForm.FFontInfos[SettingsForm.FontList.ItemIndex].FontFilePath +
-                    '" -subcp ' + SubEncoding + ' -subpos ' + FloatToStr(SettingsForm.SubposBar.Position) + ' -subfont-text-scale ' + SettingsForm.DefScaleEdit.Text + ' -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"';
+                  SubtitleCMD := ' -subfont-autoscale ' + FloatToStr(SettingsForm.AutoScaleList.ItemIndex) + ' -subfont-blur 2 -subfont-outline 2 -subfont "' +
+                    SettingsForm.FFontInfos[SettingsForm.FontList.ItemIndex].FontFilePath + '" -subcp ' + SubEncoding + ' -subpos ' + FloatToStr(SettingsForm.SubposBar.Position) +
+                    ' -subfont-text-scale ' + SettingsForm.DefScaleEdit.Text + ' -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"';
 
                   // subtitle delay
                   if FMasterFileInfoList[FFileIndex].SubtitleDelay <> 0 then
@@ -765,8 +768,8 @@ begin
         FPassStr := Mencoder2ndPass
       end;
 
-      Result.SeconPassCMD := CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition, FMasterFileInfoList[FFileIndex].EndPosition) + ' -mc 0 -priority idle ' + AudioCMD + VCodecPart1 + FPassStr + VCodecPart2 + Container + ACodec +
-        SubtitleCMD + ' -passlogfile "' + PassFile + '" -o "' + OutName + '" "' + FFileName + '"';
+      Result.SeconPassCMD := CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition, FMasterFileInfoList[FFileIndex].EndPosition) + ' -mc 0 -priority idle ' + AudioCMD + VCodecPart1 + FPassStr +
+        VCodecPart2 + Container + ACodec + SubtitleCMD + ' -passlogfile "' + PassFile + '" -o "' + OutName + '" "' + FFileName + '"';
     end
     else
     begin
@@ -789,7 +792,8 @@ begin
         AudioCMD := ' -aid ' + FMasterFileInfoList[FFileIndex].SelectedMEncoderAudio + ' ';
       end;
 
-      if AdvancedOptionsForm.MPEGAudioIDBtn.Checked and ((LowerCase(ExtractFileExt(FFileName)) = '.mpeg') or (LowerCase(ExtractFileExt(FFileName)) = '.mpg') or (LowerCase(ExtractFileExt(FFileName)) = '.vob')) then
+      if AdvancedOptionsForm.MPEGAudioIDBtn.Checked and ((LowerCase(ExtractFileExt(FFileName)) = '.mpeg') or (LowerCase(ExtractFileExt(FFileName)) = '.mpg') or
+        (LowerCase(ExtractFileExt(FFileName)) = '.vob')) then
       begin
         AudioCMD := ' ';
       end;
@@ -805,15 +809,16 @@ begin
                 // char encoding
                 SubEncoding := GetSubtitleEncoding(SettingsForm.LangIdList.ItemIndex);
                 // if user selects to use ass or ssa styles instead of options
-                if SettingsForm.SubSSABtn.Checked and ((LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ass') or (LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ssa'))
-                then
+                if SettingsForm.SubSSABtn.Checked and ((LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ass') or
+                  (LowerCase(ExtractFileExt(FMasterFileInfoList[FFileIndex].SelectedSubtitleFile)) = '.ssa')) then
                 begin
                   SubtitleCMD := ' -ass -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '" -ass-styles "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"'
                 end
                 else
                 begin
-                  SubtitleCMD := ' -subfont-autoscale ' + FloatToStr(SettingsForm.AutoScaleList.ItemIndex) + ' -subfont-blur 2 -subfont-outline 2 -subfont "' + SettingsForm.FFontInfos[SettingsForm.FontList.ItemIndex].FontFilePath +
-                    '" -subcp ' + SubEncoding + ' -subpos ' + FloatToStr(SettingsForm.SubposBar.Position) + ' -subfont-text-scale ' + SettingsForm.DefScaleEdit.Text + ' -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"';
+                  SubtitleCMD := ' -subfont-autoscale ' + FloatToStr(SettingsForm.AutoScaleList.ItemIndex) + ' -subfont-blur 2 -subfont-outline 2 -subfont "' +
+                    SettingsForm.FFontInfos[SettingsForm.FontList.ItemIndex].FontFilePath + '" -subcp ' + SubEncoding + ' -subpos ' + FloatToStr(SettingsForm.SubposBar.Position) +
+                    ' -subfont-text-scale ' + SettingsForm.DefScaleEdit.Text + ' -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"';
 
                   // subtitle delay
                   if FMasterFileInfoList[FFileIndex].SubtitleDelay <> 0 then
@@ -845,8 +850,8 @@ begin
         SubtitleCMD := ' -nosub ';
       end;
 
-      Result.SinglePassCMD := CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition, FMasterFileInfoList[FFileIndex].EndPosition) + ' -mc 0 -priority idle ' + AudioCMD + VCodecPart1 + VCodecPart2 + Container + SubtitleCMD + ACodec +
-        ' -o "' + OutName + '" "' + FFileName + '"';
+      Result.SinglePassCMD := CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition, FMasterFileInfoList[FFileIndex].EndPosition) + ' -mc 0 -priority idle ' + AudioCMD + VCodecPart1 +
+        VCodecPart2 + Container + SubtitleCMD + ACodec + ' -o "' + OutName + '" "' + FFileName + '"';
     end;
 
   end;

@@ -26,14 +26,14 @@ uses Classes, Windows, SysUtils, Messages, StrUtils, Generics.Collections, UnitD
 type
   TDVDJob = class
     CMDs: TStringlist;
-    Infos: TStringList;
-    EncoderPaths: TStringList;
-    FilePaths: TStringList;
-    OutputFiles: TStringList;
+    Infos: TStringlist;
+    EncoderPaths: TStringlist;
+    FilePaths: TStringlist;
+    OutputFiles: TStringlist;
     ProcessTypes: TList<TDVDProcessType>;
     ListItemIndexes: TList<integer>;
-    TempFiles: TStringList;
-    FilesToCheck: TStringList;
+    TempFiles: TStringlist;
+    FilesToCheck: TStringlist;
     constructor Create;
     destructor Destroy; override;
   end;
@@ -47,12 +47,12 @@ implementation
 constructor TDVDJob.Create;
 begin
   CMDs := TStringlist.Create;
-  Infos := TStringList.Create;
-  EncoderPaths := TStringList.Create;
-  FilePaths := TStringList.Create;
-  OutputFiles := TStringList.Create;
-  TempFiles := TStringList.Create;
-  FilesToCheck := TStringList.Create;
+  Infos := TStringlist.Create;
+  EncoderPaths := TStringlist.Create;
+  FilePaths := TStringlist.Create;
+  OutputFiles := TStringlist.Create;
+  TempFiles := TStringlist.Create;
+  FilesToCheck := TStringlist.Create;
   ProcessTypes := TList<TDVDProcessType>.Create;
   ListItemIndexes := TList<Integer>.Create;
 end;

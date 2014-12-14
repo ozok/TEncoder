@@ -91,6 +91,8 @@ type
     DontDoubleDownloadBtn: TsCheckBox;
     DontPreviewImgBtn: TsCheckBox;
     OverwriteList: TsComboBox;
+    DefaultAudioLangEdit: TsEdit;
+    DefaultSubLangEdit: TsEdit;
     procedure FormCreate(Sender: TObject);
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -279,6 +281,9 @@ begin
       WriteInteger('options', 'downloadcount', ProcessCountBar.Position);
       WriteBool('options', 'doubledownload', DontDoubleDownloadBtn.Checked);
       WriteBool('options', 'noimg', DontPreviewImgBtn.Checked);
+
+      WriteString('options', 'defaud', DefaultAudioLangEdit.Text);
+      WriteString('options', 'defsub', DefaultSubLangEdit.Text);
     end;
 
   finally
@@ -428,6 +433,9 @@ begin
       ProcessCountBar.Position := ReadInteger('options', 'downloadcount', 1);
       DontDoubleDownloadBtn.Checked := ReadBool('options', 'doubledownload', True);
       DontPreviewImgBtn.Checked := ReadBool('options', 'noimg', False);
+
+      DefaultAudioLangEdit.Text := ReadString('options', 'defaud', 'english;eng;en');
+      DefaultSubLangEdit.Text := ReadString('options', 'defsub', 'english;eng;en');
     end;
 
   finally

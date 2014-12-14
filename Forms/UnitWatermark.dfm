@@ -63,6 +63,7 @@ object WatermarkForm: TWatermarkForm
     ParentFont = False
     TabOrder = 0
     Text = ''
+    CheckOnExit = True
     BoundLabel.Active = True
     BoundLabel.Caption = 'Video:'
     BoundLabel.Indent = 0
@@ -95,6 +96,7 @@ object WatermarkForm: TWatermarkForm
     ParentFont = False
     TabOrder = 1
     Text = ''
+    CheckOnExit = True
     BoundLabel.Active = True
     BoundLabel.Caption = 'Image:'
     BoundLabel.Indent = 0

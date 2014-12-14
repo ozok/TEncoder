@@ -196,6 +196,36 @@ begin
       begin
         AdvancedCMD := '';
       end;
+    12: // h265
+      begin
+        AdvancedCMD := '';
+        with AdvancedOptionsForm do
+        begin
+          // presets
+          case x265PresetsList.ItemIndex of
+            1:
+              AdvancedCMD := AdvancedCMD + ' -preset ultrafast';
+            2:
+              AdvancedCMD := AdvancedCMD + ' -preset superfast';
+            3:
+              AdvancedCMD := AdvancedCMD + ' -preset veryfast';
+            4:
+              AdvancedCMD := AdvancedCMD + ' -preset faster';
+            5:
+              AdvancedCMD := AdvancedCMD + ' -preset fast';
+            6:
+              AdvancedCMD := AdvancedCMD + ' -preset medium';
+            7:
+              AdvancedCMD := AdvancedCMD + ' -preset slow';
+            8:
+              AdvancedCMD := AdvancedCMD + ' -preset slower';
+            9:
+              AdvancedCMD := AdvancedCMD + ' -preset veryslow';
+            10:
+              AdvancedCMD := AdvancedCMD + ' -preset placebo';
+          end;
+        end;
+      end;
   end;
 
   Result := AdvancedCMD;
@@ -203,23 +233,23 @@ end;
 
 function TFFMpegCommandLineCreator.CreateCommandline: TFFMpegCommandLine;
 var
-  VBitrate: string;
-  VSize: string;
-  VCodec: string;
-  VFPS: string;
-  VAspect: string;
-  VHeight: string;
-  VWidth: string;
-  Abitrate: string;
-  ACodec: string;
-  ASR: string;
-  AChan: string;
-  OutExtension: string;
-  AudioCMD: string;
-  PassFile: string;
-  OutName: string;
-  Container: string;
-  AudioDelayCMD: string;
+  LVideoBitrate: string;
+  LVideoDimensions: string;
+  LVideoCodec: string;
+  LVideoFPS: string;
+  LVideoAspectRatio: string;
+  LVideoHeight: string;
+  LVideoWidth: string;
+  LAudioBitrate: string;
+  LAudioCodec: string;
+  LAudioSampleRate: string;
+  LAudioChannels: string;
+  LOutputFileExtension: string;
+  LAudioCommandLine: string;
+  LPassFilePath: string;
+  LOutputFileName: string;
+  LContainer: string;
+  LAudioDelayCMD: string;
   FilterCMD: string;
   LVolumeCMD: string;
   CustomVideoArg: string;
@@ -227,8 +257,8 @@ var
   CustomArgs: string;
 begin
   // output extension and container options
-  Container := 'avi';
-  OutExtension := '.avi';
+  LContainer := 'avi';
+  LOutputFileExtension := '.avi';
   if AdvancedOptionsForm.CustomFFMpegVideoBtn.Checked then
   begin
     CustomVideoArg := AdvancedOptionsForm.CustomFFMpegVideoEdit.Text;
@@ -254,59 +284,59 @@ begin
     case ContainerList.ItemIndex of
       0:
         begin
-          Container := 'avi ';
-          OutExtension := '.avi';
+          LContainer := 'avi ';
+          LOutputFileExtension := '.avi';
         end;
       1:
         begin
-          Container := 'mpeg ';
-          OutExtension := '.mpeg';
+          LContainer := 'mpeg ';
+          LOutputFileExtension := '.mpeg';
         end;
       2:
         begin
-          Container := 'mp4 ';
-          OutExtension := '.mp4';
+          LContainer := 'mp4 ';
+          LOutputFileExtension := '.mp4';
         end;
       3:
         begin
-          Container := 'mov ';
-          OutExtension := '.mov';
+          LContainer := 'mov ';
+          LOutputFileExtension := '.mov';
         end;
       4:
         begin
-          Container := 'matroska ';
-          OutExtension := '.mkv';
+          LContainer := 'matroska ';
+          LOutputFileExtension := '.mkv';
         end;
       5:
         begin
-          Container := 'flv ';
-          OutExtension := '.flv';
+          LContainer := 'flv ';
+          LOutputFileExtension := '.flv';
         end;
       6:
         begin
-          Container := '';
-          OutExtension := '.wmv';
+          LContainer := '';
+          LOutputFileExtension := '.wmv';
         end;
       7:
         begin
-          Container := 'webm ';
-          OutExtension := '.webm';
+          LContainer := 'webm ';
+          LOutputFileExtension := '.webm';
         end;
       8:
         begin
-          Container := '3gp ';
-          OutExtension := '.3gp';
+          LContainer := '3gp ';
+          LOutputFileExtension := '.3gp';
         end;
     end;
 {$ENDREGION}
     // wmv
     if (ContainerList.ItemIndex = 6) or (VideoEncoderList.ItemIndex = 11) then
     begin
-      Container := '';
+      LContainer := '';
     end
     else
     begin
-      Container := ' -f ' + Container;
+      LContainer := ' -f ' + LContainer;
     end;
 
 {$REGION 'out ext'}
@@ -315,39 +345,39 @@ begin
       case ContainerList.ItemIndex of
         0:
           begin
-            OutExtension := '.avi';
+            LOutputFileExtension := '.avi';
           end;
         1:
           begin
-            OutExtension := '.mpeg';
+            LOutputFileExtension := '.mpeg';
           end;
         2:
           begin
-            OutExtension := '.mp4';
+            LOutputFileExtension := '.mp4';
           end;
         3:
           begin
-            OutExtension := '.mov';
+            LOutputFileExtension := '.mov';
           end;
         4:
           begin
-            OutExtension := '.mkv';
+            LOutputFileExtension := '.mkv';
           end;
         5:
           begin
-            OutExtension := '.flv';
+            LOutputFileExtension := '.flv';
           end;
         6:
           begin
-            OutExtension := '.wmv';
+            LOutputFileExtension := '.wmv';
           end;
         7:
           begin
-            OutExtension := '.webm';
+            LOutputFileExtension := '.webm';
           end;
         8:
           begin
-            OutExtension := '.avi';
+            LOutputFileExtension := '.avi';
           end;
       end;
     end;
@@ -356,34 +386,34 @@ begin
     if FMasterFileInfoList[FFileIndex].AudioIndex > -1 then
     begin
 
-      Abitrate := AdvancedOptionsForm.AudioBitrateList.Text;
+      LAudioBitrate := AdvancedOptionsForm.AudioBitrateList.Text;
 
       if AdvancedOptionsForm.AudioSampleRateList.ItemIndex <> 7 then
       begin
-        ASR := ' -af aresample=resampler=soxr -ar ' + AdvancedOptionsForm.AudioSampleRateList.Text
+        LAudioSampleRate := ' -af aresample=resampler=soxr -ar ' + AdvancedOptionsForm.AudioSampleRateList.Text
       end
       else
       begin
-        ASR := ' ';
+        LAudioSampleRate := ' ';
       end;
 
       // audio channels
       case AdvancedOptionsForm.AudioChannelsList.ItemIndex of
         0:
           begin
-            AChan := ' -ac 1 '
+            LAudioChannels := ' -ac 1 '
           end;
         1:
           begin
-            AChan := ' -ac 2 '
+            LAudioChannels := ' -ac 2 '
           end;
         2:
           begin
-            AChan := ' -ac 6 '
+            LAudioChannels := ' -ac 6 '
           end;
         3:
           begin
-            AChan := ' '
+            LAudioChannels := ' '
           end;
       end;
 
@@ -400,53 +430,53 @@ begin
       case AudioEncoderList.ItemIndex of
         0: // copy
           begin
-            ACodec := ' -acodec copy' + CustomAudioArg;
+            LAudioCodec := ' -c:a copy' + CustomAudioArg;
           end;
         1: // mp3
           begin
-            ACodec := ' -acodec libmp3lame -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+            LAudioCodec := ' -c:a libmp3lame -ab ' + LAudioBitrate + 'k ' + LAudioSampleRate + LAudioChannels + LVolumeCMD + ' ' + CustomAudioArg;
           end;
         2: // aac
           begin
-            ACodec := ' -strict experimental -acodec aac -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
-            // ACodec := ' -acodec libvo_aacenc -ab ' + Abitrate + 'k '
+            LAudioCodec := ' -strict experimental -c:a aac -ab ' + LAudioBitrate + 'k ' + LAudioSampleRate + LAudioChannels + LVolumeCMD + ' ' + CustomAudioArg;
+            // ACodec := ' -c:a libvo_aacenc -ab ' + Abitrate + 'k '
             // + ASR + AChan + ' ' + CustomAudioArg;
           end;
         3: // ogg
           begin
-            ACodec := ' -acodec libvorbis -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+            LAudioCodec := ' -c:a libvorbis -ab ' + LAudioBitrate + 'k ' + LAudioSampleRate + LAudioChannels + LVolumeCMD + ' ' + CustomAudioArg;
           end;
         4: // wav
           begin
-            ACodec := ' -acodec pcm_alaw';
+            LAudioCodec := ' -c:a pcm_alaw';
           end;
         5: // ac3
           begin
-            ACodec := ' -acodec ac3 -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+            LAudioCodec := ' -c:a ac3 -ab ' + LAudioBitrate + 'k ' + LAudioSampleRate + LAudioChannels + LVolumeCMD + ' ' + CustomAudioArg;
           end;
         6: // mp2
           begin
-            ACodec := ' -acodec mp2 -ab ' + Abitrate + 'k  ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+            LAudioCodec := ' -c:a mp2 -ab ' + LAudioBitrate + 'k  ' + LAudioSampleRate + LAudioChannels + LVolumeCMD + ' ' + CustomAudioArg;
           end;
         7: // wma2
           begin
-            ACodec := ' -acodec wmav2 -ab ' + Abitrate + 'k  ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+            LAudioCodec := ' -c:a wmav2 -ab ' + LAudioBitrate + 'k  ' + LAudioSampleRate + LAudioChannels + LVolumeCMD + ' ' + CustomAudioArg;
           end;
         8: // speex
           begin
-            ACodec := ' -f ogg -acodec libspeex -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+            LAudioCodec := ' -f ogg -c:a libspeex -ab ' + LAudioBitrate + 'k ' + LAudioSampleRate + LAudioChannels + LVolumeCMD + ' ' + CustomAudioArg;
           end;
         9: // opus
           begin
-            ACodec := ' -acodec libopus -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+            LAudioCodec := ' -c:a libopus -ab ' + LAudioBitrate + 'k ' + LAudioSampleRate + LAudioChannels + LVolumeCMD + ' ' + CustomAudioArg;
           end;
         10: // none
           begin
-            ACodec := ' -an ';
+            LAudioCodec := ' -an ';
           end;
         11: // flac
           begin
-            ACodec := ' -acodec flac -compression_level ' + AdvancedOptionsForm.FlacCompEdit.Text + ' ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+            LAudioCodec := ' -c:a flac -compression_level ' + AdvancedOptionsForm.FlacCompEdit.Text + ' ' + LAudioSampleRate + LAudioChannels + LVolumeCMD + ' ' + CustomAudioArg;
           end;
       end;
     end;
@@ -456,25 +486,26 @@ begin
     // get file extension from file info
     if (VideoEncoderList.ItemIndex = 11) and (AudioEncoderList.ItemIndex = 0) then
     begin
-      OutExtension := FMasterFileInfoList[FFileIndex].SelectedAudioExt;
+      LOutputFileExtension := FMasterFileInfoList[FFileIndex].SelectedAudioExt;
     end;
 
     // Video Options
 
     // bitrate
-    VBitrate := AdvancedOptionsForm.VideobitrateList.Text + '000 ';
+    LVideoBitrate := AdvancedOptionsForm.VideobitrateList.Text + '000 ';
 
     // do cbr encoding
     if AdvancedOptionsForm.VideoCBrBtn.Checked then
     begin
-      VBitrate := VBitrate + ' -minrate ' + VBitrate + ' -maxrate ' + VBitrate + ' -bufsize ' + IntToStr(StrToInt(Trim(VBitrate)) * 2) + ' -muxrate ' + IntToStr(StrToInt(Trim(VBitrate)) * 2) + ' ';
+      LVideoBitrate := LVideoBitrate + ' -minrate ' + LVideoBitrate + ' -maxrate ' + LVideoBitrate + ' -bufsize ' + IntToStr(StrToInt(Trim(LVideoBitrate)) * 2) + ' -muxrate ' +
+        IntToStr(StrToInt(Trim(LVideoBitrate)) * 2) + ' ';
     end;
 
     // video size
     if AdvancedOptionsForm.VideoSizeList.ItemIndex <> 0 then
     begin
-      VHeight := AdvancedOptionsForm.HeightEdit.Text;
-      VWidth := AdvancedOptionsForm.WidthEdit.Text;
+      LVideoHeight := AdvancedOptionsForm.HeightEdit.Text;
+      LVideoWidth := AdvancedOptionsForm.WidthEdit.Text;
     end;
 
     FilterCMD := '';
@@ -535,11 +566,11 @@ begin
     // FPS
     if AdvancedOptionsForm.VideoFPSList.ItemIndex = 0 then
     begin
-      VFPS := ' '; // auto
+      LVideoFPS := ' '; // auto
     end
     else
     begin
-      VFPS := ' -r ' + AdvancedOptionsForm.VideoFPSList.Text;
+      LVideoFPS := ' -r ' + AdvancedOptionsForm.VideoFPSList.Text;
     end;
 
     CustomVideoArg := ' ' + CustomVideoArg;
@@ -548,161 +579,167 @@ begin
     // command line for aspect ratio
     case AdvancedOptionsForm.VideoAspectRatioList.ItemIndex of
       0:
-        VAspect := '';
+        LVideoAspectRatio := '';
       1:
-        VAspect := '-aspect 4:3';
+        LVideoAspectRatio := '-aspect 4:3';
       2:
-        VAspect := '-aspect 16:9';
+        LVideoAspectRatio := '-aspect 16:9';
       3:
-        VAspect := '-aspect 1.85';
+        LVideoAspectRatio := '-aspect 1.85';
       4:
-        VAspect := '-aspect 2.35';
+        LVideoAspectRatio := '-aspect 2.35';
       5:
-        VAspect := '-aspect 1.3333';
+        LVideoAspectRatio := '-aspect 1.3333';
       6:
-        VAspect := '-aspect 1.7777';
+        LVideoAspectRatio := '-aspect 1.7777';
     end;
 
     // command line for video encoder
     case VideoEncoderList.ItemIndex of
       0: // mpeg 1
         begin
-          VCodec := ' -vcodec mpeg1video ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+          LVideoCodec := ' -c:v mpeg1video ' + ' -b:v ' + LVideoBitrate + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end;
       1: // mpeg 2
         begin
-          VCodec := ' -vcodec mpeg2video ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+          LVideoCodec := ' -c:v mpeg2video ' + ' -b:v ' + LVideoBitrate + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end;
       2: // xvid
         begin
-          VCodec := ' -vcodec libxvid ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+          LVideoCodec := ' -c:v libxvid ' + ' -b:v ' + LVideoBitrate + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end;
       3: // mpeg 4
         begin
-          VCodec := ' -vcodec mpeg4 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+          LVideoCodec := ' -c:v mpeg4 ' + ' -b:v ' + LVideoBitrate + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end;
       4: // h264
         begin
           if AdvancedOptionsForm.x264CRFBtn.Checked and AdvancedOptionsForm.x264Btn.Checked then
           begin
-            VCodec := ' -vcodec libx264 ' + ' -crf ' + StringReplace(AdvancedOptionsForm.x264CRFEdit.Text, ',', '.', []) + ' ' + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+            LVideoCodec := ' -c:v libx264 ' + ' -crf ' + StringReplace(AdvancedOptionsForm.x264CRFEdit.Text, ',', '.', []) + ' ' + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions +
+              CustomVideoArg;
           end
           else
           begin
-            VCodec := ' -vcodec libx264 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+            LVideoCodec := ' -c:v libx264 ' + ' -b:v ' + LVideoBitrate + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
           end;
         end;
       5: // flv
         begin
-          VCodec := ' -vcodec flv ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+          LVideoCodec := ' -c:v flv ' + ' -b:v ' + LVideoBitrate + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end;
       6: // wmv
         begin
-          VCodec := VFPS + ' -vcodec wmv2 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + VSize + CreateAdvancedOptions + CustomVideoArg;
+          LVideoCodec := LVideoFPS + ' -c:v wmv2 ' + ' -b:v ' + LVideoBitrate + LVideoAspectRatio + LVideoFPS + FilterCMD + LVideoDimensions + CreateAdvancedOptions + CustomVideoArg;
         end;
       7: // vp8
         begin
-          VCodec := ' -vcodec libvpx ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+          LVideoCodec := ' -c:v libvpx ' + ' -b:v ' + LVideoBitrate + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end;
       8: // huffyuv
         begin
-          VCodec := ' -vcodec huffyuv ' + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+          LVideoCodec := ' -c:v huffyuv ' + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end;
       9: // prores
         begin
-          VCodec := ' -vcodec prores ' + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+          LVideoCodec := ' -c:v prores ' + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end;
       10: // copy
         begin
-          VCodec := ' -vcodec copy' + CustomVideoArg;
+          LVideoCodec := ' -c:v copy' + CustomVideoArg;
         end;
       11: // none
         begin
-          VCodec := ' -vn ';
+          LVideoCodec := ' -vn ';
+        end;
+      12: // h265
+        begin
+          LVideoCodec := ' -c:v libx265 ' + ' -b:v ' + LVideoBitrate + LVideoAspectRatio + LVideoFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end;
     end;
 {$ENDREGION}
     // audio only source
     if FMasterFileInfoList[FFileIndex].FFMmpegVideoID = -1 then
     begin
-      VCodec := ' -vn ';
+      LVideoCodec := ' -vn ';
 
       case AudioEncoderList.ItemIndex of
         1:
-          OutExtension := '.mp3';
+          LOutputFileExtension := '.mp3';
         2:
-          OutExtension := '.m4a';
+          LOutputFileExtension := '.m4a';
         3:
-          OutExtension := '.ogg';
+          LOutputFileExtension := '.ogg';
         4:
-          OutExtension := '.wav';
+          LOutputFileExtension := '.wav';
         5:
-          OutExtension := '.ac3';
+          LOutputFileExtension := '.ac3';
         6:
-          OutExtension := '.mp2';
+          LOutputFileExtension := '.mp2';
         7:
-          OutExtension := '.wma';
+          LOutputFileExtension := '.wma';
         8:
-          OutExtension := '.spx';
+          LOutputFileExtension := '.spx';
         9:
-          OutExtension := '.opus';
+          LOutputFileExtension := '.opus';
         11:
-          OutExtension := '.flac';
+          LOutputFileExtension := '.flac';
       end;
     end;
 
     if FMasterFileInfoList[FFileIndex].FFMmpegVideoID < 1 then
     begin
-      Container := '';
+      LContainer := '';
     end;
 
     if DoTwoPassBtn.Checked then
     begin
       // two passes encoding
       // first pass
-      OutName := CreateFileName(FFileName, OutExtension);
+      LOutputFileName := CreateFileName(FFileName, LOutputFileExtension);
 
       // pass log file
-      PassFile := FAppDataFolder + ExtractFileName(ChangeFileExt(FFileName, '.log'));
+      LPassFilePath := FAppDataFolder + ExtractFileName(ChangeFileExt(FFileName, '.log'));
 
-      Result.FirstPassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" -pass 1 -passlogfile "' + PassFile + '" ' + CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition,
-        FMasterFileInfoList[FFileIndex].EndPosition) + VCodec + Container + ' -an "' + OutName + '"';
+      Result.FirstPassCMD := ' -y ' + LAudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" -pass 1 -passlogfile "' + LPassFilePath + '" ' +
+        CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition, FMasterFileInfoList[FFileIndex].EndPosition) + LVideoCodec + LContainer + ' -an "' + LOutputFileName + '"';
 
       // second pass
-      OutName := CreateFileName(FFileName, OutExtension);
+      LOutputFileName := CreateFileName(FFileName, LOutputFileExtension);
 
       // pass log file
-      PassFile := FAppDataFolder + ExtractFileName(ChangeFileExt(FFileName, '.log'));
+      LPassFilePath := FAppDataFolder + ExtractFileName(ChangeFileExt(FFileName, '.log'));
 
       // audio track selection
       if FMasterFileInfoList[FFileIndex].AudioIndex < 0 then
       begin
-        AudioCMD := ' ';
+        LAudioCommandLine := ' ';
       end
       else
       begin
         // audio delay
         if VideoEncoderList.ItemIndex = 11 then
         begin
-          AudioDelayCMD := ' ';
+          LAudioDelayCMD := ' ';
         end
         else
         begin
-          AudioDelayCMD := ' -itsoffset ' + StringReplace(FloatToStr(FMasterFileInfoList[FFileIndex].AudioDelay), ',', '.', []);
+          LAudioDelayCMD := ' -itsoffset ' + StringReplace(FloatToStr(FMasterFileInfoList[FFileIndex].AudioDelay), ',', '.', []);
         end;
 
         // if video is none or there are no video streams
         if (VideoEncoderList.ItemIndex = 11) or (FMasterFileInfoList[FFileIndex].FFMmpegVideoID = -1) then
         begin
-          AudioCMD := ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
+          LAudioCommandLine := ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
         end
         else
         begin
-          AudioCMD := ' -map 0:' + FloatToStr(FMasterFileInfoList[FFileIndex].FFMmpegVideoID) + ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
+          LAudioCommandLine := ' -map 0:' + FloatToStr(FMasterFileInfoList[FFileIndex].FFMmpegVideoID) + ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
         end;
       end;
-      Result.SeconPassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" -pass 2 -passlogfile "' + PassFile + '" ' + CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition,
-        FMasterFileInfoList[FFileIndex].EndPosition) + VCodec + Container + AudioCMD + ACodec + ' "' + OutName + '"';
+      Result.SeconPassCMD := ' -y ' + LAudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" -pass 2 -passlogfile "' + LPassFilePath + '" ' +
+        CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition, FMasterFileInfoList[FFileIndex].EndPosition) + LVideoCodec + LContainer + LAudioCommandLine + LAudioCodec + ' "' +
+        LOutputFileName + '"';
     end
     else
     begin
@@ -713,58 +750,58 @@ begin
       begin
         case AudioEncoderList.ItemIndex of
           1:
-            OutExtension := '.mp3';
+            LOutputFileExtension := '.mp3';
           2:
-            OutExtension := '.m4a';
+            LOutputFileExtension := '.m4a';
           3:
-            OutExtension := '.ogg';
+            LOutputFileExtension := '.ogg';
           4:
-            OutExtension := '.wav';
+            LOutputFileExtension := '.wav';
           5:
-            OutExtension := '.ac3';
+            LOutputFileExtension := '.ac3';
           6:
-            OutExtension := '.mp2';
+            LOutputFileExtension := '.mp2';
           7:
-            OutExtension := '.wma';
+            LOutputFileExtension := '.wma';
           8:
-            OutExtension := '.spx';
+            LOutputFileExtension := '.spx';
           9:
-            OutExtension := '.opus';
+            LOutputFileExtension := '.opus';
           11:
-            OutExtension := '.flac';
+            LOutputFileExtension := '.flac';
         end;
       end;
 
-      OutName := CreateFileName(FFileName, OutExtension);
+      LOutputFileName := CreateFileName(FFileName, LOutputFileExtension);
       // audio track selection
       if FMasterFileInfoList[FFileIndex].AudioIndex < 0 then
       begin
-        AudioCMD := ' ';
+        LAudioCommandLine := ' ';
       end
       else
       begin
         // audio delay
         if VideoEncoderList.ItemIndex = 11 then
         begin
-          AudioDelayCMD := ' ';
+          LAudioDelayCMD := ' ';
         end
         else
         begin
-          AudioDelayCMD := ' -itsoffset ' + StringReplace(FloatToStr(FMasterFileInfoList[FFileIndex].AudioDelay), ',', '.', []);
+          LAudioDelayCMD := ' -itsoffset ' + StringReplace(FloatToStr(FMasterFileInfoList[FFileIndex].AudioDelay), ',', '.', []);
         end;
 
         // if video is none
         if (VideoEncoderList.ItemIndex = 11) or (FMasterFileInfoList[FFileIndex].FFMmpegVideoID = -1) then
         begin
-          AudioCMD := ' -map 0:' + (FMasterFileInfoList[FFileIndex].SelectedAudio) + ' ';
+          LAudioCommandLine := ' -map 0:' + (FMasterFileInfoList[FFileIndex].SelectedAudio) + ' ';
         end
         else
         begin
-          AudioCMD := ' -map 0:' + FloatToStr(FMasterFileInfoList[FFileIndex].FFMmpegVideoID) + ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
+          LAudioCommandLine := ' -map 0:' + FloatToStr(FMasterFileInfoList[FFileIndex].FFMmpegVideoID) + ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
         end;
       end;
-      Result.SinglePassCMD := ' -y ' + AudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" ' + CustomArgs + ' ' + CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition, FMasterFileInfoList[FFileIndex].EndPosition) +
-        VCodec + Container + AudioCMD + ACodec + ' "' + OutName + '"';
+      Result.SinglePassCMD := ' -y ' + LAudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" ' + CustomArgs + ' ' + CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition,
+        FMasterFileInfoList[FFileIndex].EndPosition) + LVideoCodec + LContainer + LAudioCommandLine + LAudioCodec + ' "' + LOutputFileName + '"';
     end;
   end;
 end;
@@ -816,7 +853,7 @@ begin
   end;
 
   FOutputFileName := OutFileName;
-  Result := OutFileName;
+  Result := OutFileName.Replace('\\\', '\', [rfReplaceAll]);
 
 end;
 

@@ -203,6 +203,36 @@ begin
       begin
         AdvancedCMD := '';
       end;
+    12: // x265
+      begin
+        AdvancedCMD := '';
+        with AdvancedOptionsForm do
+        begin
+          // presets
+          case x265PresetsList.ItemIndex of
+            1:
+              AdvancedCMD := AdvancedCMD + ' -preset ultrafast';
+            2:
+              AdvancedCMD := AdvancedCMD + ' -preset superfast';
+            3:
+              AdvancedCMD := AdvancedCMD + ' -preset veryfast';
+            4:
+              AdvancedCMD := AdvancedCMD + ' -preset faster';
+            5:
+              AdvancedCMD := AdvancedCMD + ' -preset fast';
+            6:
+              AdvancedCMD := AdvancedCMD + ' -preset medium';
+            7:
+              AdvancedCMD := AdvancedCMD + ' -preset slow';
+            8:
+              AdvancedCMD := AdvancedCMD + ' -preset slower';
+            9:
+              AdvancedCMD := AdvancedCMD + ' -preset veryslow';
+            10:
+              AdvancedCMD := AdvancedCMD + ' -preset placebo';
+          end;
+        end;
+      end;
   end;
   Result := AdvancedCMD;
 end;
@@ -342,49 +372,49 @@ begin
   case MainForm.AudioEncoderList.ItemIndex of
     0: // copy
       begin
-        ACodec := ' -acodec copy' + CustomAudioArg;
+        ACodec := ' -c:a copy' + CustomAudioArg;
       end;
     1: // mp3
       begin
-        ACodec := ' -acodec libmp3lame -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+        ACodec := ' -c:a libmp3lame -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
       end;
     2: // aac
       begin
-        ACodec := ' -strict experimental -acodec aac -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
-        // ACodec := ' -acodec libvo_aacenc -ab ' + Abitrate + 'k '
+        ACodec := ' -strict experimental -c:a aac -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+        // ACodec := ' -c:a libvo_aacenc -ab ' + Abitrate + 'k '
         // + ASR + AChan + ' ' + CustomAudioArg;
       end;
     3: // ogg
       begin
-        ACodec := ' -acodec libvorbis -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+        ACodec := ' -c:a libvorbis -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
       end;
     4: // wav
       begin
-        ACodec := ' -acodec pcm_alaw';
+        ACodec := ' -c:a pcm_alaw';
       end;
     5: // ac3
       begin
-        ACodec := ' -acodec ac3 -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+        ACodec := ' -c:a ac3 -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
       end;
     6: // mp2
       begin
-        ACodec := ' -acodec mp2 -ab ' + Abitrate + 'k  ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+        ACodec := ' -c:a mp2 -ab ' + Abitrate + 'k  ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
       end;
     7: // wma2
       begin
-        ACodec := ' -acodec wmav2 -ab ' + Abitrate + 'k  ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+        ACodec := ' -c:a wmav2 -ab ' + Abitrate + 'k  ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
       end;
     8: // speex
       begin
-        ACodec := ' -f ogg -acodec libspeex -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+        ACodec := ' -f ogg -c:a libspeex -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
       end;
     9: // opus
       begin
-        ACodec := ' -acodec libopus -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+        ACodec := ' -c:a libopus -ab ' + Abitrate + 'k ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
       end;
     11: // flac
       begin
-        ACodec := ' -acodec flac -compression_level ' + AdvancedOptionsForm.FlacCompEdit.Text + ' ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
+        ACodec := ' -c:a flac -compression_level ' + AdvancedOptionsForm.FlacCompEdit.Text + ' ' + ASR + AChan + LVolumeCMD + ' ' + CustomAudioArg;
       end;
   end;
 
@@ -496,50 +526,54 @@ begin
   case MainForm.VideoEncoderList.ItemIndex of
     0: // mpeg 1
       begin
-        VCodec := ' -vcodec mpeg1video ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+        VCodec := ' -c:v mpeg1video ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
       end;
     1: // mpeg 2
       begin
-        VCodec := ' -vcodec mpeg2video ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+        VCodec := ' -c:v mpeg2video ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
       end;
     2: // xvid
       begin
-        VCodec := ' -vcodec libxvid ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+        VCodec := ' -c:v libxvid ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
       end;
     3: // mpeg 4
       begin
-        VCodec := ' -vcodec mpeg4 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+        VCodec := ' -c:v mpeg4 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
       end;
     4: // h264
       begin
         if AdvancedOptionsForm.x264CRFBtn.Checked and AdvancedOptionsForm.x264Btn.Checked then
         begin
-          VCodec := ' -vcodec libx264 ' + ' -crf ' + AdvancedOptionsForm.x264CRFEdit.Text + ' ' + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+          VCodec := ' -c:v libx264 ' + ' -crf ' + AdvancedOptionsForm.x264CRFEdit.Text + ' ' + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end
         else
         begin
-          VCodec := ' -vcodec libx264 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+          VCodec := ' -c:v libx264 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
         end;
       end;
     5: // flv
       begin
-        VCodec := ' -vcodec flv ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+        VCodec := ' -c:v flv ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
       end;
     6: // wmv
       begin
-        VCodec := VFPS + ' -vcodec wmv2 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + VSize + CreateAdvancedOptions + CustomVideoArg;
+        VCodec := VFPS + ' -c:v wmv2 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + VSize + CreateAdvancedOptions + CustomVideoArg;
       end;
     7: // vp8
       begin
-        VCodec := ' -vcodec libvpx ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+        VCodec := ' -c:v libvpx ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
       end;
     8: // huffyuv
       begin
-        VCodec := ' -vcodec huffyuv ' + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+        VCodec := ' -c:v huffyuv ' + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
       end;
     9: // prores
       begin
-        VCodec := ' -vcodec prores ' + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+        VCodec := ' -c:v prores ' + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+      end;
+    12: // h265
+      begin
+            VCodec := ' -c:v libx265 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
       end;
   end;
 
@@ -733,6 +767,7 @@ end;
 procedure TImageAudiotoVideoForm.StartBtnClick(Sender: TObject);
 var
   LCMD: string;
+  LEncodeJob: TEncodeJob;
 begin
   if FileExists(AudioEdit.Text) then
   begin
@@ -758,12 +793,13 @@ begin
             LCMD := CreateCMD;
             if Length(LCMD) > 0 then
             begin
-              FEncoder.CommandLines.Add(LCMD);
-              FEncoder.EncoderPaths.Add(MainForm.FFFMpegPath);
-              FEncoder.ProcessTypes.Add(ffmpeg);
-              FEncoder.Infos.Add('Image+Audio=Video');
-              FEncoder.OutputFiles.Add(FOutputFile);
-              FEncoder.FileNames.Add('');
+              LEncodeJob.CommandLine := LCMD;
+              LEncodeJob.ProcessPath := MainForm.FFFMpegPath;
+              LEncodeJob.ProcessType := ffmpeg;
+              LEncodeJob.EncodingInformation := 'Image+Audio=Video';
+              LEncodeJob.EncodingOutputFilePath := FOutputFile;
+              LEncodeJob.SourceFileName := '';
+              FEncoder.EncodeJobs.Add(LEncodeJob);
               FEncoder.Start;
               PosTimer.Enabled := True;
               EncodingState;

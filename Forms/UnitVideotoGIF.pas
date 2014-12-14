@@ -267,6 +267,8 @@ begin
 end;
 
 procedure TVideoToGIFForm.PosTimerTimer(Sender: TObject);
+var
+  I: Integer;
 begin
   if FConverter.FilesDone <> FConverter.CommandCount then
   begin
@@ -279,7 +281,10 @@ begin
     NormalState;
     LogForm.OtherLog.Lines.Add('Video to GIF:');
     LogForm.OtherLog.Lines.AddStrings(FConverter.GetConsoleOutput);
-    LogForm.OtherLog.Lines.AddStrings(FConverter.CommandLines);
+    for I := 0 to FConverter.EncodeJobs.Count-1 do
+    begin
+      LogForm.OtherLog.Lines.Add(FConverter.EncodeJobs[i].CommandLine);
+    end;
     Self.BringToFront;
     Application.MessageBox('Finished converting to gif.', 'Info', MB_ICONINFORMATION);
   end;
@@ -363,6 +368,7 @@ end;
 procedure TVideoToGIFForm.StartBtnClick(Sender: TObject);
 var
   LCMD: string;
+  LEncodeJob: TEncodeJob;
 begin
   if not DirectoryExists(MainForm.Info.Folders.Temp + '\TEncoder\') then
   begin
@@ -387,18 +393,20 @@ begin
       LCMD := LCMD + ' -vf scale=' + WidthEdit.Text + ':' + HeightEdit.Text;
     end;
     LCMD := LCMD + ' -f image2 -r 10 -ss ' + TimetoStrEx(FStart) + ' -t ' + TimetoStrEx(FDuration) + ' "' + MainForm.Info.Folders.Temp + '\TEncoder\%05d.png"';
-    FConverter.CommandLines.Add(LCMD);
-    FConverter.EncoderPaths.Add(FFMpegPath);
-    FConverter.Infos.Add('Video to image sequence');
-    FConverter.Durations.Add(FDuration div 1000);
-    FConverter.ProcessTypes.Add(ffmpeg);
+    LEncodeJob.CommandLine := LCMD;
+    LEncodeJob.ProcessPath := FFMpegPath;
+    LEncodeJob.EncodingOutputFilePath := 'Video to image sequence';
+    LEncodeJob.SourceDuration := FDuration div 1000;
+    LEncodeJob.ProcessType := ffmpeg;
+    FConverter.EncodeJobs.Add(LEncodeJob);
     // convert pngs to gif
     LCMD := ' -monitor -limit memory ' + MemoryEdit.Text + 'MB -delay ' + DelayEdit.Text + ' +dither -layers optimizeplus -colors 32 "' + MainForm.Info.Folders.Temp + '\TEncoder\*.png" "' + DestEdit.Text + '"';
-    FConverter.CommandLines.Add(LCMD);
-    FConverter.EncoderPaths.Add(ImageMagickPath);
-    FConverter.Infos.Add('Image sequence to gif');
-    FConverter.Durations.Add(FDuration div 1000);
-    FConverter.ProcessTypes.Add(imagemagick);
+    LEncodeJob.CommandLine := LCMD;
+    LEncodeJob.ProcessPath := ImageMagickPath;
+    LEncodeJob.EncodingOutputFilePath := 'Image sequence to gif';
+    LEncodeJob.SourceDuration := FDuration div 1000;
+    LEncodeJob.ProcessType := imagemagick;
+    FConverter.EncodeJobs.Add(LEncodeJob);
 
     FConverter.Start;
     PosTimer.Enabled := True;
@@ -411,13 +419,18 @@ begin
 end;
 
 procedure TVideoToGIFForm.StopBtnClick(Sender: TObject);
+var
+  I: Integer;
 begin
   PosTimer.Enabled := False;
   FConverter.Stop;
   NormalState;
     LogForm.OtherLog.Lines.Add('Video to GIF:');
     LogForm.OtherLog.Lines.AddStrings(FConverter.GetConsoleOutput);
-    LogForm.OtherLog.Lines.AddStrings(FConverter.CommandLines);
+  for I := 0 to FConverter.EncodeJobs.Count-1 do
+  begin
+    LogForm.OtherLog.Lines.Add(FConverter.EncodeJobs[i].CommandLine);
+  end;
 end;
 
 function TVideoToGIFForm.TimetoStrEx(const Time: Integer): string;
