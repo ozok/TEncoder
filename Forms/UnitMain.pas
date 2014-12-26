@@ -674,7 +674,7 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
 
 const
   Portable = False;
-  Build = 4973;
+  Build = 5066;
 
 {$R *.dfm}
 
@@ -3933,7 +3933,7 @@ begin
   end;
 
   // mencoder does not support x265 encoding
-  if (VideoEncoderList.ItemIndex = 12) and (EncoderList.ItemIndex = 0) then
+  if (VideoEncoderList.ItemIndex = 12) then
   begin
     Application.MessageBox('Mencoder does not support encoding video with x265 codec!', 'Error', MB_ICONERROR);
     Exit;
@@ -5348,7 +5348,7 @@ begin
 {$IFDEF WIN64}
   FMEncoder64Path := ExtractFileDir(Application.ExeName) + '\MEncoder\MEncoder64\Mencoder.exe';
 {$ELSE}
-  MencoderPath64 := MencoderPath;
+  FMEncoder64Path := FMencoderPath;
 {$ENDIF}
   FMPlayerPath := ExtractFileDir(Application.ExeName) + '\MEncoder\Mplayer.exe';
   FMp4BoxPath := ExtractFileDir(Application.ExeName) + '\Mp4Box.exe';
@@ -5655,6 +5655,8 @@ begin
   AddToLog(0, 'CPU: ' + Trim(Info.CPU.Name));
   AddToLog(0, '');
 
+  Self.Width := Self.Width + 1;
+  Self.Width := Self.Width - 1;
   Self.BringToFront;
 end;
 

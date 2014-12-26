@@ -1,14 +1,16 @@
 TEncoder Change Log
 
 -4.5.4
--Added: Batch DVD ripping
--Added: A faster way to add links to video downloader
--Added: Options to define default audio and subtitle track languages
--Fixed: Couldn't get subtitle tracks from some mkv files
--Fixed: Updated default video downloader format
+-Added: [Video/Audio Converter] Support for x265 encoding
+-Added: [DVD Ripper] Batch DVD ripping
+-Added: [Video Downloader] A faster way to add links to video downloader
+-Added: [Video/Audio Converter] Options to define default audio and subtitle track languages
+-Fixed: [General] Couldn't get subtitle tracks from some mkv files
+-Fixed: [Video/Audio Converter] Updated default video downloader format
 -Updated: youtube-dl
 -Updated: MediaInfo to 0.7.71
 -Updated: FFmpeg
+-Updated: Skin component
 
 --4.5.3
 -Added: [Video Downloader] Video thumbnails will be resized more smoothly
