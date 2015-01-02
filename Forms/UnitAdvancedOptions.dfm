@@ -102,7 +102,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     Top = 367
     Width = 486
     Height = 131
-    ActivePage = sTabSheet5
+    ActivePage = sTabSheet3
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
     SkinData.SkinSection = 'PAGECONTROL'
@@ -130,6 +130,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'x264'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object x264Btn: TsCheckBox
         Left = 8
         Top = 8
@@ -363,6 +367,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'ProRes'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object sLabel1: TsLabel
         Left = 3
         Top = 44
@@ -470,6 +478,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'FLAC'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object FlacCompBar: TsTrackBar
         Left = 166
         Top = 4

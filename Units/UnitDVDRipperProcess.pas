@@ -236,14 +236,11 @@ begin
   begin
     FConsoleOutput := Trim(S);
 
-    if MainForm.FDVDBatchMode then
+    if TryStrToInt(FItem.SubItems[0], LCurrVal) then
     begin
-      if TryStrToInt(FItem.SubItems[0], LCurrVal) then
+      if GetPercentage > LCurrVal then
       begin
-        if GetPercentage > LCurrVal then
-        begin
-          FItem.SubItems[0] := FloatToStr(GetPercentage);
-        end;
+        FItem.SubItems[0] := FloatToStr(GetPercentage);
       end;
     end;
   end;
@@ -256,11 +253,8 @@ begin
   MainForm.DVDProgressBar.Position := 0;
   if FStoppedByUser then
   begin
-    if MainForm.FDVDBatchMode then
-    begin
-      FItem.SubItems[0] := 'Stopped';
-      FItem.StateIndex := 3;
-    end;
+    FItem.SubItems[0] := 'Stopped';
+    FItem.StateIndex := 3;
     FEncoderStatus := esStopped;
   end
   else
@@ -269,24 +263,19 @@ begin
     // run next command
     inc(FCommandIndex);
 
-    if MainForm.FDVDBatchMode then
-    begin
-      FItem.SubItems[0] := '100';
-      FItem.StateIndex := 2;
-    end;
+    FItem.SubItems[0] := '100';
+    FItem.StateIndex := 2;
+
     if FCommandIndex < FCommandLines.Count then
     begin
       FProcess.CommandLine := FCommandLines[FCommandIndex];
       FProcess.ApplicationName := FEncoderPaths[FCommandIndex];
       FEncoderStatus := esEncoding;
       FConsoleOutput := '';
-      if MainForm.FDVDBatchMode then
-      begin
-        FItem := MainForm.DVDJobList.Items[FListItemIndexes[FCommandIndex]];
-        FItem.SubItems[0] := '0';
-        FItem.StateIndex := 0;
-        FItem.MakeVisible(False);
-      end;
+      FItem := MainForm.DVDJobList.Items[FListItemIndexes[FCommandIndex]];
+      FItem.SubItems[0] := '0';
+      FItem.StateIndex := 0;
+      FItem.MakeVisible(False);
       FProcess.Run;
     end
     else
@@ -322,12 +311,10 @@ begin
       FProcess.ApplicationName := FEncoderPaths[0];
       FProcess.CommandLine := FCommandLines[0];
       FEncoderStatus := esEncoding;
-      if MainForm.FDVDBatchMode then
-      begin
-        FItem := MainForm.DVDJobList.Items[FListItemIndexes[0]];
-        FItem.SubItems[0] := '0';
-        FItem.StateIndex := 0;
-      end;
+
+      FItem := MainForm.DVDJobList.Items[FListItemIndexes[0]];
+      FItem.SubItems[0] := '0';
+      FItem.StateIndex := 0;
       FProcess.Run;
     end
     else

@@ -256,7 +256,7 @@ begin
   finally
     SettingsFile.Free;
     x264Btn.OnClick(Self);
-    x265BtnClick(self);
+    x265BtnClick(Self);
     ProresQualityEdit.Text := FloatToStr(ProresQualityBar.Position);
     FlacCompBarChange(Self);
   end;
@@ -526,16 +526,16 @@ end;
 
 procedure TAdvancedOptionsForm.x265BtnClick(Sender: TObject);
 begin
-    x265PresetsList.Enabled := x265Btn.Checked;
+  x265PresetsList.Enabled := x265Btn.Checked;
 
-//  if x264Btn.Checked then
-//  begin
-//    x264CRFEdit.Enabled := x264CRFBtn.Checked;
-//  end
-//  else
-//  begin
-//    x264CRFEdit.Enabled := False;
-//  end;
+  // if x264Btn.Checked then
+  // begin
+  // x264CRFEdit.Enabled := x264CRFBtn.Checked;
+  // end
+  // else
+  // begin
+  // x264CRFEdit.Enabled := False;
+  // end;
 end;
 
 end.

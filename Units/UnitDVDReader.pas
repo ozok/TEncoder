@@ -321,7 +321,6 @@ var
 begin
   FStatus := fsReading;
   try
-    // FProcess.ConsoleOutput.SaveToFile('C:\' + FloatToStr(FTitleIndex) + '.txt');
     // get title duration
     for I := 0 to FProcess.ConsoleOutput.Count - 1 do
     begin

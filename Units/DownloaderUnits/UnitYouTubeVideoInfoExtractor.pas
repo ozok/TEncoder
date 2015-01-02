@@ -328,8 +328,6 @@ var
   LVideoTypeInfo: TTypeInfo;
 begin
   FFormatStatus := stReading;
-//FFormatProcess.ConsoleOutput.SaveToFile('C:\format.txt');
-  //FFormatProcess.ConsoleOutput.Add(FFormatProcess.CommandLine);
   // find start of avail. formats
   try
     LStartIndex := -1;
@@ -432,7 +430,6 @@ var
   LImageTypeExt: TImageType;
 begin
   FThumbStatus := stReading;
-//FThumbProcess.ConsoleOutput.SaveToFile('C:\thumb.txt');
   LImageTypeExt := TImageType.Create(FImageName);
   try
     if LImageTypeExt.ImageType = '.jpg' then
@@ -462,9 +459,7 @@ begin
       FTitleExtractProcess.ConsoleOutput.Delete(i);
     end;
   end;
-// FTitleExtractProcess.ConsoleOutput.SaveToFile('C:\title.txt');
   try
-//    FTitleExtractProcess.ConsoleOutput.Add(FTitleExtractProcess.CommandLine);
     if FTitleExtractProcess.ConsoleOutput.Count > 0 then
     begin
       // if there are more than one line,
@@ -495,7 +490,6 @@ var
   i: integer;
 begin
   FPlayListStatus := stReading;
-//FPlayListProcess.ConsoleOutput.SaveToFile('C:\playlist.txt');
   for I := 0 to FPlayListProcess.ConsoleOutput.Count-1 do
   begin
     if Length(Trim(FPlayListProcess.ConsoleOutput[i])) > 3 then
@@ -516,7 +510,6 @@ var
 begin
   FSubtitleStatus := stReading;
   try
-//    FSubtitleProcess.ConsoleOutput.SaveToFile('C:\sub.txt');
     if Assigned(FSubtitleProcess) then
     begin
       if Assigned(FSubtitleProcess.ConsoleOutput) then

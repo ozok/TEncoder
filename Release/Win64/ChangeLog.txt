@@ -1,6 +1,15 @@
 TEncoder Change Log
 
--4.5.4
+--4.5.6
+-Fixed: Selecting x265 would not select ffmpeg and mp4 as default options
+-Fixed: Controls to add links fast to video downloader were not disabled during a download
+
+--4.5.5
+-Fixed: [DVD Ripper] Could not rip to xvid due to a bug in aspect ratio code 
+-Fixed: [General] "Codec Options" button wasn't enabled after DVD ripping was stopped/ended
+-Fixed: [General] Some debugging parameters were left on
+
+--4.5.4
 -Added: [Video/Audio Converter] Support for x265 encoding
 -Added: [DVD Ripper] Batch DVD ripping
 -Added: [Video Downloader] A faster way to add links to video downloader

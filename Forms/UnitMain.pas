@@ -614,7 +614,6 @@ type
     FVideoDownloadListItems: TMyListItemList;
     // dvd ripper process
     FDVDRipperProcess: TDVDRipProcess;
-    FDVDBatchMode: Boolean;
 
     FTimePassed: Integer;
     // list that holds all the informaiton about files to be converted
@@ -673,8 +672,8 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
   UnitVideotoGIF, UnitBatchAdd, UnitWatermark;
 
 const
-  Portable = False;
-  Build = 5066;
+  Portable = True;
+  Build = 5079;
 
 {$R *.dfm}
 
@@ -1727,12 +1726,18 @@ begin
               LVideoDownloaderItem.PrevievImg.Picture.LoadFromFile(YIE.ImageName);
             except
               // load default image in case of an error
-              LVideoDownloaderItem.PrevievImg.Picture.LoadFromFile(ExtractFileDir(Application.ExeName) + '\icon.ico');
+              if FileExists(ExtractFileDir(Application.ExeName) + '\icon.ico') then
+              begin
+                LVideoDownloaderItem.PrevievImg.Picture.LoadFromFile(ExtractFileDir(Application.ExeName) + '\icon.ico');
+              end;
             end;
           end
           else
           begin
-            LVideoDownloaderItem.PrevievImg.Picture.LoadFromFile(ExtractFileDir(Application.ExeName) + '\icon.ico');
+            if FileExists(ExtractFileDir(Application.ExeName) + '\icon.ico') then
+            begin
+              LVideoDownloaderItem.PrevievImg.Picture.LoadFromFile(ExtractFileDir(Application.ExeName) + '\icon.ico');
+            end;
           end;
           LVideoDownloaderItem.DeleteButton.OnClick := DeleteBtnClick;
           LVideoDownloaderItem.ProgressLabel.Caption := 'Waiting...';
@@ -3209,7 +3214,7 @@ begin
       begin
         VCodecPart1 := FilterCMD + VFPS + ' -ovc xvid -xvidencopts bitrate=' + VBitrate + CreateDVDAdvancedCMD + DVDThreadCMD;
         if (Length(VAspect) > 0) then
-          VCodecPart2 := ':' + VAspect;
+          VCodecPart2 := VAspect;
       end;
     3: // mpeg 4
       begin
@@ -3696,6 +3701,9 @@ begin
   VideoSettingsBtn.Enabled := True;
   ConvertDownloadedBtn.Enabled := True;
   PassBtn.Enabled := True;
+  LinkEdit.Enabled := True;
+  LinkTypeList.Enabled := True;
+  AddSingleLinkBtn.Enabled := True;
   for I := 0 to FVideoDownloadListItems.Count - 1 do
   begin
     for j := 0 to FVideoDownloadListItems[i].Panel.ControlCount - 1 do
@@ -3782,6 +3790,9 @@ begin
   VideoSettingsBtn.Enabled := False;
   ConvertDownloadedBtn.Enabled := False;
   PassBtn.Enabled := False;
+  LinkEdit.Enabled := False;
+  LinkTypeList.Enabled := False;
+  AddSingleLinkBtn.Enabled := False;
   if PassPnl.Visible then
   begin
     PassPnl.Visible := False;
@@ -4202,6 +4213,7 @@ begin
   DVDTotalProgressBar.Position := 0;
   SetProgressValue(Handle, 0, 100);
   Self.Caption := 'TEncoder';
+  VideoSettingsBtn.Enabled := True;
 
   SettingsBtn.Enabled := True;
   DirectoryEdit.Enabled := True;
@@ -4235,6 +4247,7 @@ begin
   begin
     DVDPages.Pages[0].Controls[i].Enabled := True;
   end;
+  VideoSettingsBtn.Enabled := True;
 end;
 
 procedure TMainForm.DVDBatchRemoveBtnClick(Sender: TObject);
@@ -4330,8 +4343,6 @@ begin
       FTempFilesToDelete.AddStrings(FDVDJobs[i].TempFiles);
       FFilesToCheck.AddStrings(FDVDJobs[i].FilesToCheck);
     end;
-    FDVDRipperProcess.CommandLines.SaveToFile('C:\adasd.txt');
-    FDVDRipperProcess.EncoderPaths.SaveToFile('C:\adaadsadadsd.txt');
     if FDVDRipperProcess.CommandLines.Count > 0 then
     begin
       for I := 0 to DVDJobList.Items.Count - 1 do
@@ -4346,7 +4357,6 @@ begin
       AddToLog(6, '');
       DVDBatchRipUI;
       AddToLog(0, 'Starting to rip DVDs.');
-      FDVDBatchMode := True;
       FDVDRipperProcess.Start;
       DVDPosTimer.Enabled := True;
       Timer.Enabled := True;
@@ -4438,6 +4448,7 @@ begin
   DVDInfoLabel.Caption := '';
   SetProgressValue(Handle, 0, MaxInt);
   FuncPagesChange(Self);
+  VideoSettingsBtn.Enabled := True;
 end;
 
 procedure TMainForm.DVDEncodeBtnClick(Sender: TObject);
@@ -4697,7 +4708,6 @@ begin
       AddToLog(6, '');
       DVDRipUI;
       AddToLog(0, 'Starting to rip DVD.');
-      FDVDBatchMode := False;
       FDVDRipperProcess.Start;
       DVDPosTimer.Enabled := True;
       Timer.Enabled := True;
@@ -4755,14 +4765,7 @@ begin
     DVDPosTimer.Enabled := False;
     Timer.Enabled := False;
     DeleteTempFiles;
-    if FDVDBatchMode then
-    begin
-      DVDBatchDoneUI;
-    end
-    else
-    begin
-      DVDDoneUI;
-    end;
+    DVDBatchDoneUI;
 
     if SettingsForm.PlaySoundBtn.Checked then
     begin
@@ -4964,14 +4967,7 @@ begin
     DVDPosTimer.Enabled := False;
     Timer.Enabled := False;
     DeleteTempFiles;
-    if FDVDBatchMode then
-    begin
-      DVDBatchDoneUI;
-    end
-    else
-    begin
-      DVDDoneUI;
-    end;
+    DVDBatchDoneUI;
   end;
 end;
 
@@ -8605,6 +8601,11 @@ begin
     9:
       begin
         ContainerList.ItemIndex := 3;
+        EncoderList.ItemIndex := 1;
+      end;
+    13:
+      begin
+        ContainerList.ItemIndex := 2;
         EncoderList.ItemIndex := 1;
       end;
   end;
