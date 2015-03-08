@@ -189,10 +189,6 @@ object SettingsForm: TSettingsForm
       Caption = 'General'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GeneralPanel: TsPanel
         Left = 0
         Top = 0
@@ -353,10 +349,6 @@ object SettingsForm: TSettingsForm
       Caption = 'Subtitle'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object SubtitlePanel: TsPanel
         Left = 0
         Top = 0
@@ -598,10 +590,6 @@ object SettingsForm: TSettingsForm
       Caption = 'Encoding'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object EncodingPanel: TsPanel
         Left = 0
         Top = 0
@@ -844,10 +832,6 @@ object SettingsForm: TSettingsForm
       Caption = 'Skin'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object SkinPanel: TsPanel
         Left = 0
         Top = 0
@@ -978,10 +962,6 @@ object SettingsForm: TSettingsForm
       Caption = 'Video Downloader'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object PreferedFormatEdit: TsEdit
         Left = 100
         Top = 3

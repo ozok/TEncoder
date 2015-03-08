@@ -318,7 +318,7 @@ end;
 procedure TYouTubeVideoInfoExtractor.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 const
   AvailFormat = 'format code extension resolution  note';
-  SoundCloudStr = 'format code      extension resolution  note';
+  SoundCloudStr = 'format code  extension  resolution note';
 var
   I: Integer;
   LLine: string;
