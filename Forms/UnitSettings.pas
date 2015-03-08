@@ -267,7 +267,6 @@ begin
       WriteBool('Options', 'Update', CheckUpdatesChckBtn.Checked);
 
       WriteBool('Options', 'UseThreads', ThreadChkBtn.Checked);
-      WriteInteger('Options', 'PostEncode', PostEncodeActionList.ItemIndex);
 
       WriteBool('Options', 'Skinning2', SkinEnableBtn.Checked);
 
@@ -422,7 +421,6 @@ begin
 
       CheckUpdatesChckBtn.Checked := ReadBool('Options', 'Update', True);
       ThreadChkBtn.Checked := ReadBool('Options', 'UseThreads', False);
-      PostEncodeActionList.ItemIndex := ReadInteger('Options', 'PostEncode', 0);
       DeleteUnfinBtn.Checked := ReadBool('Options', 'Unfinished', True);
       FolderStructBtn.Checked := ReadBool('Options', 'FolderStruct', False);
       CopyDateBtn.Checked := ReadBool('Options', 'copydate', False);

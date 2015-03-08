@@ -673,7 +673,7 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
 
 const
   Portable = True;
-  Build = 5079;
+  Build = 5086;
 
 {$R *.dfm}
 
@@ -6408,8 +6408,6 @@ begin
       VideoEncoderList.ItemIndex := ReadInteger('Options', 'VEncoder', 2);
 
       ContainerList.ItemIndex := ReadInteger('Options', 'Container', 0);
-      PostEncodeList.ItemIndex := ReadInteger('Options', 'PostEncode', 0);
-      PostEncodeList2.ItemIndex := ReadInteger('Options', 'PostEncode2', 0);
 
       AudioEncoderList.ItemIndex := ReadInteger('Options', 'AEncoder', 1);
 
@@ -7155,8 +7153,6 @@ begin
       WriteInteger('Options', 'AEncoder', AudioEncoderList.ItemIndex);
 
       WriteInteger('Options', 'Container', ContainerList.ItemIndex);
-      WriteInteger('Options', 'PostEncode', PostEncodeList.ItemIndex);
-      WriteInteger('Options', 'PostEncode2', PostEncodeList2.ItemIndex);
 
       WriteBool('Options', 'Sub', EnableSubBtn.Checked);
       WriteBool('Options', 'Script', ExportScriptBtn.Checked);

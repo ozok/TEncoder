@@ -1,8 +1,13 @@
 TEncoder Change Log
 
 --4.5.6
--Fixed: Selecting x265 would not select ffmpeg and mp4 as default options
--Fixed: Controls to add links fast to video downloader were not disabled during a download
+-Added: [General] Post encode options are now reset to "Do nothing" when to program is closed
+-Fixed: [Video/Audio Converter] Selecting x265 would not select ffmpeg and mp4 as default options
+-Fixed: [Video Downloader] Controls to add links fast to video downloader were not disabled during a download
+-Fixed: [Video Downloader] Video downloader was unable to add links to the list
+-Updated: youtube-dl
+-Updated: FFmpeg
+-Updated: Skin component
 
 --4.5.5
 -Fixed: [DVD Ripper] Could not rip to xvid due to a bug in aspect ratio code 
