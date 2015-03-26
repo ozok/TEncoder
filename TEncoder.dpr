@@ -37,7 +37,8 @@ uses
   UnitDownloadProcess in 'Units\UnitDownloadProcess.pas',
   UnitDVDRipperProcess in 'Units\UnitDVDRipperProcess.pas',
   UnitFileInfoExtractor in 'Units\UnitFileInfoExtractor.pas',
-  UnitDVDJob in 'Units\UnitDVDJob.pas';
+  UnitDVDJob in 'Units\UnitDVDJob.pas',
+  VideoAdding in 'Forms\VideoAdding.pas' {VideoAddingForm};
 
 {$R *.res}
 
@@ -63,6 +64,7 @@ begin
   Application.CreateForm(TVideoToGIFForm, VideoToGIFForm);
   Application.CreateForm(TBatchAddForm, BatchAddForm);
   Application.CreateForm(TWatermarkForm, WatermarkForm);
+  Application.CreateForm(TVideoAddingForm, VideoAddingForm);
   Application.Run;
 
 end.

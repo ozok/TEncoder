@@ -1,5 +1,9 @@
 TEncoder Change Log
 
+--4.5.7
+-Fixed: [Video Downloader] Couldn't download videos due to a change in youtube-dl console output
+-Added: [General] A few UI changes and new default window dimensions
+
 --4.5.6
 -Added: [General] Post encode options are now reset to "Do nothing" when to program is closed
 -Fixed: [Video/Audio Converter] Selecting x265 would not select ffmpeg and mp4 as default options

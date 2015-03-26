@@ -270,10 +270,8 @@ type
     Batchaddlinks1: TMenuItem;
     A2: TMenuItem;
     Batchaddplaylists1: TMenuItem;
-    LoadPanel: TsPanel;
     TotalBar: TsProgressBar;
     VideoDownloaderPosTimer: TTimer;
-    Image1: TImage;
     ConvertDownloadedBtn: TsCheckBox;
     U1: TMenuItem;
     sTabSheet3: TsTabSheet;
@@ -312,8 +310,6 @@ type
     Log2Btn: TsBitBtn;
     PostEncodeList: TsComboBox;
     sBitBtn1: TsBitBtn;
-    AbortVideoAddBtn: TsBitBtn;
-    VideoAddBar: TsProgressBar;
     RightPnl: TsPanel;
     BottomPnl: TsPanel;
     sPanel5: TsPanel;
@@ -447,7 +443,6 @@ type
     procedure CheckUpdateThreadExecute(Sender: TObject; Params: Pointer);
     procedure UpdateCheckerDoneStream(Sender: TObject; Stream: TStream; StreamSize: Integer; Url: string);
     procedure W1Click(Sender: TObject);
-    procedure AbortVideoAddBtnClick(Sender: TObject);
     procedure PassBtnClick(Sender: TObject);
     procedure sLabelFX1Click(Sender: TObject);
     procedure sLabelFX2Click(Sender: TObject);
@@ -496,7 +491,6 @@ type
     // time passed downloading
     // todo: use this
     FVideoDownloaderTime: Integer;
-    FStopAddingLink: Boolean;
     FSkippedVideoCount: integer;
 
     // ===dvd ripper===
@@ -614,6 +608,7 @@ type
     FVideoDownloadListItems: TMyListItemList;
     // dvd ripper process
     FDVDRipperProcess: TDVDRipProcess;
+    FStopAddingLink: Boolean;
 
     FTimePassed: Integer;
     // list that holds all the informaiton about files to be converted
@@ -669,7 +664,7 @@ implementation
 
 uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
   UnitProfileEditor, UnitSettings, UnitEffects, UnitRangeEditor, UnitPreview, UnitAdvancedOptions, UnitImageAudioMerger, UnitDub,
-  UnitVideotoGIF, UnitBatchAdd, UnitWatermark;
+  UnitVideotoGIF, UnitBatchAdd, UnitWatermark, VideoAdding;
 
 const
   Portable = False;
@@ -691,13 +686,12 @@ begin
     LPass.Password := PassEdit.Text;
     LYIE := TYouTubeVideoInfoExtractor.Create(LURL, FYoutubedlPath, FTempFolder, LPass, not SettingsForm.DontPreviewImgBtn.Checked);
     LYIE.GetPlayListInfo;
-    AbortVideoAddBtn.Top := (LoadPanel.Height div 2) - (AbortVideoAddBtn.Height div 2);
-    LoadPanel.Visible := True;
-    LoadPanel.BringToFront;
+    Self.Enabled := False;
+    VideoAddingForm.Show;
     MenuState(False);
     FStopAddingLink := False;
     try
-      LoadPanel.Caption := 'Extracting video links from playlist, this may take a while...';
+      VideoAddingForm.InfoLabel.Caption := 'Extracting video links from playlist, this may take a while...';
       while LYIE.PlaylistStatus = stReading do
       begin
         if FStopAddingLink then
@@ -721,7 +715,7 @@ begin
             begin
               Break;
             end;
-            LoadPanel.Caption := 'Adding videos to the list...(' + FloatToStr(i + 1) + '/' + FloatToStr(LYIE.PlayListVideoLinks.Count) + ')';
+            VideoAddingForm.InfoLabel.Caption := 'Adding videos to the list...(' + FloatToStr(i + 1) + '/' + FloatToStr(LYIE.PlayListVideoLinks.Count) + ')';
             AddURL('http://www.youtube.com/watch?v=' + LYIE.PlayListVideoLinks[i]);
           end;
         end
@@ -733,7 +727,7 @@ begin
     finally
       LYIE.Free;
       Self.Enabled := True;
-      LoadPanel.Visible := False;
+      VideoAddingForm.Close;
       // SendMessage(LinkList.Handle, WM_SETREDRAW, 1, 0);
       RedrawWindow(VideoDownloaderList.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_FRAME or RDW_ALLCHILDREN);
       MenuState(True);
@@ -750,28 +744,23 @@ begin
 
   if Length(Trim(LURL)) > 0 then
   begin
-    AbortVideoAddBtn.Top := (LoadPanel.Height div 2) - (AbortVideoAddBtn.Height div 2);
-    LoadPanel.Visible := True;
-    LoadPanel.BringToFront;
+    VideoAddingForm.InfoLabel.Caption := 'Please wait...';
+    Self.Enabled := False;
+    VideoAddingForm.Show;
     MenuState(False);
     FStopAddingLink := False;
     // SendMessage(LinkList.Handle, WM_SETREDRAW, 0, 0);
     try
-      LoadPanel.Caption := 'Adding given URL to list...';
+      VideoAddingForm.InfoLabel.Caption := 'Adding given URL to list...';
       AddURL(Trim(LURL));
     finally
       Self.Enabled := True;
-      LoadPanel.Visible := False;
+      VideoAddingForm.Close;
       // SendMessage(LinkList.Handle, WM_SETREDRAW, 1, 0);
       RedrawWindow(VideoDownloaderList.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_FRAME or RDW_ALLCHILDREN);
       MenuState(True);
     end;
   end;
-end;
-
-procedure TMainForm.AbortVideoAddBtnClick(Sender: TObject);
-begin
-  FStopAddingLink := True;
 end;
 
 procedure TMainForm.About1Click(Sender: TObject);
@@ -1548,18 +1537,18 @@ begin
     case LinkTypeList.ItemIndex of
       0: // single link
         begin
-          AbortVideoAddBtn.Top := (LoadPanel.Height div 2) - (AbortVideoAddBtn.Height div 2);
-          LoadPanel.Visible := True;
-          LoadPanel.BringToFront;
+          VideoAddingForm.InfoLabel.Caption := 'Please wait...';
+          Self.Enabled := False;
+          VideoAddingForm.Show;
           MenuState(False);
           FStopAddingLink := False;
           // SendMessage(LinkList.Handle, WM_SETREDRAW, 0, 0);
           try
-            LoadPanel.Caption := 'Adding given URL to list...';
+            VideoAddingForm.InfoLabel.Caption := 'Adding given URL to list...';
             AddURL(Trim(LURL));
           finally
             Self.Enabled := True;
-            LoadPanel.Visible := False;
+            VideoAddingForm.Close;
             // SendMessage(LinkList.Handle, WM_SETREDRAW, 1, 0);
             RedrawWindow(VideoDownloaderList.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_FRAME or RDW_ALLCHILDREN);
             MenuState(True);
@@ -1573,13 +1562,13 @@ begin
           LPass.Password := PassEdit.Text;
           LYIE := TYouTubeVideoInfoExtractor.Create(LURL, FYoutubedlPath, FTempFolder, LPass, not SettingsForm.DontPreviewImgBtn.Checked);
           LYIE.GetPlayListInfo;
-          AbortVideoAddBtn.Top := (LoadPanel.Height div 2) - (AbortVideoAddBtn.Height div 2);
-          LoadPanel.Visible := True;
-          LoadPanel.BringToFront;
+          VideoAddingForm.InfoLabel.Caption := 'Please wait...';
+          Self.Enabled := False;
+          VideoAddingForm.Show;
           MenuState(False);
           FStopAddingLink := False;
           try
-            LoadPanel.Caption := 'Extracting video links from playlist, this may take a while...';
+            VideoAddingForm.InfoLabel.Caption := 'Extracting video links from playlist, this may take a while...';
             while LYIE.PlaylistStatus = stReading do
             begin
               if FStopAddingLink then
@@ -1606,7 +1595,7 @@ begin
                   begin
                     Break;
                   end;
-                  LoadPanel.Caption := 'Adding videos to the list...(' + FloatToStr(i + 1) + '/' + FloatToStr(LYIE.PlayListVideoLinks.Count) + ')';
+                  VideoAddingForm.InfoLabel.Caption := 'Adding videos to the list...(' + FloatToStr(i + 1) + '/' + FloatToStr(LYIE.PlayListVideoLinks.Count) + ')';
                   AddURL('http://www.youtube.com/watch?v=' + LYIE.PlayListVideoLinks[i]);
                 end;
               end
@@ -1618,7 +1607,7 @@ begin
           finally
             LYIE.Free;
             Self.Enabled := True;
-            LoadPanel.Visible := False;
+            VideoAddingForm.Close;
             // SendMessage(LinkList.Handle, WM_SETREDRAW, 1, 0);
             RedrawWindow(VideoDownloaderList.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_FRAME or RDW_ALLCHILDREN);
             MenuState(True);
@@ -2054,10 +2043,9 @@ Var
 begin
   if Links.Count > 0 then
   begin
-    AbortVideoAddBtn.Top := (LoadPanel.Height div 2) - (AbortVideoAddBtn.Height div 2);
-    LoadPanel.Caption := 'Please wait...';
-    LoadPanel.Visible := True;
-    LoadPanel.BringToFront;
+    VideoAddingForm.InfoLabel.Caption := 'Please wait...';
+    Self.Enabled := False;
+    VideoAddingForm.Show;
     MenuState(False);
     FStopAddingLink := False;
     // SendMessage(LinkList.Handle, WM_SETREDRAW, 0, 0);
@@ -2075,13 +2063,13 @@ begin
           if SingleLink then
           begin
             // normal link
-            LoadPanel.Caption := 'Adding videos to the list...(' + FloatToStr(i + 1) + '/' + FloatToStr(Links.Count) + ')';
+            VideoAddingForm.InfoLabel.Caption := 'Adding videos to the list...(' + FloatToStr(i + 1) + '/' + FloatToStr(Links.Count) + ')';
             AddURL(LURL);
           end
           else
           begin
             // playlist
-            LoadPanel.Caption := 'Extracting video links from playlist, this may take a while...';
+            VideoAddingForm.InfoLabel.Caption := 'Extracting video links from playlist, this may take a while...';
             LPass.UserName := UserEdit.Text;
             LPass.Password := PassEdit.Text;
             LYIE := TYouTubeVideoInfoExtractor.Create(LURL, FYoutubedlPath, FTempFolder, LPass, not SettingsForm.DontPreviewImgBtn.Checked);
@@ -2096,7 +2084,7 @@ begin
               begin
                 for j := 0 to LYIE.PlayListVideoLinks.Count - 1 do
                 begin
-                  LoadPanel.Caption := 'Adding videos to the list...(' + FloatToStr(j + 1) + '/' + FloatToStr(LYIE.PlayListVideoLinks.Count) + ')';
+                  VideoAddingForm.InfoLabel.Caption := 'Adding videos to the list...(' + FloatToStr(j + 1) + '/' + FloatToStr(LYIE.PlayListVideoLinks.Count) + ')';
                   AddURL('http://www.youtube.com/watch?v=' + LYIE.PlayListVideoLinks[j]);
                 end;
               end
@@ -2115,7 +2103,7 @@ begin
       end;
     finally
       Self.Enabled := True;
-      LoadPanel.Visible := False;
+      VideoAddingForm.Close;
       // SendMessage(LinkList.Handle, WM_SETREDRAW, 1, 0);
       RedrawWindow(VideoDownloaderList.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_FRAME or RDW_ALLCHILDREN);
       MenuState(True);
@@ -6547,11 +6535,11 @@ begin
   end;
   if _Enabled then
   begin
-    VideoAddBar.Style := pbstNormal;
+    VideoAddingForm.VideoAddBar.Style := pbstNormal;
   end
   else
   begin
-    VideoAddBar.Style := pbstMarquee;
+    VideoAddingForm.VideoAddBar.Style := pbstMarquee;
   end;
 end;
 
@@ -8655,6 +8643,7 @@ begin
   PrevievImg := TsImage.Create(nil);
   DeleteButton := TsButton.Create(nil);
   DeleteButton.Tag := _Index;
+  DeleteButton.AlignWithMargins := True;
   FileNameLabel := TsLabel.Create(nil);
   FormatList := TsComboBox.Create(nil);
   ProgressBar := TsProgressBar.Create(nil);
