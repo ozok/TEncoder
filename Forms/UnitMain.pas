@@ -672,7 +672,7 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
   UnitVideotoGIF, UnitBatchAdd, UnitWatermark;
 
 const
-  Portable = True;
+  Portable = False;
   Build = 5086;
 
 {$R *.dfm}
@@ -5372,7 +5372,7 @@ begin
     ForceDirectories(FLogFolder)
   end;
 
-  AppIniFileStorage.FileName := FAppDataFolder + 'TEncoderFormPos5.ini';
+  AppIniFileStorage.FileName := FAppDataFolder + 'TEncoderFormPos6.ini';
 
   if not FileExists(FMencoderPath) then
   begin
