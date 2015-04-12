@@ -667,8 +667,8 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
   UnitVideotoGIF, UnitBatchAdd, UnitWatermark, VideoAdding;
 
 const
-  Portable = False;
-  Build = 5086;
+  Portable = True;
+  Build = 5103;
 
 {$R *.dfm}
 
