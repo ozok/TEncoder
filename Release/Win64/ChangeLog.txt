@@ -1,5 +1,13 @@
 TEncoder Change Log
 
+--4.5.8
+-Added: [Video Downloader] New video downloader list item layout
+-Added: [General] A new skin
+-Fixed: [Video Downloader] Program could get stuck while adding links in some cases
+-Updated: FFmpeg
+-Updated: Youtube-dl
+-Updated: Skin component
+
 --4.5.7
 -Fixed: [Video Downloader] Couldn't download videos due to a change in youtube-dl console output
 -Added: [General] A few UI changes and new default window dimensions

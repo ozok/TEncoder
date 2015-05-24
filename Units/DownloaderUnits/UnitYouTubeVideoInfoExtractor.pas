@@ -237,6 +237,7 @@ begin
   FTitleExtractProcess.Free;
   FPlayListProcess.Free;
   FPlayListVideoLinks.Free;
+  FSubtitleProcess.Free;
   FOutExt.Free;
   FSubtitles.Free;
 end;
@@ -318,7 +319,7 @@ end;
 procedure TYouTubeVideoInfoExtractor.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 const
   AvailFormat = 'format code  extension  resolution note';
-  SoundCloudStr = 'format code  extension  resolution note';
+//  SoundCloudStr = 'format code      extension resolution  note';
 var
   I: Integer;
   LLine: string;
@@ -341,13 +342,13 @@ begin
         FURLType := general;
         Break;
       end
-      else if SoundCloudStr = Copy(LLine, 1, Length(SoundCloudStr)) then
-      begin
-        // sound cloud
-        LStartIndex := i;
-        FURLType := soundcloud;
-        Break;
-      end;
+//      else if SoundCloudStr = Copy(LLine, 1, Length(SoundCloudStr)) then
+//      begin
+//        // sound cloud
+//        LStartIndex := i;
+//        FURLType := soundcloud;
+//        Break;
+//      end;
     end;
     // extract avail. formats and their codes
     if LStartIndex > -1 then
@@ -548,8 +549,6 @@ var
 begin
   LIR := TImageResizer.Create(FImageName, FImageName);
   try
-    LIR.Width := 150;
-    LIR.Height := 150;
     LIR.Resize;
   finally
     LIR.Free;
@@ -608,7 +607,7 @@ begin
   begin
     LPass := ' -u ' + FPass.UserName + ' -p ' + FPass.Password;
   end;
-  FFormatProcess.CommandLine := ' ' + LPass + ' -s --skip-download -i -F --no-playlist "' + FURL + '"';
+  FFormatProcess.CommandLine := ' ' + LPass + ' -s --skip-download -i -F --no-playlist --playlist-start 1 --playlist-end 1 "' + FURL + '"';
   FFormatProcess.Run;
   Start2;
   Start3;
@@ -628,7 +627,7 @@ begin
     end;
     FImageName := FTempFolder + '\' + CreateTempFileName + '.jpg';
     FThumbProcess.ApplicationName := FYouTube_dlPath;
-    FThumbProcess.CommandLine := ' ' + LPass + ' -o "' + FImageName + '" -i --write-thumbnail --no-playlist "' + FURL + '"';
+    FThumbProcess.CommandLine := ' ' + LPass + ' -i "' + FURL + '" --write-thumbnail -o "' + FImageName + '"  --no-playlist --playlist-start 1 --playlist-end 1';
     FThumbProcess.Run;
   end
   else
@@ -647,7 +646,7 @@ begin
   begin
     LPass := ' -u ' + FPass.UserName + ' -p ' + FPass.Password;
   end;
-  FTitleExtractProcess.CommandLine := ' ' + LPass + ' -s --skip-download -i --no-playlist --get-filename -o "%(uploader)s - %(title)s.%(ext)s" "' + FURL + '"';
+  FTitleExtractProcess.CommandLine := ' ' + LPass + ' -s --skip-download -i --no-playlist --playlist-start 1 --playlist-end 1 --get-filename -o "%(uploader)s - %(title)s.%(ext)s" "' + FURL + '"';
   FTitleExtractProcess.Run;
 end;
 
@@ -660,7 +659,7 @@ begin
   begin
     LPass := ' -u ' + FPass.UserName + ' -p ' + FPass.Password;
   end;
-  FSubtitleProcess.CommandLine := ' ' + LPass + ' -s --skip-download -i --list-subs --no-playlist "' + FURL + '"';
+  FSubtitleProcess.CommandLine := ' ' + LPass + ' -s --skip-download -i --list-subs --no-playlist --playlist-start 1 --playlist-end 1 "' + FURL + '"';
   FSubtitleProcess.Run;
 end;
 

@@ -309,7 +309,7 @@ begin
   if GetFileIndex < MainForm.FVideoDownloadListItems.Count then
   begin
     MainForm.FVideoDownloadListItems[GetFileIndex].ProgressLabel.Caption := ProgressStr;
-    MainForm.FVideoDownloadListItems[GetFileIndex].ProgressBar.Position := Progress;
+    MainForm.FVideoDownloadListItems[GetFileIndex].ProgressBar.Progress := Progress;
   end;
 end;
 

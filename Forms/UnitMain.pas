@@ -36,7 +36,7 @@ uses
   sScrollBox, UnitYouTubeVideoInfoExtractor, UnitCommonTypes, acImage, UnitFileNameExtractor, Jpeg, Winapi.MMSystem,
   sMaskEdit, sCustomComboEdit, sToolEdit, sGroupBox, UnitDVDReader,
   JvUrlListGrabber, JvUrlGrabbers, JvThread, sStatusBar, UnitDownloadProcess, UnitDVDRipperProcess, UnitFileInfoExtractor,
-  sDialogs, UnitDVDJob;
+  sDialogs, UnitDVDJob, DownloadItemFrame;
 
 type
   TFileInfoForAdding = packed record
@@ -108,27 +108,6 @@ type
   end;
 
   TFileInfoList = TList<TFileInfoItem>;
-
-  // control for video downloader that has thumbnail, formatlist etc
-type
-  TVideoDownloaderItem = class(TCustomControl)
-    Panel: TsPanel;
-    Panel2: TsPanel;
-    Panel3: TsPanel;
-    LinkLabel: TsLabel;
-    ProgressLabel: TsLabel;
-    PrevievImg: TsImage;
-    DeleteButton: TsButton;
-    FileNameLabel: TsLabel;
-    FormatList: TsComboBox;
-    SubtitleList: TsComboBox;
-    ProgressBar: TsProgressBar;
-    procedure ResetProgressLabel;
-    constructor Create(const ParentControl: TsScrollBox; const _Index: integer; const PreviousBottom: Integer);
-    Destructor Destroy; override;
-  end;
-
-  TMyListItemList = TList<TVideoDownloaderItem>;
 
   // dvd ripper command line
 type
@@ -605,7 +584,7 @@ type
     // process objects
     FEncoders: array [0 .. 15] of TMyProcess;
     // video download list items
-    FVideoDownloadListItems: TMyListItemList;
+    FVideoDownloadListItems: TList<TDownloadUIItem>;
     // dvd ripper process
     FDVDRipperProcess: TDVDRipProcess;
     FStopAddingLink: Boolean;
@@ -1652,7 +1631,7 @@ var
   YIE: TYouTubeVideoInfoExtractor;
   I: Integer;
   LDownloadItem: TDownloadItem;
-  LVideoDownloaderItem: TVideoDownloaderItem;
+  LVideoDownloaderItem: TDownloadUIItem;
   LPass: TUserPass;
 begin
   if Length(Url) > 0 then
@@ -1704,7 +1683,9 @@ begin
           LDownloadItem.SubIndex := 0;
           LDownloadItem.LinkType := YIE.LinkType;
           FDownloadItems.Add(LDownloadItem);
-          LVideoDownloaderItem := TVideoDownloaderItem.Create(VideoDownloaderList, FVideoDownloadListItems.Count, FVideoDownloadListItems.Count * 110);
+          LVideoDownloaderItem := TDownloadUIItem.Create(nil);
+          LVideoDownloaderItem.Width := VideoDownloaderList.ClientWidth;
+          LVideoDownloaderItem.Top := FVideoDownloadListItems.Count * 112;
           LVideoDownloaderItem.LinkLabel.Caption := Url;
           LVideoDownloaderItem.FileNameLabel.Caption := YIE.FileName;
           LVideoDownloaderItem.FileNameLabel.Hint := LVideoDownloaderItem.FileNameLabel.Caption;
@@ -1730,7 +1711,7 @@ begin
           end;
           LVideoDownloaderItem.DeleteButton.OnClick := DeleteBtnClick;
           LVideoDownloaderItem.ProgressLabel.Caption := 'Waiting...';
-          VideoDownloaderList.InsertControl(LVideoDownloaderItem.Panel);
+          VideoDownloaderList.InsertControl(LVideoDownloaderItem);
           LVideoDownloaderItem.FormatList.Items.AddStrings(YIE.FormatList);
           LVideoDownloaderItem.FormatList.ItemIndex := LDownloadItem.FormatIndex;
           LVideoDownloaderItem.FormatList.OnChange := FormatListChange;
@@ -2184,7 +2165,7 @@ var
 begin
   for I := 0 to FVideoDownloadListItems.Count - 1 do
   begin
-    FVideoDownloadListItems[i].Panel.Visible := False;
+    FVideoDownloadListItems[i].Visible := False;
     FVideoDownloadListItems[i].Free;
   end;
   FVideoDownloadListItems.Clear;
@@ -3531,7 +3512,7 @@ var
   LItemIndex, i: integer;
 begin
   LItemIndex := (Sender as TsButton).Tag;
-  FVideoDownloadListItems[LItemIndex].Panel.Visible := False;
+  FVideoDownloadListItems[LItemIndex].Visible := False;
   FVideoDownloadListItems.Delete(LItemIndex);
   FDownloadItems.Delete(LItemIndex);
   for I := 0 to FVideoDownloadListItems.Count - 1 do
@@ -3694,20 +3675,20 @@ begin
   AddSingleLinkBtn.Enabled := True;
   for I := 0 to FVideoDownloadListItems.Count - 1 do
   begin
-    for j := 0 to FVideoDownloadListItems[i].Panel.ControlCount - 1 do
+    for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
-      if (FVideoDownloadListItems[i].Panel.Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Panel.Controls[j] is TsButton) then
-        FVideoDownloadListItems[i].Panel.Controls[j].Enabled := True;
+      if (FVideoDownloadListItems[i].Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Controls[j] is TsButton) then
+        FVideoDownloadListItems[i].Controls[j].Enabled := True;
     end;
-    for j := 0 to FVideoDownloadListItems[i].Panel2.ControlCount - 1 do
+    for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
-      if (FVideoDownloadListItems[i].Panel2.Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Panel2.Controls[j] is TsButton) then
-        FVideoDownloadListItems[i].Panel2.Controls[j].Enabled := True;
+      if (FVideoDownloadListItems[i].Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Controls[j] is TsButton) then
+        FVideoDownloadListItems[i].Controls[j].Enabled := True;
     end;
-    for j := 0 to FVideoDownloadListItems[i].Panel3.ControlCount - 1 do
+    for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
-      if (FVideoDownloadListItems[i].Panel3.Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Panel3.Controls[j] is TsButton) then
-        FVideoDownloadListItems[i].Panel3.Controls[j].Enabled := True;
+      if (FVideoDownloadListItems[i].Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Controls[j] is TsButton) then
+        FVideoDownloadListItems[i].Controls[j].Enabled := True;
     end;
   end;
   for I := 0 to MainMenu1.Items.Count - 1 do
@@ -3716,12 +3697,12 @@ begin
   end;
   for I := 0 to FVideoDownloadListItems.Count - 1 do
   begin
-    for j := 0 to FVideoDownloadListItems[i].Panel.ControlCount - 1 do
+    for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
-      FVideoDownloadListItems[i].Panel.Controls[j].Enabled := True;
-      if FVideoDownloadListItems[i].Panel.Controls[j] is TsProgressBar then
+      FVideoDownloadListItems[i].Controls[j].Enabled := True;
+      if FVideoDownloadListItems[i].Controls[j] is TsProgressBar then
       begin
-        TsProgressBar(FVideoDownloadListItems[i].Panel.Controls[j]).Position := 0;
+        TsProgressBar(FVideoDownloadListItems[i].Controls[j]).Position := 0;
       end;
       FVideoDownloadListItems[i].ResetProgressLabel;
     end;
@@ -3789,22 +3770,11 @@ begin
   begin
     PassBtn.Down := False;
   end;
-  for I := 0 to FVideoDownloadListItems.Count - 1 do
+ for I := 0 to FVideoDownloadListItems.Count - 1 do
   begin
-    for j := 0 to FVideoDownloadListItems[i].Panel.ControlCount - 1 do
+    for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
-      if (FVideoDownloadListItems[i].Panel.Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Panel.Controls[j] is TsButton) then
-        FVideoDownloadListItems[i].Panel.Controls[j].Enabled := False;
-    end;
-    for j := 0 to FVideoDownloadListItems[i].Panel2.ControlCount - 1 do
-    begin
-      if (FVideoDownloadListItems[i].Panel2.Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Panel2.Controls[j] is TsButton) then
-        FVideoDownloadListItems[i].Panel2.Controls[j].Enabled := False;
-    end;
-    for j := 0 to FVideoDownloadListItems[i].Panel3.ControlCount - 1 do
-    begin
-      if (FVideoDownloadListItems[i].Panel3.Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Panel3.Controls[j] is TsButton) then
-        FVideoDownloadListItems[i].Panel3.Controls[j].Enabled := False;
+        FVideoDownloadListItems[i].Controls[j].Enabled := False;
     end;
   end;
   for I := 0 to MainMenu1.Items.Count - 1 do
@@ -4411,12 +4381,12 @@ begin
   end;
   for I := 0 to FVideoDownloadListItems.Count - 1 do
   begin
-    for j := 0 to FVideoDownloadListItems[i].Panel.ControlCount - 1 do
+    for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
-      FVideoDownloadListItems[i].Panel.Controls[j].Enabled := True;
-      if FVideoDownloadListItems[i].Panel.Controls[j] is TsProgressBar then
+      FVideoDownloadListItems[i].Controls[j].Enabled := True;
+      if FVideoDownloadListItems[i].Controls[j] is TsProgressBar then
       begin
-        TsProgressBar(FVideoDownloadListItems[i].Panel.Controls[j]).Position := 0;
+        TsProgressBar(FVideoDownloadListItems[i].Controls[j]).Position := 0;
       end;
       FVideoDownloadListItems[i].ResetProgressLabel;
     end;
@@ -5360,7 +5330,7 @@ begin
     ForceDirectories(FLogFolder)
   end;
 
-  AppIniFileStorage.FileName := FAppDataFolder + 'TEncoderFormPos6.ini';
+  AppIniFileStorage.FileName := FAppDataFolder + 'TEncoderFormPos7.ini';
 
   if not FileExists(FMencoderPath) then
   begin
@@ -5464,7 +5434,7 @@ begin
   ClearTempFolder;
   FTimePassed := 0;
   FDownloadItems := TDownloadItemList.Create;
-  FVideoDownloadListItems := TMyListItemList.Create;
+  FVideoDownloadListItems := TList<TDownloadUIItem>.Create;
   for I := Low(FVideoDownloadProcesses) to High(FVideoDownloadProcesses) do
     FVideoDownloadProcesses[i] := TDownloadProcess.Create;
   FDVDRipperProcess := TDVDRipProcess.Create;
@@ -7801,7 +7771,7 @@ begin
               begin
                 AddToLog(0, 'Ignoring "' + LOutputFile + '" because it contains audio.');
                 FVideoDownloadListItems[i].ProgressLabel.Caption := 'Already downloaded';
-                FVideoDownloadListItems[i].ProgressBar.Position := 100;
+                FVideoDownloadListItems[i].ProgressBar.Progress := 100;
                 Inc(FSkippedVideoCount);
                 Continue;
               end;
@@ -8629,94 +8599,6 @@ begin
     AdvancedOptionsForm.VideoCBrBtn.Enabled := True;
   end;
   UpdateSummary;
-end;
-
-{ TVideoDownloaderItem }
-
-constructor TVideoDownloaderItem.Create(const ParentControl: TsScrollBox; const _Index, PreviousBottom: Integer);
-begin
-  Panel := TsPanel.Create(nil);
-  Panel2 := TsPanel.Create(nil);
-  Panel3 := TsPanel.Create(nil);
-  LinkLabel := TsLabel.Create(nil);
-  ProgressLabel := TsLabel.Create(nil);
-  PrevievImg := TsImage.Create(nil);
-  DeleteButton := TsButton.Create(nil);
-  DeleteButton.Tag := _Index;
-  DeleteButton.AlignWithMargins := True;
-  FileNameLabel := TsLabel.Create(nil);
-  FormatList := TsComboBox.Create(nil);
-  ProgressBar := TsProgressBar.Create(nil);
-  SubtitleList := TsComboBox.Create(nil);
-  Panel.ParentColor := False;
-  Panel.Color := clGray;
-  LinkLabel.Font.Color := clBlue;
-  LinkLabel.Cursor := crHandPoint;
-  LinkLabel.Font.Style := [fsUnderline];
-  ProgressBar.Smooth := True;
-
-  Panel.InsertControl(PrevievImg);
-  Panel.InsertControl(Panel2);
-
-  Panel2.InsertControl(LinkLabel);
-  Panel2.InsertControl(FileNameLabel);
-  Panel2.InsertControl(FormatList);
-  Panel2.InsertControl(SubtitleList);
-  Panel2.InsertControl(ProgressLabel);
-  Panel2.InsertControl(ProgressBar);
-  Panel2.InsertControl(Panel3);
-
-  Panel3.InsertControl(DeleteButton);
-
-  Panel2.BorderStyle := bsNone;
-  Panel3.BorderStyle := bsNone;
-  Panel2.BevelOuter := bvNone;
-  Panel3.BevelOuter := bvNone;
-
-  Panel.Align := alTop;
-  Panel.Height := 150;
-  Panel.Top := PreviousBottom;
-
-  PrevievImg.Width := Panel.Height;
-  PrevievImg.Height := Panel.Height;
-  PrevievImg.AutoSize := False;
-  PrevievImg.Center := True;
-  PrevievImg.Transparent := True;
-  PrevievImg.Align := alLeft;
-
-  Panel2.Align := alClient;
-  Panel3.Align := alBottom;
-  Panel3.Height := 30;
-
-  LinkLabel.Align := alTop;
-  LinkLabel.AlignWithMargins := True;
-  FileNameLabel.Align := alTop;
-  FileNameLabel.AlignWithMargins := True;
-  FormatList.Align := alTop;
-  SubtitleList.Align := alTop;
-  ProgressLabel.Align := alBottom;
-  ProgressLabel.AlignWithMargins := True;
-  ProgressBar.Align := alBottom;
-  ProgressBar.Height := 10;
-  FormatList.Style := csDropDownList;
-  SubtitleList.Style := csDropDownList;
-
-  DeleteButton.Width := 100;
-  DeleteButton.Height := 30;
-  DeleteButton.Caption := 'Remove';
-  DeleteButton.Align := alRight;
-end;
-
-destructor TVideoDownloaderItem.Destroy;
-begin
-
-  inherited;
-end;
-
-procedure TVideoDownloaderItem.ResetProgressLabel;
-begin
-  ProgressLabel.Caption := '';
-  ProgressBar.Position := 0;
 end;
 
 { TConverterItem }
