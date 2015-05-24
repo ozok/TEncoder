@@ -28,7 +28,7 @@ Features
 
 Version and download location
 ---
-* Latest version of TEncoder is 4.5.6
+* Latest version of TEncoder is 4.5.7
 * You can download TEncoder from http://www.fosshub.com/TEncoder-Video-Converter.html
 
 Licence
