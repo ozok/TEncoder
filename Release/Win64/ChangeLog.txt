@@ -4,6 +4,7 @@ TEncoder Change Log
 -Added: [Video Downloader] New video downloader list item layout
 -Added: [General] A new skin
 -Fixed: [Video Downloader] Program could get stuck while adding links in some cases
+-Fixed: [Video Downloader] Could not download webm video files
 -Updated: FFmpeg
 -Updated: Youtube-dl
 -Updated: Skin component

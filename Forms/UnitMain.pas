@@ -36,7 +36,7 @@ uses
   sScrollBox, UnitYouTubeVideoInfoExtractor, UnitCommonTypes, acImage, UnitFileNameExtractor, Jpeg, Winapi.MMSystem,
   sMaskEdit, sCustomComboEdit, sToolEdit, sGroupBox, UnitDVDReader,
   JvUrlListGrabber, JvUrlGrabbers, JvThread, sStatusBar, UnitDownloadProcess, UnitDVDRipperProcess, UnitFileInfoExtractor,
-  sDialogs, UnitDVDJob, DownloadItemFrame;
+  sDialogs, UnitDVDJob, DownloadItemFrame, System.ImageList;
 
 type
   TFileInfoForAdding = packed record
@@ -647,7 +647,7 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
 
 const
   Portable = True;
-  Build = 5103;
+  Build = 5116;
 
 {$R *.dfm}
 
@@ -3770,11 +3770,11 @@ begin
   begin
     PassBtn.Down := False;
   end;
- for I := 0 to FVideoDownloadListItems.Count - 1 do
+  for I := 0 to FVideoDownloadListItems.Count - 1 do
   begin
     for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
-        FVideoDownloadListItems[i].Controls[j].Enabled := False;
+      FVideoDownloadListItems[i].Controls[j].Enabled := False;
     end;
   end;
   for I := 0 to MainMenu1.Items.Count - 1 do
@@ -7817,8 +7817,8 @@ begin
             LDASHVideoExt := VideoTypeToVideo(LSelectedFormatStr);
             LDASHAudioCode := VideoTypeToAudioCode(LSelectedFormatStr);
             // get audio
-            FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].CommandLines.Add(' -o "' + ExcludeTrailingPathDelimiter(DirectoryEdit.Text) +
-              '\Downloaded\%(uploader)s - %(title)s.%(ext)s" -i --no-playlist -f ' + LDASHAudioCode + ' -c -w ' + FVideoDownloadListItems[i].LinkLabel.Caption);
+            FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].CommandLines.Add(' -o "' + ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\Downloaded\%(uploader)s - %(title)s"' +
+              LDASHAudioExt + ' -i --no-playlist -f ' + LDASHAudioCode + ' -c -w ' + FVideoDownloadListItems[i].LinkLabel.Caption);
             FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].ProcessTypes.Add('5');
             FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].EncoderPaths.Add(FYoutubedlPath);
             FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].FileIndexes.Add(FloatToStr(i));

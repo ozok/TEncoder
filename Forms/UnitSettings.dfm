@@ -1095,14 +1095,15 @@ object SettingsForm: TSettingsForm
     end
   end
   object sSkinProvider1: TsSkinProvider
+    UseGlobalColor = False
     AddedTitle.Font.Charset = DEFAULT_CHARSET
     AddedTitle.Font.Color = clNone
     AddedTitle.Font.Height = -11
     AddedTitle.Font.Name = 'Tahoma'
     AddedTitle.Font.Style = []
+    FormHeader.AdditionalHeight = 0
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
-    UseGlobalColor = False
     Left = 352
     Top = 112
   end

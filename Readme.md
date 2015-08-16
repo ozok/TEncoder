@@ -1,7 +1,7 @@
 TEncoder
 =========
 
-####TEncoder is a multithreaded video and audio converter. It can also download videos, do some editing and rip unprotected DVDs
+####TEncoder is a multi-threaded video and audio converter. It can also download videos, do some editing and rip unprotected DVDs
 
 You can download it from http://www.fosshub.com/TEncoder-Video-Converter.html
 
@@ -28,7 +28,7 @@ Features
 
 Version and download location
 ---
-* Latest version of TEncoder is 4.5.7
+* Latest version of TEncoder is 4.5.8
 * You can download TEncoder from http://www.fosshub.com/TEncoder-Video-Converter.html
 
 Licence

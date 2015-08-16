@@ -26,7 +26,7 @@ uses
   Dialogs, JvComponentBase, JvCreateProcess, sSkinProvider, StdCtrls, Buttons,
   sBitBtn, ComCtrls, JvExComCtrls, JvComCtrls, ExtCtrls, sPanel, sEdit, sGauge,
   UnitPlayer,
-  acPNG, ImgList, acAlphaImageList;
+  acPNG, ImgList, acAlphaImageList, System.ImageList;
 
 type
   TRangeEditorForm = class(TForm)

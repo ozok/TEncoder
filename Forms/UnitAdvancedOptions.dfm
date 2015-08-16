@@ -110,6 +110,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'General'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object MPEGAudioIDBtn: TsCheckBox
         Left = 8
         Top = 8
@@ -599,6 +603,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     Caption = 'Video Options'
     TabOrder = 2
     SkinData.SkinSection = 'GROUPBOX'
+    Checked = False
     object VideoSettingsPanel: TsPanel
       Left = 2
       Top = 15
@@ -898,6 +903,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     Caption = 'Audio Options'
     TabOrder = 3
     SkinData.SkinSection = 'GROUPBOX'
+    Checked = False
     object AudioSettingsPanel: TsPanel
       Left = 2
       Top = 15
@@ -1042,6 +1048,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     Caption = 'Custom Options'
     TabOrder = 4
     SkinData.SkinSection = 'GROUPBOX'
+    Checked = False
     DesignSize = (
       486
       196)
@@ -1264,6 +1271,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     AddedTitle.Font.Height = -11
     AddedTitle.Font.Name = 'Tahoma'
     AddedTitle.Font.Style = []
+    FormHeader.AdditionalHeight = 0
     SkinData.SkinSection = 'FORM'
     TitleButtons = <>
     Left = 368
