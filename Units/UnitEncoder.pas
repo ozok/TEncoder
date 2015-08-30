@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2014 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -68,6 +68,8 @@ type
     // process events
     procedure ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
     procedure ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
+
+    procedure UpdateProgressItem(const Msg: string; const Progress: string; const StateIndex: integer);
 
     // field variable read funcs
     function GetProcessID: integer;
@@ -240,11 +242,14 @@ begin
   if (FTerminateCounter mod 5) = 0 then
   begin
     FConsoleOutput := Trim(S);
-    if TryStrToInt(FItem.SubItems[1], LCurrVal) then
+    if Assigned(FItem) then
     begin
-      if GetPercentage > LCurrVal then
+      if TryStrToInt(FItem.SubItems[1], LCurrVal) then
       begin
-        FItem.SubItems[1] := FloatToStr(GetPercentage);
+        if GetPercentage > LCurrVal then
+        begin
+          UpdateProgressItem(FItem.SubItems[0], FloatToStr(GetPercentage), FItem.StateIndex);
+        end;
       end;
     end;
   end;
@@ -255,8 +260,7 @@ begin
   FEncoderStatus := esStopped;
   if FStoppedByUser then
   begin
-    FItem.SubItems[0] := 'Stopped';
-    FItem.StateIndex := 3;
+    UpdateProgressItem('Stopped', '0', 3);
     FEncoderStatus := esStopped;
     // delete unfinished files.
     if SettingsForm.DeleteUnfinBtn.Checked then
@@ -288,9 +292,7 @@ begin
 
     // run next command
     inc(FCommandIndex);
-    FItem.SubItems[0] := 'Done';
-    FItem.SubItems[1] := '100';
-    FItem.StateIndex := 2;
+    UpdateProgressItem('Done', '100', 2);
     if FCommandIndex < FEncodeJobs.Count then
     begin
       FProcess.CommandLine := FEncodeJobs[FCommandIndex].CommandLine;
@@ -298,11 +300,14 @@ begin
       FEncoderStatus := esEncoding;
       FConsoleOutput := '';
       FItem := MainForm.ProgressList.Items.Add;
-      FItem.Caption := ExtractFileName(FEncodeJobs[FCommandIndex].SourceFileName);
-      FItem.SubItems.Add(FEncodeJobs[FCommandIndex].EncodingInformation);
-      FItem.SubItems.Add('0');
-      FItem.StateIndex := 0;
-      FItem.MakeVisible(False);
+      if Assigned(FItem) then
+      begin
+        FItem.Caption := ExtractFileName(FEncodeJobs[FCommandIndex].SourceFileName);
+        FItem.SubItems.Add(FEncodeJobs[FCommandIndex].EncodingInformation);
+        FItem.SubItems.Add('0');
+        FItem.StateIndex := 0;
+        FItem.MakeVisible(False);
+      end;
       FProcess.Run;
     end
     else
@@ -338,11 +343,14 @@ begin
         FProcess.CommandLine := FEncodeJobs[0].CommandLine;
         FEncoderStatus := esEncoding;
         FItem := MainForm.ProgressList.Items.Add;
-        FItem.Caption := ExtractFileName(GetFileName);
-        FItem.SubItems.Add(GetInfo);
-        FItem.SubItems.Add('0');
-        FItem.StateIndex := 0;
-        FItem.MakeVisible(False);
+        if Assigned(FItem) then
+        begin
+          FItem.Caption := ExtractFileName(GetFileName);
+          FItem.SubItems.Add(GetInfo);
+          FItem.SubItems.Add('0');
+          FItem.StateIndex := 0;
+          FItem.MakeVisible(False);
+        end;
         FProcess.Run;
       end
       else
@@ -362,6 +370,16 @@ begin
     TerminateProcess(FProcess.ProcessInfo.hProcess, 0);
     FEncoderStatus := esStopped;
     FStoppedByUser := true;
+  end;
+end;
+
+procedure TMyProcess.UpdateProgressItem(const Msg: string; const Progress: string; const StateIndex: integer);
+begin
+  if Assigned(FItem) then
+  begin
+    FItem.SubItems[0] := Msg;
+    FItem.SubItems[1] := Progress;
+    FItem.StateIndex := StateIndex;
   end;
 end;
 

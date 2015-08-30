@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2014 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -93,8 +93,8 @@ begin
     end;
     // output bitmap
     LBMP.PixelFormat := pf24bit;
-    LBMP.Width := 150;
-    LBMP.Height := Round(150 * (LJpeg.Height / LJpeg.Width));
+    LBMP.Width := 200;
+    LBMP.Height := Round(LBMP.Width * (LJpeg.Height / LJpeg.Width));
     // bitmap to hold data from jpeg
     LJpegBMP.PixelFormat := pf24bit;
     LJpegBMP.Width := LJpeg.Width;

@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2014 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -1685,7 +1685,7 @@ begin
           FDownloadItems.Add(LDownloadItem);
           LVideoDownloaderItem := TDownloadUIItem.Create(nil);
           LVideoDownloaderItem.Width := VideoDownloaderList.ClientWidth;
-          LVideoDownloaderItem.Top := FVideoDownloadListItems.Count * 112;
+          LVideoDownloaderItem.Top := FVideoDownloadListItems.Count * 141;
           LVideoDownloaderItem.LinkLabel.Caption := Url;
           LVideoDownloaderItem.FileNameLabel.Caption := YIE.FileName;
           LVideoDownloaderItem.FileNameLabel.Hint := LVideoDownloaderItem.FileNameLabel.Caption;
@@ -3521,6 +3521,7 @@ begin
     begin
       FVideoDownloadListItems[i].DeleteButton.Tag := FVideoDownloadListItems[i].DeleteButton.Tag - 1;
     end;
+    FVideoDownloadListItems[i].Top := i * 142;
   end;
 end;
 
