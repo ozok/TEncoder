@@ -2,8 +2,9 @@ TEncoder Change Log
 
 --4.5.9
 -Fixed: [Video Downloader] Removing one item from the list didn't move other item to the top of the list
+-Fixed: [General] A possible fix to AV errors regarding file list
 -Updated: Skin component
--Updated: FFMpeg
+-Updated: FFMpeg, mediainfo, youtube-dl
 
 --4.5.8
 -Added: [Video Downloader] New video downloader list item layout

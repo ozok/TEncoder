@@ -89,7 +89,7 @@ end;
 
 procedure TAboutForm.HomepageBtnClick(Sender: TObject);
 begin
-  ShellExecute(0, 'open', 'http://tencoder.sourceforge.net/', nil, nil, SW_SHOWNORMAL);
+  ShellExecute(0, 'open', 'http://www.ozok26.com/tencoder-vdeo-converter-1', nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TAboutForm.Label14Click(Sender: TObject);

@@ -180,20 +180,17 @@ object EffectForm: TEffectForm
     Alignment = taLeftJustify
     BoundLabel.Active = True
     BoundLabel.Caption = 'Select file:'
-    BoundLabel.Indent = 0
     BoundLabel.Font.Charset = DEFAULT_CHARSET
     BoundLabel.Font.Color = clBlack
     BoundLabel.Font.Height = -11
     BoundLabel.Font.Name = 'Tahoma'
     BoundLabel.Font.Style = []
-    BoundLabel.Layout = sclLeft
-    BoundLabel.MaxWidth = 0
-    BoundLabel.UseSkinColor = True
     SkinData.SkinSection = 'COMBOBOX'
     VerticalAlignment = taAlignTop
     Style = csDropDownList
+    Color = clWhite
     Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
@@ -206,7 +203,7 @@ object EffectForm: TEffectForm
     Top = 8
     Width = 560
     Height = 170
-    ActivePage = sTabSheet1
+    ActivePage = sTabSheet3
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 3
     SkinData.SkinSection = 'PAGECONTROL'
@@ -214,10 +211,6 @@ object EffectForm: TEffectForm
       Caption = 'Deinterlace'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object sLabel1: TsLabel
         Left = 3
         Top = 72
@@ -254,21 +247,18 @@ object EffectForm: TEffectForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Method:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = clBlack
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
+        Color = clWhite
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -292,10 +282,6 @@ object EffectForm: TEffectForm
       Caption = 'Crop'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label5: TsLabel
         Left = 10
         Top = 68
@@ -323,9 +309,10 @@ object EffectForm: TEffectForm
         Width = 50
         Height = 21
         Alignment = taCenter
+        Color = clWhite
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -336,15 +323,6 @@ object EffectForm: TEffectForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'Heigth:'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         MaxValue = 0
         MinValue = 0
         Value = 0
@@ -355,9 +333,10 @@ object EffectForm: TEffectForm
         Width = 50
         Height = 21
         Alignment = taCenter
+        Color = clWhite
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -368,15 +347,6 @@ object EffectForm: TEffectForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'Width:'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         MaxValue = 0
         MinValue = 0
         Value = 0
@@ -387,9 +357,10 @@ object EffectForm: TEffectForm
         Width = 50
         Height = 21
         Alignment = taCenter
+        Color = clWhite
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -399,15 +370,6 @@ object EffectForm: TEffectForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'X:'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         MaxValue = 0
         MinValue = 0
         Value = 0
@@ -418,9 +380,10 @@ object EffectForm: TEffectForm
         Width = 50
         Height = 21
         Alignment = taCenter
+        Color = clWhite
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -430,15 +393,6 @@ object EffectForm: TEffectForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'Y:'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         MaxValue = 0
         MinValue = 0
         Value = 0
@@ -448,10 +402,6 @@ object EffectForm: TEffectForm
       Caption = 'Rotate'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object RotateList: TsComboBox
         Left = 45
         Top = 16
@@ -460,20 +410,12 @@ object EffectForm: TEffectForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Rotate:'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
+        Color = clWhite
         Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
+        Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -486,17 +428,17 @@ object EffectForm: TEffectForm
           'Rotate by 90 degrees clockwise and flip (default).'
           'Rotate by 90 degrees clockwise.'
           'Rotate by 90 degrees counterclockwise.'
-          'Rotate by 90 degrees counterclockwise and flip.')
+          'Rotate by 90 degrees counterclockwise and flip.'
+          'Rotate by 180 degrees clockwise and flip (default).'
+          'Rotate by 180 degrees clockwise.'
+          'Rotate by 180 degrees counterclockwise.'
+          'Rotate by 180 degrees counterclockwise and flip.')
       end
     end
     object sTabSheet4: TsTabSheet
       Caption = 'Volume'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object VolumeEnableBtn: TsCheckBox
         Left = 10
         Top = 16
@@ -528,15 +470,6 @@ object EffectForm: TEffectForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'MEncoder volume level (-200 - 60 dB)'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         MaxValue = 60
         MinValue = -200
         Value = 0
@@ -560,15 +493,6 @@ object EffectForm: TEffectForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'FFMpeg volume level (%):'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         MaxValue = 100
         MinValue = 0
         Value = 100

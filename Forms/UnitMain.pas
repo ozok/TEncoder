@@ -646,8 +646,8 @@ uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
   UnitVideotoGIF, UnitBatchAdd, UnitWatermark, VideoAdding;
 
 const
-  Portable = True;
-  Build = 5116;
+  Portable = False;
+  Build = 5125;
 
 {$R *.dfm}
 
@@ -5514,10 +5514,15 @@ end;
 
 procedure TMainForm.FormResize(Sender: TObject);
 begin
-  ProgressList.Columns[0].Width := ProgressList.ClientWidth - ProgressList.Columns[1].Width - ProgressList.Columns[2].Width - 20;
-  FileList.Columns[0].Width := FileList.ClientWidth - FileList.Columns[1].Width - FileList.Columns[2].Width - FileList.Columns[3].Width - 20;
-  sStatusBar1.Panels[0].Width := sStatusBar1.ClientWidth - sStatusBar1.Panels[1].Width;
-  DVDJobList.Columns[0].Width := DVDJobList.ClientWidth - DVDJobList.Columns[1].Width - 20;
+  try
+    ProgressList.Columns[0].Width := ProgressList.ClientWidth - ProgressList.Columns[1].Width - ProgressList.Columns[2].Width - 20;
+    FileList.Columns[0].Width := FileList.ClientWidth - FileList.Columns[1].Width - FileList.Columns[2].Width - FileList.Columns[3].Width - 20;
+    sStatusBar1.Panels[0].Width := sStatusBar1.ClientWidth - sStatusBar1.Panels[1].Width;
+    DVDJobList.Columns[0].Width := DVDJobList.ClientWidth - DVDJobList.Columns[1].Width - 20;
+  except on E: Exception do
+    // I got bug reports saying that sometimes this part raises av errors.
+    // most likely alphacontrols' fault
+  end;
 end;
 
 procedure TMainForm.FormShow(Sender: TObject);
