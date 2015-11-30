@@ -158,15 +158,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Level:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
         BoundLabel.Layout = sclTopLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -208,15 +205,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Preset:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
         BoundLabel.Layout = sclTopLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -252,15 +246,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Profile:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
         BoundLabel.Layout = sclTopLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -289,15 +280,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Tune:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
         BoundLabel.Layout = sclTopLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -353,15 +341,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         TabOrder = 6
         Text = '23'
         SkinData.SkinSection = 'EDIT'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         MaxValue = 51
         MinValue = 0
         Value = 23
@@ -409,15 +388,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Profile:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -467,15 +442,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         TabOrder = 2
         Text = '0'
         SkinData.SkinSection = 'EDIT'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
       end
     end
     object sTabSheet4: TsTabSheet
@@ -518,15 +484,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'Compression level:'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
       end
     end
     object sTabSheet5: TsTabSheet
@@ -557,15 +514,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Preset:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
         BoundLabel.Layout = sclTopLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -636,15 +590,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Aspect Ratio:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -676,15 +626,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Video Bitrate:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Color = clWhite
@@ -736,15 +682,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'FPS:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -782,15 +724,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Common sizes:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -849,15 +787,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'Size:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         MaxValue = 0
         MinValue = 0
         Value = 352
@@ -880,15 +814,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'X'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = 2171169
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         MaxValue = 0
         MinValue = 0
         Value = 288
@@ -922,15 +852,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Audio Bitrate:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = clBlack
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Color = clWhite
@@ -968,15 +894,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'Channels:'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = clBlack
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -1005,15 +927,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Alignment = taLeftJustify
         BoundLabel.Active = True
         BoundLabel.Caption = 'S. Rate (Hz):'
-        BoundLabel.Indent = 0
         BoundLabel.Font.Charset = DEFAULT_CHARSET
         BoundLabel.Font.Color = clBlack
         BoundLabel.Font.Height = -11
         BoundLabel.Font.Name = 'Tahoma'
         BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -1102,15 +1020,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       ParentFont = False
       TabOrder = 2
       SkinData.SkinSection = 'EDIT'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
     end
     object CustomFFMpegAudioEdit: TsEdit
       Left = 186
@@ -1128,15 +1037,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       ParentFont = False
       TabOrder = 3
       SkinData.SkinSection = 'EDIT'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
     end
     object CustomMEncoderAudioEdit: TsEdit
       Left = 186
@@ -1153,15 +1053,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       ParentFont = False
       TabOrder = 4
       SkinData.SkinSection = 'EDIT'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
     end
     object CustomMEncoderVideoEdit: TsEdit
       Left = 186
@@ -1178,15 +1069,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       ParentFont = False
       TabOrder = 5
       SkinData.SkinSection = 'EDIT'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
     end
     object CustomMEncoderAudioBtn: TsCheckBox
       Left = 8
@@ -1228,15 +1110,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       SkinData.SkinSection = 'EDIT'
       BoundLabel.Active = True
       BoundLabel.Caption = 'FFMpeg:'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
     end
     object CustomMencoderEdit: TsEdit
       Left = 66
@@ -1254,15 +1127,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       SkinData.SkinSection = 'EDIT'
       BoundLabel.Active = True
       BoundLabel.Caption = 'MEncoder:'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
     end
   end
   object sSkinProvider1: TsSkinProvider

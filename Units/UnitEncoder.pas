@@ -242,15 +242,20 @@ begin
   if (FTerminateCounter mod 5) = 0 then
   begin
     FConsoleOutput := Trim(S);
-    if Assigned(FItem) then
-    begin
-      if TryStrToInt(FItem.SubItems[1], LCurrVal) then
+    try
+      if Assigned(FItem) then
       begin
-        if GetPercentage > LCurrVal then
+        if TryStrToInt(FItem.SubItems[1], LCurrVal) then
         begin
-          UpdateProgressItem(FItem.SubItems[0], FloatToStr(GetPercentage), FItem.StateIndex);
+          if GetPercentage > LCurrVal then
+          begin
+            UpdateProgressItem(FItem.SubItems[0], FloatToStr(GetPercentage), FItem.StateIndex);
+          end;
         end;
       end;
+    except
+      on E: Exception do
+        // ignored
     end;
   end;
 end;
@@ -299,14 +304,19 @@ begin
       FProcess.ApplicationName := FEncodeJobs[FCommandIndex].ProcessPath;
       FEncoderStatus := esEncoding;
       FConsoleOutput := '';
-      FItem := MainForm.ProgressList.Items.Add;
-      if Assigned(FItem) then
-      begin
-        FItem.Caption := ExtractFileName(FEncodeJobs[FCommandIndex].SourceFileName);
-        FItem.SubItems.Add(FEncodeJobs[FCommandIndex].EncodingInformation);
-        FItem.SubItems.Add('0');
-        FItem.StateIndex := 0;
-        FItem.MakeVisible(False);
+      try
+        FItem := MainForm.ProgressList.Items.Add;
+        if Assigned(FItem) then
+        begin
+          FItem.Caption := ExtractFileName(FEncodeJobs[FCommandIndex].SourceFileName);
+          FItem.SubItems.Add(FEncodeJobs[FCommandIndex].EncodingInformation);
+          FItem.SubItems.Add('0');
+          FItem.StateIndex := 0;
+          FItem.MakeVisible(False);
+        end;
+      except
+        on E: Exception do
+          // ignored
       end;
       FProcess.Run;
     end
@@ -342,14 +352,19 @@ begin
         FProcess.ApplicationName := FEncodeJobs[0].ProcessPath;
         FProcess.CommandLine := FEncodeJobs[0].CommandLine;
         FEncoderStatus := esEncoding;
-        FItem := MainForm.ProgressList.Items.Add;
-        if Assigned(FItem) then
-        begin
-          FItem.Caption := ExtractFileName(GetFileName);
-          FItem.SubItems.Add(GetInfo);
-          FItem.SubItems.Add('0');
-          FItem.StateIndex := 0;
-          FItem.MakeVisible(False);
+        try
+          FItem := MainForm.ProgressList.Items.Add;
+          if Assigned(FItem) then
+          begin
+            FItem.Caption := ExtractFileName(GetFileName);
+            FItem.SubItems.Add(GetInfo);
+            FItem.SubItems.Add('0');
+            FItem.StateIndex := 0;
+            FItem.MakeVisible(False);
+          end;
+        except
+          on E: Exception do
+            // ignored
         end;
         FProcess.Run;
       end
@@ -375,11 +390,16 @@ end;
 
 procedure TMyProcess.UpdateProgressItem(const Msg: string; const Progress: string; const StateIndex: integer);
 begin
-  if Assigned(FItem) then
-  begin
-    FItem.SubItems[0] := Msg;
-    FItem.SubItems[1] := Progress;
-    FItem.StateIndex := StateIndex;
+  try
+    if Assigned(FItem) then
+    begin
+      FItem.SubItems[0] := Msg;
+      FItem.SubItems[1] := Progress;
+      FItem.StateIndex := StateIndex;
+    end;
+  except
+    on E: Exception do
+      // ignore
   end;
 end;
 

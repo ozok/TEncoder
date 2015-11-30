@@ -310,15 +310,6 @@ object SettingsForm: TSettingsForm
           SkinData.SkinSection = 'EDIT'
           BoundLabel.Active = True
           BoundLabel.Caption = 'Default audio track language:'
-          BoundLabel.Indent = 0
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = clWindowText
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
         end
         object DefaultSubLangEdit: TsEdit
           Left = 165
@@ -337,15 +328,6 @@ object SettingsForm: TSettingsForm
           SkinData.SkinSection = 'EDIT'
           BoundLabel.Active = True
           BoundLabel.Caption = 'Default subtitle track language:'
-          BoundLabel.Indent = 0
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = clWindowText
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
         end
       end
     end
@@ -388,15 +370,11 @@ object SettingsForm: TSettingsForm
           Alignment = taLeftJustify
           BoundLabel.Active = True
           BoundLabel.Caption = 'Auto-scale method:'
-          BoundLabel.Indent = 0
           BoundLabel.Font.Charset = DEFAULT_CHARSET
           BoundLabel.Font.Color = 2171169
           BoundLabel.Font.Height = -11
           BoundLabel.Font.Name = 'Tahoma'
           BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
           SkinData.SkinSection = 'COMBOBOX'
           VerticalAlignment = taAlignTop
           Style = csDropDownList
@@ -425,15 +403,11 @@ object SettingsForm: TSettingsForm
           Alignment = taLeftJustify
           BoundLabel.Active = True
           BoundLabel.Caption = 'Language:'
-          BoundLabel.Indent = 0
           BoundLabel.Font.Charset = DEFAULT_CHARSET
           BoundLabel.Font.Color = 2171169
           BoundLabel.Font.Height = -11
           BoundLabel.Font.Name = 'Tahoma'
           BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
           SkinData.SkinSection = 'COMBOBOX'
           VerticalAlignment = taAlignTop
           Style = csDropDownList
@@ -506,15 +480,6 @@ object SettingsForm: TSettingsForm
           ReadOnly = True
           TabOrder = 3
           SkinData.SkinSection = 'EDIT'
-          BoundLabel.Indent = 0
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = clWindowText
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
         end
         object FontList: TsComboBox
           Left = 121
@@ -524,15 +489,11 @@ object SettingsForm: TSettingsForm
           Alignment = taLeftJustify
           BoundLabel.Active = True
           BoundLabel.Caption = 'Fonts:'
-          BoundLabel.Indent = 0
           BoundLabel.Font.Charset = DEFAULT_CHARSET
           BoundLabel.Font.Color = 2171169
           BoundLabel.Font.Height = -11
           BoundLabel.Font.Name = 'Tahoma'
           BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
           SkinData.SkinSection = 'COMBOBOX'
           VerticalAlignment = taAlignTop
           Style = csDropDownList
@@ -566,15 +527,6 @@ object SettingsForm: TSettingsForm
           SkinData.SkinSection = 'EDIT'
           BoundLabel.Active = True
           BoundLabel.Caption = 'Default scale:'
-          BoundLabel.Indent = 0
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = clWindowText
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
           MaxValue = 0
           MinValue = 0
           Value = 10
@@ -629,15 +581,11 @@ object SettingsForm: TSettingsForm
           Alignment = taLeftJustify
           BoundLabel.Active = True
           BoundLabel.Caption = 'Number of processes:'
-          BoundLabel.Indent = 0
           BoundLabel.Font.Charset = DEFAULT_CHARSET
           BoundLabel.Font.Color = clBlack
           BoundLabel.Font.Height = -11
           BoundLabel.Font.Name = 'Tahoma'
           BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
           SkinData.SkinSection = 'COMBOBOX'
           VerticalAlignment = taAlignTop
           Style = csDropDownList
@@ -700,15 +648,11 @@ object SettingsForm: TSettingsForm
           Alignment = taLeftJustify
           BoundLabel.Active = True
           BoundLabel.Caption = 'Post-encode action:'
-          BoundLabel.Indent = 0
           BoundLabel.Font.Charset = DEFAULT_CHARSET
           BoundLabel.Font.Color = clBlack
           BoundLabel.Font.Height = -11
           BoundLabel.Font.Name = 'Tahoma'
           BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
           SkinData.SkinSection = 'COMBOBOX'
           VerticalAlignment = taAlignTop
           Style = csDropDownList
@@ -812,15 +756,6 @@ object SettingsForm: TSettingsForm
           Alignment = taLeftJustify
           BoundLabel.Active = True
           BoundLabel.Caption = 'If output file already exists:'
-          BoundLabel.Indent = 0
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = clWindowText
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
           SkinData.SkinSection = 'COMBOBOX'
           VerticalAlignment = taAlignTop
           Style = csDropDownList
@@ -922,15 +857,11 @@ object SettingsForm: TSettingsForm
           Alignment = taLeftJustify
           BoundLabel.Active = True
           BoundLabel.Caption = 'Skins:'
-          BoundLabel.Indent = 0
           BoundLabel.Font.Charset = DEFAULT_CHARSET
           BoundLabel.Font.Color = clBlack
           BoundLabel.Font.Height = -11
           BoundLabel.Font.Name = 'Tahoma'
           BoundLabel.Font.Style = []
-          BoundLabel.Layout = sclLeft
-          BoundLabel.MaxWidth = 0
-          BoundLabel.UseSkinColor = True
           SkinData.SkinSection = 'COMBOBOX'
           VerticalAlignment = taAlignTop
           Style = csDropDownList
@@ -999,15 +930,6 @@ object SettingsForm: TSettingsForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'Preferred format:'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
       end
       object DashVideoBtn: TsCheckBox
         Left = 3
@@ -1041,15 +963,6 @@ object SettingsForm: TSettingsForm
         SkinData.SkinSection = 'EDIT'
         BoundLabel.Active = True
         BoundLabel.Caption = 'Parallel download count:'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
       end
       object ProcessCountBar: TsTrackBar
         Left = 176

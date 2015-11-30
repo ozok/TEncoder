@@ -4123,7 +4123,7 @@ object AboutForm: TAboutForm
         Align = alTop
         Alignment = taCenter
         AutoSize = False
-        Caption = '4.5.8.5116'
+        Caption = '4.5.10.5129'
         ParentFont = False
         Layout = tlCenter
         Font.Charset = DEFAULT_CHARSET

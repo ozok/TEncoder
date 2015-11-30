@@ -280,15 +280,6 @@ object LogForm: TLogForm
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 0
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'EDIT'
       end
     end
@@ -296,10 +287,6 @@ object LogForm: TLogForm
       Caption = 'Video/Audio Converter'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 691
-      ExplicitHeight = 0
       object VideoEncoderList: TsMemo
         Left = 0
         Top = 21
@@ -317,15 +304,6 @@ object LogForm: TLogForm
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 0
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'EDIT'
       end
       object VideoEncoderLogsList: TsComboBox
@@ -335,15 +313,6 @@ object LogForm: TLogForm
         Height = 21
         Align = alTop
         Alignment = taLeftJustify
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -381,10 +350,6 @@ object LogForm: TLogForm
       Caption = 'MPlayer'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 691
-      ExplicitHeight = 0
       object MPlayerLogList: TMemo
         Left = 0
         Top = 0
@@ -394,7 +359,6 @@ object LogForm: TLogForm
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 0
-        ExplicitWidth = 691
       end
     end
     object sTabSheet10: TsTabSheet
@@ -417,15 +381,6 @@ object LogForm: TLogForm
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 0
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'EDIT'
       end
     end
@@ -433,10 +388,6 @@ object LogForm: TLogForm
       Caption = 'Video Downloader'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 691
-      ExplicitHeight = 0
       object LogList: TsComboBox
         Left = 0
         Top = 0
@@ -444,15 +395,6 @@ object LogForm: TLogForm
         Height = 21
         Align = alTop
         Alignment = taLeftJustify
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'COMBOBOX'
         VerticalAlignment = taAlignTop
         Style = csDropDownList
@@ -497,15 +439,6 @@ object LogForm: TLogForm
         ScrollBars = ssBoth
         TabOrder = 1
         Text = 'DownloadLog'
-        BoundLabel.Indent = 0
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clWindowText
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclLeft
-        BoundLabel.MaxWidth = 0
-        BoundLabel.UseSkinColor = True
         SkinData.SkinSection = 'EDIT'
       end
     end
@@ -513,10 +446,6 @@ object LogForm: TLogForm
       Caption = 'DVD Ripper'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 691
-      ExplicitHeight = 0
       object DVDPages: TsPageControl
         Left = 0
         Top = 0
@@ -526,10 +455,6 @@ object LogForm: TLogForm
         Align = alClient
         TabOrder = 0
         SkinData.SkinSection = 'PAGECONTROL'
-        ExplicitLeft = 200
-        ExplicitTop = 64
-        ExplicitWidth = 289
-        ExplicitHeight = 193
         object sTabSheet3: TsTabSheet
           Caption = 'Console Output'
           SkinData.CustomColor = False
@@ -550,15 +475,6 @@ object LogForm: TLogForm
             ReadOnly = True
             ScrollBars = ssBoth
             TabOrder = 0
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
             SkinData.SkinSection = 'EDIT'
           end
         end
@@ -582,15 +498,6 @@ object LogForm: TLogForm
             ReadOnly = True
             ScrollBars = ssBoth
             TabOrder = 0
-            BoundLabel.Indent = 0
-            BoundLabel.Font.Charset = DEFAULT_CHARSET
-            BoundLabel.Font.Color = clWindowText
-            BoundLabel.Font.Height = -11
-            BoundLabel.Font.Name = 'Tahoma'
-            BoundLabel.Font.Style = []
-            BoundLabel.Layout = sclLeft
-            BoundLabel.MaxWidth = 0
-            BoundLabel.UseSkinColor = True
             SkinData.SkinSection = 'EDIT'
           end
         end

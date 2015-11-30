@@ -52,15 +52,6 @@ object DubForm: TDubForm
     CheckOnExit = True
     BoundLabel.Active = True
     BoundLabel.Caption = 'Audio File:'
-    BoundLabel.Indent = 0
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clWindowText
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-    BoundLabel.Layout = sclLeft
-    BoundLabel.MaxWidth = 0
-    BoundLabel.UseSkinColor = True
     SkinData.SkinSection = 'EDIT'
     GlyphMode.Blend = 0
     GlyphMode.Grayed = False
@@ -85,15 +76,6 @@ object DubForm: TDubForm
     CheckOnExit = True
     BoundLabel.Active = True
     BoundLabel.Caption = 'Video File:'
-    BoundLabel.Indent = 0
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clWindowText
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-    BoundLabel.Layout = sclLeft
-    BoundLabel.MaxWidth = 0
-    BoundLabel.UseSkinColor = True
     SkinData.SkinSection = 'EDIT'
     GlyphMode.Blend = 0
     GlyphMode.Grayed = False
@@ -115,15 +97,6 @@ object DubForm: TDubForm
     SkinData.SkinSection = 'EDIT'
     BoundLabel.Active = True
     BoundLabel.Caption = 'Output File:'
-    BoundLabel.Indent = 0
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clWindowText
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-    BoundLabel.Layout = sclLeft
-    BoundLabel.MaxWidth = 0
-    BoundLabel.UseSkinColor = True
   end
   object ContainerList: TsComboBox
     Left = 64
@@ -133,15 +106,6 @@ object DubForm: TDubForm
     Alignment = taLeftJustify
     BoundLabel.Active = True
     BoundLabel.Caption = 'Format:'
-    BoundLabel.Indent = 0
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clWindowText
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-    BoundLabel.Layout = sclLeft
-    BoundLabel.MaxWidth = 0
-    BoundLabel.UseSkinColor = True
     SkinData.SkinSection = 'COMBOBOX'
     VerticalAlignment = taAlignTop
     Style = csDropDownList

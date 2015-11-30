@@ -2112,19 +2112,33 @@ var
 begin
   for I := 0 to FFilesToCheck.Count - 1 do
   begin
-    // if output doesnt exist
-    if not FileExists(FFilesToCheck[i]) then
-    begin
-      MissingFiles.Add(FFilesToCheck[i]);
-      AddToLog(0, 'Missing output file ' + FFilesToCheck[i] + '.');
-    end
-    else
-    begin
-      // if file is empty
-      if GetFileSize(FFilesToCheck[i]) < 1 then
+    try
+      // if output doesnt exist
+      if not FileExists(FFilesToCheck[i]) then
       begin
         MissingFiles.Add(FFilesToCheck[i]);
-        AddToLog(0, 'Output file ' + FFilesToCheck[i] + ' is empty.');
+        AddToLog(0, 'Missing output file ' + FFilesToCheck[i] + '.');
+      end
+      else
+      begin
+        // if file is empty
+        try
+          if GetFileSize(FFilesToCheck[i]) < 1 then
+          begin
+            MissingFiles.Add(FFilesToCheck[i]);
+            AddToLog(0, 'Output file ' + FFilesToCheck[i] + ' is empty.');
+          end;
+        except
+          on E: Exception do
+          begin
+            AddToLog(0, 'File size check error: ' + E.Message);
+          end;
+        end;
+      end;
+    except
+      on E: Exception do
+      begin
+        AddToLog(0, 'Output file check error: ' + E.Message);
       end;
     end;
   end;
@@ -2178,22 +2192,34 @@ end;
 
 procedure TMainForm.ClearTempFolder;
 var
-  Search: TSearchRec;
-  FileName: string;
-  Extension: string;
+  LSearch: TSearchRec;
+  LFileName: string;
+  LExtension: string;
 begin
-  if (FindFirst(FAppDataFolder + '\*.*', faAnyFile, Search) = 0) then
-  Begin
-    repeat
-      Application.ProcessMessages;
-      FileName := FAppDataFolder + '\' + Search.Name;
-      Extension := LowerCase(ExtractFileExt(FileName));
-      if (Extension = '.log') or (Extension = '.mbtree') or (Extension = '.temp') or (Extension = '.tmp') then
-      begin
-        DeleteFile(FileName);
-      end;
-    until (FindNext(Search) <> 0);
-    FindClose(Search);
+  try
+    if (FindFirst(FAppDataFolder + '\*.*', faAnyFile, LSearch) = 0) then
+    Begin
+      repeat
+        try
+          LFileName := FAppDataFolder + '\' + LSearch.Name;
+          LExtension := LowerCase(ExtractFileExt(LFileName));
+          if (LExtension = '.log') or (LExtension = '.mbtree') or (LExtension = '.temp') or (LExtension = '.tmp') then
+          begin
+            if FileExists(LFileName) then
+            begin
+              DeleteFile(LFileName);
+            end;
+          end;
+        except
+          on E: Exception do
+            Continue;
+        end;
+      until (FindNext(LSearch) <> 0);
+      FindClose(LSearch);
+    end;
+  except
+    on E: Exception do
+      LogForm.MainLog.Lines.Add('Error while clearing temp folder: ' + E.Message);
   end;
 end;
 
@@ -3512,16 +3538,19 @@ var
   LItemIndex, i: integer;
 begin
   LItemIndex := (Sender as TsButton).Tag;
-  FVideoDownloadListItems[LItemIndex].Visible := False;
-  FVideoDownloadListItems.Delete(LItemIndex);
-  FDownloadItems.Delete(LItemIndex);
-  for I := 0 to FVideoDownloadListItems.Count - 1 do
+  if LItemIndex < FVideoDownloadListItems.Count then
   begin
-    if FVideoDownloadListItems[i].DeleteButton.Tag > LItemIndex then
+    FVideoDownloadListItems[LItemIndex].Visible := False;
+    FVideoDownloadListItems.Delete(LItemIndex);
+    FDownloadItems.Delete(LItemIndex);
+    for I := 0 to FVideoDownloadListItems.Count - 1 do
     begin
-      FVideoDownloadListItems[i].DeleteButton.Tag := FVideoDownloadListItems[i].DeleteButton.Tag - 1;
+      if FVideoDownloadListItems[i].DeleteButton.Tag > LItemIndex then
+      begin
+        FVideoDownloadListItems[i].DeleteButton.Tag := FVideoDownloadListItems[i].DeleteButton.Tag - 1;
+      end;
+      FVideoDownloadListItems[i].Top := i * 142;
     end;
-    FVideoDownloadListItems[i].Top := i * 142;
   end;
 end;
 
@@ -4217,8 +4246,15 @@ begin
   begin
     if DVDJobList.Items[i].Selected then
     begin
-      DVDJobList.Items.Delete(i);
-      FDVDJobs.Delete(i);
+      try
+        DVDJobList.Items.Delete(i);
+        FDVDJobs.Delete(i);
+      except
+        on E: Exception do
+        begin
+          Application.MessageBox(PWideChar('Unable to delete item. Error: ' + E.Message), 'Error', MB_ICONERROR);
+        end;
+      end;
     end;
   end;
 end;
@@ -5519,9 +5555,11 @@ begin
     FileList.Columns[0].Width := FileList.ClientWidth - FileList.Columns[1].Width - FileList.Columns[2].Width - FileList.Columns[3].Width - 20;
     sStatusBar1.Panels[0].Width := sStatusBar1.ClientWidth - sStatusBar1.Panels[1].Width;
     DVDJobList.Columns[0].Width := DVDJobList.ClientWidth - DVDJobList.Columns[1].Width - 20;
-  except on E: Exception do
-    // I got bug reports saying that sometimes this part raises av errors.
-    // most likely alphacontrols' fault
+  except
+    on E: Exception do
+    begin
+      LogForm.MainLog.Lines.Add('Form resize error: ' + E.Message);
+    end;
   end;
 end;
 
@@ -5762,7 +5800,7 @@ begin
     begin
       try
         // Open a file in complete mode
-        MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
+        MediaInfo_Open(MediaInfoHandle, PWideChar(FileName));
         MediaInfo_Option(0, 'Complete', '1');
         // get length
         VDuration := MediaInfo_Get(MediaInfoHandle, Stream_Video, 0, 'Duration', Info_Text, Info_Name);
@@ -5874,7 +5912,7 @@ begin
 
       try
         // Open a file in complete mode
-        MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
+        MediaInfo_Open(MediaInfoHandle, PWideChar(FileName));
         MediaInfo_Option(0, 'Complete', '');
 
         InfoForm.InfoList.Text := string(MediaInfo_Inform(MediaInfoHandle, 0));
@@ -5978,7 +6016,7 @@ begin
 
       try
         // Open a file in complete mode
-        MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
+        MediaInfo_Open(MediaInfoHandle, PWideChar(FileName));
         MediaInfo_Option(0, 'Complete', '1');
 
         // get length
@@ -6114,7 +6152,7 @@ begin
 
       try
         // Open a file in complete mode
-        MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
+        MediaInfo_Open(MediaInfoHandle, PWideChar(FileName));
         MediaInfo_Option(0, 'Complete', '1');
 
         // get length
@@ -6171,7 +6209,7 @@ begin
     begin
       try
         // Open a file in complete mode
-        MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
+        MediaInfo_Open(MediaInfoHandle, PWideChar(FileName));
         MediaInfo_Option(0, 'Complete', '1');
 
         // get length
@@ -6203,7 +6241,7 @@ var
 begin
 
   mailbody := AboutForm.Label2.Caption + NewLine + NewLine + 'Bugs: ' + NewLine + NewLine + NewLine + 'Suggestions: ' + NewLine + NewLine + NewLine;
-  mail := PwideChar('mailto:ozok26@gmail.com?subject=TEncoder&body=' + mailbody);
+  mail := PWideChar('mailto:ozok26@gmail.com?subject=TEncoder&body=' + mailbody);
 
   ShellExecute(0, 'open', mail, nil, nil, SW_SHOWNORMAL);
 
@@ -6286,7 +6324,7 @@ begin
 
       try
         // Open a file in complete mode
-        MediaInfo_Open(MediaInfoHandle, PwideChar(FileName));
+        MediaInfo_Open(MediaInfoHandle, PWideChar(FileName));
         MediaInfo_Option(0, 'Complete', '1');
 
         VideoCount := Trim(MediaInfo_Get(MediaInfoHandle, Stream_Video, 0, 'Count', Info_Text, Info_Name));
@@ -6348,7 +6386,7 @@ end;
 
 procedure TMainForm.LabelClick(Sender: TObject);
 begin
-  ShellExecute(Handle, 'open', PwideChar(TsLabel(Sender).Caption), nil, nil, SW_SHOWNORMAL);
+  ShellExecute(Handle, 'open', PWideChar(TsLabel(Sender).Caption), nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TMainForm.LinkEditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
