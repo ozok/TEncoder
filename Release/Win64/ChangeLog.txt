@@ -1,7 +1,11 @@
 TEncoder Change Log
 
 --4.6.0
--Added: Improved way to update youtube-dl
+-Added: [Video Downloader] Improved way to update youtube-dl
+-Added: [Video Downloader] An option to specify per process download rate limit
+-Fixed: [Video Downloader] Subtitles were not listed
+-Fixed: [Video Downloader] Subtitles were not downloaded
+-Fixed: [Video Downloader] Downloaded subtitles were not converted to srt
 -Updated: Internal libraries
 
 --4.5.10

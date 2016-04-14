@@ -21,7 +21,9 @@ unit UnitDVDRipperProcess;
 
 interface
 
-uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, UnitSettings, Generics.Collections, ComCtrls;
+uses
+  Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, UnitSettings,
+  Generics.Collections, ComCtrls;
 
 // current state of the process
 type
@@ -88,10 +90,8 @@ type
     property ExeName: string read GetExeName;
     property OutputFiles: TStringList read FOutputFiles write FOutputFiles;
     property ListItemIndexes: TList<Integer> read FListItemIndexes write FListItemIndexes;
-
     constructor Create();
     destructor Destroy(); override;
-
     procedure Start();
     procedure Stop();
     procedure ResetValues();
@@ -102,7 +102,8 @@ implementation
 
 { TDVDRipProcess }
 
-uses UnitMain;
+uses
+  UnitMain;
 
 constructor TDVDRipProcess.Create;
 begin
@@ -240,12 +241,20 @@ begin
       begin
         if GetPercentage > LCurrVal then
         begin
-          FItem.SubItems[0] := FloatToStr(GetPercentage);
+          try
+            FItem.SubItems[0] := FloatToStr(GetPercentage);
+          except
+            on E: Exception do
+            begin
+            // ignored
+            end;
+          end;
         end;
       end;
     except
       on E: Exception do
         // ignored
+
     end;
   end;
 end;
@@ -263,6 +272,7 @@ begin
     except
       on E: Exception do
         // ignored
+
     end;
     FEncoderStatus := esStopped;
   end
@@ -277,6 +287,7 @@ begin
       FItem.StateIndex := 2;
     except
       on E: Exception do
+
     end;
 
     if FCommandIndex < FCommandLines.Count then
@@ -292,6 +303,7 @@ begin
         FItem.MakeVisible(False);
       except
         on E: Exception do
+
       end;
       FProcess.Run;
     end
@@ -335,6 +347,7 @@ begin
         FItem.StateIndex := 0;
       except
         on E: Exception do
+
       end;
       FProcess.Run;
     end
@@ -357,3 +370,4 @@ begin
 end;
 
 end.
+

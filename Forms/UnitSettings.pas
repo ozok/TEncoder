@@ -93,6 +93,9 @@ type
     OverwriteList: TsComboBox;
     DefaultAudioLangEdit: TsEdit;
     DefaultSubLangEdit: TsEdit;
+    CheckYoutubeDlUpdateBtn: TsCheckBox;
+    DownloaderSpeedLimitEdit: TsSpinEdit;
+    SubLangList: TsComboBox;
     procedure FormCreate(Sender: TObject);
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -280,6 +283,9 @@ begin
       WriteInteger('options', 'downloadcount', ProcessCountBar.Position);
       WriteBool('options', 'doubledownload', DontDoubleDownloadBtn.Checked);
       WriteBool('options', 'noimg', DontPreviewImgBtn.Checked);
+      WriteBool('options', 'ytdlupdate', CheckYoutubeDlUpdateBtn.Checked);
+      WriteString('options', 'dlspeedlmt', DownloaderSpeedLimitEdit.Text);
+      WriteInteger('Options', 'SubLang', SubLangList.ItemIndex);
 
       WriteString('options', 'defaud', DefaultAudioLangEdit.Text);
       WriteString('options', 'defsub', DefaultSubLangEdit.Text);
@@ -431,6 +437,9 @@ begin
       ProcessCountBar.Position := ReadInteger('options', 'downloadcount', 1);
       DontDoubleDownloadBtn.Checked := ReadBool('options', 'doubledownload', True);
       DontPreviewImgBtn.Checked := ReadBool('options', 'noimg', False);
+      CheckYoutubeDlUpdateBtn.Checked := ReadBool('options', 'ytdlupdate', False);
+      DownloaderSpeedLimitEdit.Text := ReadString('options', 'dlspeedlmt', '0');
+      SubLangList.ItemIndex := ReadInteger('Options', 'SubLang', 39);
 
       DefaultAudioLangEdit.Text := ReadString('options', 'defaud', 'english;eng;en');
       DefaultSubLangEdit.Text := ReadString('options', 'defsub', 'english;eng;en');

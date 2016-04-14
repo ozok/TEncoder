@@ -40,7 +40,8 @@ uses
   UnitDVDJob in 'Units\UnitDVDJob.pas',
   VideoAdding in 'Forms\VideoAdding.pas' {VideoAddingForm},
   DownloadItemFrame in 'Forms\DownloadItemFrame.pas' {DownloadUIItem: TFrame},
-  UnitYoutubedlUpdateChecker in 'Forms\UnitYoutubedlUpdateChecker.pas' {YoutubedlUpdateChecker};
+  UnitYoutubedlUpdateChecker in 'Forms\UnitYoutubedlUpdateChecker.pas' {YoutubedlUpdateChecker},
+  UnitYouTubeDlVersionReader in 'Units\DownloaderUnits\UnitYouTubeDlVersionReader.pas';
 
 {$R *.res}
 

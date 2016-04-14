@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2014 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -21,74 +21,83 @@ unit UnitDownloadProcess;
 
 interface
 
-uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, UnitSettings, ComCtrls;
+uses
+  Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, UnitSettings,
+  ComCtrls, Generics.Collections, Graphics;
 
 // current state of the process
 type
-  TEncoderStatus = (esEncoding, esStopped, esDone);
+  TProcessState = (esEncoding, esStopped, esDone);
+
+type
+  TProcessType = (youtubedl, ffmpeg, mp4box, subrenamer);
+
+type
+  TRenameJob = record
+    AudioFilePath: string;
+    VideoFilePath: string;
+    TempMuxedFilePath: string;
+  end;
+
+type
+  TDownloadJob = class
+    ApplicationPath: string;
+    CommandLine: string;
+    FileName: string;
+    ProcessType: TProcessType;
+    ProcessInfo: string;
+    FileIndex: integer;
+    RenameJob: TRenameJob;
+    SubtitleFilePath: string;
+    IsWebm: Boolean;
+    constructor Create();
+  end;
+
+  TDownloadJobs = TList<TDownloadJob>;
 
 type
   TDownloadProcess = class(TObject)
   private
     // process
     FProcess: TJvCreateProcess;
-    // list of command lines to be executed
-    FCommandLines: TStringList;
-    // list of executables
-    FPaths: TStringList;
+    FDownloadJobs: TDownloadJobs;
     // index of current command line. Also progress.
     FCommandIndex: integer;
-    // last line backend has written to console
-    FConsoleOutput: string;
     // encoder's state
-    FEncoderStatus: TEncoderStatus;
+    FEncoderStatus: TProcessState;
     // flag to indicate if encoding is stopped by user
     FStoppedByUser: Boolean;
-    // list of files to be processed.
-    FFileNames: TStringList;
-    // a list of types of encoders to be run.
-    FProcessTypes: TStringList;
-    // list of informations about steps.
-    FInfos: TStringList;
-    // a list of indexes indicating to the files in a list. to show progress in the list.
-    FFileIndexes: TStringList;
+    FErrorLog: TStringList;
 
     // process events
     procedure ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
     procedure ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
-
+    // updates progress information shown in the list item
     procedure UpdateMainFormItem(const ProgressStr: string; const Progress: integer);
 
     // field variable read funcs
     function GetProcessID: integer;
     function GetFileName: string;
-    function GetCurrentProcessType: string;
+    function GetCurrentProcessType: TProcessType;
     function GetInfo: string;
     function GetCommandCount: integer;
     function GetExeName: string;
     function GetFileIndex: Integer;
     function GetProgress(const ConsoleOutput: string): Integer;
+    procedure ProcessSubtitleFile(const FilePath: string);
   public
-    property ConsoleOutput: string read FConsoleOutput;
-    property EncoderStatus: TEncoderStatus read FEncoderStatus;
-    property CommandLines: TStringList read FCommandLines write FCommandLines;
-    property EncoderPaths: TStringList read FPaths write FPaths;
-    property FileNames: TStringList read FFileNames;
+    property EncoderStatus: TProcessState read FEncoderStatus;
     property FilesDone: integer read FCommandIndex;
     property ProcessID: integer read GetProcessID;
     property CurrentFile: string read GetFileName;
-    property ProcessTypes: TStringList read FProcessTypes write FProcessTypes;
-    property CurrentProcessType: string read GetCurrentProcessType;
+    property CurrentProcessType: TProcessType read GetCurrentProcessType;
     property Info: string read GetInfo;
-    property Infos: TStringList read FInfos write FInfos;
     property CommandCount: integer read GetCommandCount;
     property ExeName: string read GetExeName;
-    property FileIndexes: TStringList read FFileIndexes write FFileIndexes;
     property FileIndex: Integer read GetFileIndex;
-
+    property DownloadJobs: TDownloadJobs read FDownloadJobs write FDownloadJobs;
     constructor Create();
     destructor Destroy(); override;
-
     procedure Start();
     procedure Stop();
     procedure ResetValues();
@@ -99,7 +108,8 @@ implementation
 
 { TDownloadProcess }
 
-uses UnitMain;
+uses
+  UnitMain;
 
 constructor TDownloadProcess.Create;
 begin
@@ -125,67 +135,61 @@ begin
     WaitForTerminate := true;
   end;
 
-  FCommandLines := TStringList.Create;
-  FPaths := TStringList.Create;
-  FFileNames := TStringList.Create;
+  FDownloadJobs := TDownloadJobs.Create;
   FEncoderStatus := esStopped;
   FStoppedByUser := False;
-  FProcessTypes := TStringList.Create;
-  FInfos := TStringList.Create;
-  FFileIndexes := TStringList.Create;
   FCommandIndex := 0;
+  FErrorLog := TStringList.Create;
 end;
 
 destructor TDownloadProcess.Destroy;
 begin
   inherited Destroy;
-  FreeAndNil(FCommandLines);
-  FreeAndNil(FPaths);
-  FreeAndNil(FInfos);
-  FreeAndNil(FFileNames);
-  FreeAndNil(FProcessTypes);
-  FreeAndNil(FFileIndexes);
+  FDownloadJobs.Free;
   FProcess.Free;
+  FErrorLog.Free;
 end;
 
 function TDownloadProcess.GetCommandCount: integer;
 begin
-  Result := FCommandLines.Count;
+  Result := FDownloadJobs.Count;
 end;
 
 function TDownloadProcess.GetConsoleOutput: TStrings;
 begin
-  Result := FProcess.ConsoleOutput;
+  Result := FErrorLog;
 end;
 
-function TDownloadProcess.GetCurrentProcessType: string;
+function TDownloadProcess.GetCurrentProcessType: TProcessType;
 begin
-  if FCommandIndex < FProcessTypes.Count then
-    Result := FProcessTypes[FCommandIndex];
+  Result := ffmpeg;
+  if FCommandIndex < FDownloadJobs.Count then
+    Result := FDownloadJobs[FCommandIndex].ProcessType;
 end;
 
 function TDownloadProcess.GetExeName: string;
 begin
-  if FCommandIndex < FPaths.Count then
-    Result := FPaths[FCommandIndex];
+  if FCommandIndex < FDownloadJobs.Count then
+    Result := FDownloadJobs[FCommandIndex].ApplicationPath;
 end;
 
 function TDownloadProcess.GetFileIndex: Integer;
 begin
-  if FCommandIndex < FFileIndexes.Count then
-    Result := StrToInt(FFileIndexes[FCommandIndex]);
+  Result := -1;
+  if FCommandIndex < FDownloadJobs.Count then
+    Result := FDownloadJobs[FCommandIndex].FileIndex;
 end;
 
 function TDownloadProcess.GetFileName: string;
 begin
-  if FCommandIndex < FFileNames.Count then
-    Result := FFileNames[FCommandIndex];
+  if FCommandIndex < FDownloadJobs.Count then
+    Result := FDownloadJobs[FCommandIndex].FileName;
 end;
 
 function TDownloadProcess.GetInfo: string;
 begin
-  if FCommandIndex < FInfos.Count then
-    Result := FInfos[FCommandIndex];
+  if FCommandIndex < FDownloadJobs.Count then
+    Result := FDownloadJobs[FCommandIndex].ProcessInfo;
 end;
 
 function TDownloadProcess.GetProcessID: integer;
@@ -212,13 +216,118 @@ end;
 
 procedure TDownloadProcess.ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
 begin
-  FConsoleOutput := Trim(S);
-  UpdateMainFormItem(S, GetProgress(S));
+  UpdateMainFormItem(GetInfo + ' ' + S.Replace('[download]', '').Trim, GetProgress(S));
+end;
+
+procedure TDownloadProcess.ProcessSubtitleFile(const FilePath: string);
+const
+  START_FLAG = 'Language:';
+var
+  LFileContent: TStringList;
+  LOutputFile: TStringList;
+  LOutputFilePath: string;
+  LLine: string;
+  I: integer;
+  LStartIndex: integer;
+begin
+  try
+    if FileExists(FilePath) then
+    begin
+      try
+        LFileContent := TStringList.Create;
+
+        LFileContent.LoadFromFile(FilePath, TEncoding.UTF8);
+        if LFileContent.Count > 0 then
+        begin
+          LStartIndex := -1;
+          for I := 0 to LFileContent.Count - 1 do
+          begin
+            LLine := Trim(LFileContent[i]);
+            if LLine.StartsWith(START_FLAG) then
+            begin
+              LStartIndex := i;
+              Break;
+            end;
+          end;
+          // means found start
+          if LStartIndex > -1 then
+          begin
+            LOutputFile := TStringList.Create;
+            try
+              for I := LStartIndex + 1 to LFileContent.Count - 1 do
+              begin
+                LLine := Trim(LFileContent[i]);
+                LOutputFile.Add(LLine);
+              end;
+
+              try
+                LOutputFilePath := ChangeFileExt(FilePath, '.srt');
+                LOutputFile.SaveToFile(LOutputFilePath, TEncoding.UTF8);
+                DeleteFile(FilePath);
+                ExitCode := 0;
+              except
+                on E: Exception do
+                begin
+                  MainForm.AddToLog(0, E.ClassName + ': ' + E.Message);
+                  ExitCode := 1;
+                end;
+              end;
+            finally
+              LOutputFile.Free;
+            end;
+          end
+          else
+          begin
+            MainForm.AddToLog(0, 'Unable to find subtitle file start flag');
+          end;
+        end;
+      finally
+        LFileContent.Free;
+      end;
+    end
+    else
+    begin
+      MainForm.AddToLog(0, 'File not found: ' + FilePath);
+    end;
+  except
+    on E: Exception do
+    begin
+      MainForm.AddToLog(0, E.ClassName + ': ' + E.Message);
+    end;
+  end;
 end;
 
 procedure TDownloadProcess.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 begin
   FEncoderStatus := esStopped;
+  if FDownloadJobs[FCommandIndex].RenameJob.AudioFilePath <> '' then
+  begin
+    if FileExists(FDownloadJobs[FCommandIndex].RenameJob.AudioFilePath) then
+    begin
+      if not DeleteFile(FDownloadJobs[FCommandIndex].RenameJob.AudioFilePath) then
+      begin
+        MainForm.AddToLog(0, 'Unable to delete ' + ExtractFileName(FDownloadJobs[FCommandIndex].RenameJob.AudioFilePath));
+      end;
+    end;
+    if FileExists(FDownloadJobs[FCommandIndex].RenameJob.VideoFilePath) then
+    begin
+      if not DeleteFile(FDownloadJobs[FCommandIndex].RenameJob.VideoFilePath) then
+      begin
+        MainForm.AddToLog(0, 'Unable to delete ' + ExtractFileName(FDownloadJobs[FCommandIndex].RenameJob.VideoFilePath));
+      end;
+    end;
+    if not RenameFile(FDownloadJobs[FCommandIndex].RenameJob.TempMuxedFilePath, FDownloadJobs[FCommandIndex].RenameJob.VideoFilePath) then
+    begin
+      MainForm.AddToLog(0, 'Unable to rename ' + ExtractFileName(FDownloadJobs[FCommandIndex].RenameJob.TempMuxedFilePath) + ' to ' + ExtractFileName(FDownloadJobs[FCommandIndex].RenameJob.VideoFilePath));
+    end;
+  end;
+
+  if FileExists(FDownloadJobs[FCommandIndex].SubtitleFilePath) then
+  begin
+    ProcessSubtitleFile(FDownloadJobs[FCommandIndex].SubtitleFilePath);
+  end;
+
+  // if user has stopped downloading do not try the next item
   if FStoppedByUser then
   begin
     UpdateMainFormItem('Stopped', 0);
@@ -226,9 +335,14 @@ begin
   end
   else
   begin
+    // if process has not exited properly, add it to the log
+    MainForm.AddToLog(0, ExtractFileName(FDownloadJobs[FCommandIndex].ApplicationPath) + ' has exited with ' + FloatToStr(ExitCode) + '.');
+    FErrorLog.AddStrings(FProcess.ConsoleOutput);
+    FProcess.ConsoleOutput.Clear;
     if ExitCode <> 0 then
     begin
       UpdateMainFormItem('Error code: ' + FloatToStr(ExitCode), 0);
+//      Inc(MainForm.FProcessErrorCount);
     end
     else
     begin
@@ -237,19 +351,17 @@ begin
 
     // run next command
     inc(FCommandIndex);
-    if FCommandIndex < FCommandLines.Count then
+    if FCommandIndex < FDownloadJobs.Count then
     begin
-      FProcess.CommandLine := FCommandLines[FCommandIndex];
-      FProcess.ApplicationName := FPaths[FCommandIndex];
+      FProcess.CommandLine := FDownloadJobs[FCommandIndex].CommandLine;
+      FProcess.ApplicationName := FDownloadJobs[FCommandIndex].ApplicationPath;
       FEncoderStatus := esEncoding;
-      FConsoleOutput := '';
       UpdateMainFormItem('Starting...', 0);
       FProcess.Run;
     end
     else
     begin
       // done
-      FFileNames.Clear;
       FEncoderStatus := esDone;
     end;
   end;
@@ -258,47 +370,36 @@ end;
 procedure TDownloadProcess.ResetValues;
 begin
   // reset all lists, indexes etc
-  FCommandLines.Clear;
-  FPaths.Clear;
+  FDownloadJobs.Clear;
   FCommandIndex := 0;
-  FConsoleOutput := '';
   FProcess.ConsoleOutput.Clear;
-  FProcessTypes.Clear;
   FStoppedByUser := False;
-  FInfos.Clear;
+  FErrorLog.Clear;
 end;
 
 procedure TDownloadProcess.Start;
 begin
+  // start with the first item if download is not already started
   if FProcess.ProcessInfo.hProcess = 0 then
   begin
-    if FCommandLines.Count > 0 then
+    if FDownloadJobs.Count > 0 then
     begin
-      if FileExists(FPaths[0]) then
-      begin
-        FProcess.ApplicationName := FPaths[0];
-        FProcess.CommandLine := FCommandLines[0];
-        FEncoderStatus := esEncoding;
-        UpdateMainFormItem('Starting...', 0);
-        FProcess.Run;
-      end
-      else
-        FConsoleOutput := 'encoder'
+      FProcess.ApplicationName := FDownloadJobs[0].ApplicationPath;
+      FProcess.CommandLine := FDownloadJobs[0].CommandLine;
+      FEncoderStatus := esEncoding;
+      UpdateMainFormItem('Starting...', 0);
+      FProcess.Run;
     end
-    else
-      FConsoleOutput := '0 cmd'
   end
-  else
-    FConsoleOutput := 'not 0'
 end;
 
 procedure TDownloadProcess.Stop;
 begin
+  // terminate running process unless it's already stopped
   if FProcess.ProcessInfo.hProcess > 0 then
   begin
     TerminateProcess(FProcess.ProcessInfo.hProcess, 0);
     UpdateMainFormItem('Stopped', 0);
-    FFileNames.Clear;
     FEncoderStatus := esStopped;
     FStoppedByUser := true;
   end;
@@ -313,4 +414,20 @@ begin
   end;
 end;
 
+{ TDownloadJob }
+
+constructor TDownloadJob.Create;
+begin
+  inherited;
+  ApplicationPath := '';
+  CommandLine := '';
+  FileName := '';
+  ProcessType := TProcessType.youtubedl;
+  ProcessInfo := '';
+  FileIndex := -1;
+  SubtitleFilePath := '';
+  IsWebm := false;
+end;
+
 end.
+

@@ -38,7 +38,7 @@ object YoutubedlUpdateChecker: TYoutubedlUpdateChecker
     ScrollBars = ssBoth
     TabOrder = 0
   end
-  object sButton1: TsButton
+  object CloseBtn: TsButton
     Left = 562
     Top = 139
     Width = 75
@@ -46,7 +46,7 @@ object YoutubedlUpdateChecker: TYoutubedlUpdateChecker
     Anchors = [akRight, akBottom]
     Caption = 'Close'
     TabOrder = 1
-    OnClick = sButton1Click
+    OnClick = CloseBtnClick
   end
   object ProgressBar: TsProgressBar
     Left = 8

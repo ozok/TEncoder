@@ -13,13 +13,13 @@ uses
 type
   TYoutubedlUpdateChecker = class(TForm)
     OutputList: TsMemo;
-    sButton1: TsButton;
+    CloseBtn: TsButton;
     Downloader: TIdHTTP;
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     UpdateThread: TJvThread;
     ProgressBar: TsProgressBar;
     sSkinProvider1: TsSkinProvider;
-    procedure sButton1Click(Sender: TObject);
+    procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure UpdateThreadExecute(Sender: TObject; Params: Pointer);
@@ -32,6 +32,7 @@ type
   public
     { Public declarations }
     Path: string;
+    LocalVersion: string;
   end;
 
 var
@@ -91,7 +92,7 @@ begin
   UpdateThread.Execute(nil);
 end;
 
-procedure TYoutubedlUpdateChecker.sButton1Click(Sender: TObject);
+procedure TYoutubedlUpdateChecker.CloseBtnClick(Sender: TObject);
 begin
   Self.Close;
 end;
@@ -99,6 +100,8 @@ end;
 procedure TYoutubedlUpdateChecker.UpdateThreadExecute(Sender: TObject; Params: Pointer);
 const
   MATCH_LINE = '">Windows exe</a>';
+  VERSION_LINE = '<h2><a href="https://yt-dl.org/downloads/';
+  VERSION_LINE_END = '/youtube-dl">';
 var
   LMS: TMemoryStream;
   LSR: TStreamReader;
@@ -106,63 +109,108 @@ var
   LPos: integer;
   LFS: TFileStream;
   LPath: string; // youtube-dl.tmp
+  FContinue: Boolean;
+  LExeLine: string;
 begin
   OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Starting the update process.');
+  CloseBtn.Enabled := False;
   try
     LMS := TMemoryStream.Create;
     try
-      OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Extracting youtube-dl.exe link...');
+      OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Checking for the update...');
       Downloader.Get(DOWNLOAD_PAGE_URL, LMS);
       LMS.Seek(0, soBeginning);
       LSR := TStreamReader.Create(LMS);
       try
+        FContinue := True;
         while not LSR.EndOfStream do
         begin
           Application.ProcessMessages;
           LLine := LSR.ReadLine;
+
+          // get the version number
+          if LLine.contains(VERSION_LINE) then
+          begin
+            // if this string is longer than 0 it means called from
+            // backend launcher
+            if Length(LocalVersion) > 0 then
+            begin
+              LLine := LLine.Replace(VERSION_LINE, '');
+
+              LPos := Pos(VERSION_LINE_END, LLine);
+              if LPos > -1 then
+              begin
+                LLine := LLine.Substring(0, LPos - 1);
+                OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] The Latest Version: ' + LLine);
+                OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] The Local Version: ' + LocalVersion.Trim);
+                FContinue := Trim(LLine) <> Trim(LocalVersion);
+              end;
+            end;
+          end;
+
+          // get the exe link
           if LLine.contains(MATCH_LINE) then
           begin
-            Break;
+            LExeLine := LLine;
           end;
         end;
-        if LLine.Length > 0 then
+        if FContinue then
         begin
-          LPos := Pos(MATCH_LINE, LLine);
-          LLine := LLine.Substring(0, LPos - 1);
-          LLine := StringReplace(LLine, '<a href="', '', []).Trim;
-          OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Link: ' + LLine);
+          if LExeLine.Length > 0 then
+          begin
+            LPos := Pos(MATCH_LINE, LExeLine);
+            LExeLine := LExeLine.Substring(0, LPos - 1);
+            LExeLine := StringReplace(LExeLine, '<a href="', '', []).Trim;
+            OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Link: ' + LExeLine);
 
-          try
-            LPath := ChangeFileExt(Path, '.tmp');
-            // delete tmp file from a previous update
-            if FileExists(LPath) then
-            begin
-              DeleteFile(LPath);
-            end;
-            // write downloaded file to the tmp file
-            LFS := TFileStream.Create(LPath, fmCreate);
             try
-              OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Downloading the latest version...');
-              Downloader.Get(LLine, LFS);
-              OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Downloaded the latest version.');
-              OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] You can close this window now.');
-            except
-              on E: Exception do
-                OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Error: ' + E.Message);
+              LPath := ChangeFileExt(Path, '.tmp');
+            // delete tmp file from a previous update
+              if FileExists(LPath) then
+              begin
+                DeleteFile(LPath);
+              end;
+              try
+            // write downloaded file to the tmp file
+                LFS := TFileStream.Create(LPath, fmCreate);
+                OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Downloading the latest version...');
+                Downloader.Get(LExeLine, LFS);
+                OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Downloaded the latest version.');
+                if Length(LocalVersion) > 0 then
+                begin
+                  OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] This window will close itself now.');
+                  Sleep(3000);
+                end
+                else
+                begin
+                  OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] You can close this window now.');
+                end;
+              except
+                on E: Exception do
+                  OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Error: ' + E.Message);
+              end;
+            finally
+              LFS.Free;
+
+              // delete the old version of the exe
+              if FileExists(Path) then
+              begin
+                DeleteFile(Path);
+              end;
+              RenameFile(LPath, Path);
             end;
-          finally
-            LFS.Free;
-            // delete the old version of the exe
-            if FileExists(Path) then
-            begin
-              DeleteFile(Path);
-            end;
-            RenameFile(LPath, Path);
+          end
+          else
+          begin
+            OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Unable to get the link. Connect the author please.');
+            LocalVersion := '';
           end;
         end
         else
         begin
-          OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] Unable to get the link. Connect the author please.');
+          OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] You have the latest version.');
+          OutputList.Lines.Add('[' + DateTimeToStr(Now) + '] This window will close itself now.');
+          Sleep(3000);
         end;
       finally
         LSR.Close;
@@ -174,12 +222,17 @@ begin
     end;
   finally
     LMS.Free;
+    CloseBtn.Enabled := True;
   end;
 
   UpdateThread.CancelExecute;
   if Params <> nil then
   begin
     Application.Terminate;
+  end;
+  if Length(LocalVersion) > 0 then
+  begin
+    Self.Close;
   end;
 end;
 

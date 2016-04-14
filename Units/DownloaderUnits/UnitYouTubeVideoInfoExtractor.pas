@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2014 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -21,7 +21,9 @@ unit UnitYouTubeVideoInfoExtractor;
 
 interface
 
-uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, Generics.Collections, UnitImageResize, UnitCommonTypes, UnitImageTypeExtractor;
+uses
+  Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, Generics.Collections,
+  UnitImageResize, UnitCommonTypes, UnitImageTypeExtractor;
 
 type
   TStatus = (stReading, stDone);
@@ -59,13 +61,13 @@ type
     FURLType: TLinkType;
     FPass: TUserPass;
     FDownloadImg: Boolean;
-
+    FPlaylistFoundVideos: integer;
     procedure ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
     procedure ProcessTerminate2(Sender: TObject; ExitCode: Cardinal);
     procedure ProcessTerminate3(Sender: TObject; ExitCode: Cardinal);
     procedure ProcessTerminate4(Sender: TObject; ExitCode: Cardinal);
     procedure ProcessTerminate5(Sender: TObject; ExitCode: Cardinal);
-
+    procedure PlaylistProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
     function LineToVideoTypeInfo(const Line: string): TTypeInfo;
     function LineToExtension(const Line: string): string;
     function SoundCloudLineToTypeInfo(const Line: string): TTypeInfo;
@@ -85,10 +87,13 @@ type
     property Subtitles: TStringList read FSubtitles;
     property SubtitleStatus: TStatus read FSubtitleStatus;
     property LinkType: TLinkType read FURLType;
-
+    property PlaylistFoundVideosCount: integer read FPlaylistFoundVideos;
+    property Process1: TJvCreateProcess read FFormatProcess;
+    property Process2: TJvCreateProcess read FThumbProcess;
+    property Process3: TJvCreateProcess read FTitleExtractProcess;
+    property Process4: TJvCreateProcess read FSubtitleProcess;
     constructor Create(const URL: string; const YouTube_dlPath: string; const TempFolder: string; const UserPass: TUserPass; const DownloadImg: Boolean);
     destructor Destroy(); override;
-
     procedure Start();
     procedure Start2();
     procedure Start3();
@@ -166,6 +171,7 @@ begin
   with FPlayListProcess do
   begin
     OnTerminate := ProcessTerminate4;
+    OnRead := PlaylistProcessRead;
     ConsoleOptions := [coRedirect];
     CreationFlags := [cfUnicode];
     Priority := ppIdle;
@@ -246,6 +252,7 @@ procedure TYouTubeVideoInfoExtractor.GetPlayListInfo;
 var
   LPass: string;
 begin
+  FPlaylistFoundVideos := 0;
   FPlayListProcess.ApplicationName := FYouTube_dlPath;
   if (Length(FPass.UserName) > 0) and (Length(FPass.Password) > 0) then
   begin
@@ -314,6 +321,11 @@ begin
   finally
     FreeAndNil(LSplitList);
   end;
+end;
+
+procedure TYouTubeVideoInfoExtractor.PlaylistProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
+begin
+  FPlaylistFoundVideos := FPlayListProcess.ConsoleOutput.Count;
 end;
 
 procedure TYouTubeVideoInfoExtractor.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
@@ -453,7 +465,7 @@ var
 begin
   FTitleStatus := stReading;
   // remove empty lines
-  for I := FTitleExtractProcess.ConsoleOutput.Count-1 downto 1 do
+  for I := FTitleExtractProcess.ConsoleOutput.Count - 1 downto 1 do
   begin
     if Length(Trim(FTitleExtractProcess.ConsoleOutput[i])) = 0 then
     begin
@@ -468,7 +480,7 @@ begin
       // last line is probably the one that has the title.
       if FTitleExtractProcess.ConsoleOutput.Count > 1 then
       begin
-        for I := FTitleExtractProcess.ConsoleOutput.Count-1 downto 1 do
+        for I := FTitleExtractProcess.ConsoleOutput.Count - 1 downto 1 do
         begin
           if Length(Trim(FTitleExtractProcess.ConsoleOutput[i])) > 0 then
           begin
@@ -491,7 +503,7 @@ var
   i: integer;
 begin
   FPlayListStatus := stReading;
-  for I := 0 to FPlayListProcess.ConsoleOutput.Count-1 do
+  for I := 0 to FPlayListProcess.ConsoleOutput.Count - 1 do
   begin
     if Length(Trim(FPlayListProcess.ConsoleOutput[i])) > 3 then
     begin
@@ -503,11 +515,11 @@ end;
 
 procedure TYouTubeVideoInfoExtractor.ProcessTerminate5(Sender: TObject; ExitCode: Cardinal);
 const
-  SUB_STR = 'Available subtitles for video:';
+  SUB_STR = 'Available subtitles for ';
 var
   LSubLine: string;
   i: integer;
-  LPos: integer;
+  LStartIndex: integer;
 begin
   FSubtitleStatus := stReading;
   try
@@ -515,16 +527,26 @@ begin
     begin
       if Assigned(FSubtitleProcess.ConsoleOutput) then
       begin
+        // look for the subtitles in console output
+        LStartIndex := -1;
         for I := 0 to FSubtitleProcess.ConsoleOutput.Count - 1 do
         begin
           LSubLine := Trim(FSubtitleProcess.ConsoleOutput[i]);
-          if ContainsText(LSubLine, SUB_STR) then
+          if LSubLine.StartsWith(SUB_STR) then
           begin
-            LPos := Pos(SUB_STR, LSubLine);
-            LSubLine := Copy(LSubLine, LPos + Length(SUB_STR), MaxInt);
-            if not ContainsText(LSubLine, 'Do not download subtitles') then
+            LStartIndex := i;
+            Break;
+          end;
+        end;
+        // means found a sub
+        if LStartIndex > -1 then
+        begin
+          for I := LStartIndex+2 to FSubtitleProcess.ConsoleOutput.Count - 1 do
+          begin
+            LSubLine := Trim(FSubtitleProcess.ConsoleOutput[i]);
+            if Length(LSubLine) > 0 then
             begin
-              FSubtitles.DelimitedText := LSubLine;
+              FSubtitles.Add(LSubLine.Replace('vtt, ttml', '').Trim);
             end;
           end;
         end;
@@ -533,11 +555,7 @@ begin
   finally
     if Assigned(FSubtitles) then
     begin
-      for I := 0 to FSubtitles.Count - 1 do
-      begin
-        FSubtitles[i] := UpperCase(Trim(FSubtitles[i]));
-      end;
-      FSubtitles.Insert(0, 'Do not download subtitles');
+//      FSubtitles.Insert(0, 'Do not download subtitles');
     end;
     FSubtitleStatus := stDone;
   end;
@@ -646,7 +664,7 @@ begin
   begin
     LPass := ' -u ' + FPass.UserName + ' -p ' + FPass.Password;
   end;
-  FTitleExtractProcess.CommandLine := ' ' + LPass + ' -s --skip-download -i --no-playlist --playlist-start 1 --playlist-end 1 --get-filename -o "%(uploader)s - %(title)s.%(ext)s" "' + FURL + '"';
+  FTitleExtractProcess.CommandLine := ' ' + LPass + ' -s --skip-download -i --no-playlist --playlist-start 1 --playlist-end 1 --get-filename -o "%(upload_date)s - %(uploader)s - %(title)s.%(ext)s" "' + FURL + '"';
   FTitleExtractProcess.Run;
 end;
 
@@ -688,3 +706,4 @@ begin
 end;
 
 end.
+
