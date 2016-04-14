@@ -255,6 +255,9 @@ var
   CustomVideoArg: string;
   CustomAudioArg: string;
   CustomArgs: string;
+  LMergeCMD: string;
+  LMergeVideoCMD: string;
+  LMergeAudioCMD: string;
 begin
   // output extension and container options
   LContainer := 'avi';

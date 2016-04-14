@@ -532,6 +532,8 @@ type
     procedure ExchangeItems(lv: TsListView; const i, j: Integer);
     // adds command line to TEncoder object
     procedure CreateEncodingCommands(FileIndex: Integer; const EncoderIndex: integer);
+    // generates merge command line
+    procedure CreateMergeCommandLine();
 
     // video download fncs.
     // download link
@@ -764,7 +766,6 @@ var
   LEncodeJobs: TEncodeJobs;
   LEncodeJob: TEncodeJob;
 begin
-
   // if audio only then we must use ffmpeg and do single pass
   if FMasterFileInfoList[FileIndex].FFMmpegVideoID = -1 then
   begin
@@ -3530,6 +3531,106 @@ begin
     end;
   end;
   Result := OutFileName;
+end;
+
+procedure TMainForm.CreateMergeCommandLine();
+var
+  LSourceFileNamePath: string;
+  LMEncoderCMD: TMencoderCommandLineCreator;
+  LMp4MuxingCMD: string;
+  LFFMpegCMD: TFFMpegCommandLineCreator;
+  LExtractedAudioFileName: string;
+  LMEncoderMp4MuxExt: string;
+  LOggRemuxExtension: string;
+  LOggAudioCMD: string;
+  LRenameFile: TStringList;
+  LMencoderFinalFileName: string;
+  LEncoderIndex: integer;
+  LEncodeJobs: TEncodeJobs;
+  LEncodeJob: TEncodeJob;
+  FileIndex: Integer;
+  LListOfFilesToBeEncoded: TStringList;
+begin
+  try
+    LListOfFilesToBeEncoded := TStringList.Create;
+    for FileIndex := 0 to FMasterFileInfoList.Count - 1 do
+    begin
+      // no merge unless we have a video stream
+      if FMasterFileInfoList[FileIndex].FFMmpegVideoID > -1 then
+      begin
+        LListOfFilesToBeEncoded.Add(FMasterFileInfoList[FileIndex].FilePath);
+      end;
+    end;
+  finally
+    LListOfFilesToBeEncoded.Free;
+  end;
+  for FileIndex := 0 to FMasterFileInfoList.Count - 1 do
+  begin
+    if DoTwoPassBtn.Checked then
+    begin
+          // do two passes
+          // first pass
+      LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
+      AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(LSourceFileNamePath) + ')';
+          // create command line
+      LFFMpegCMD := TFFMpegCommandLineCreator.Create(FileIndex);
+      try
+        LEncodeJob.CommandLine := LFFMpegCMD.FMpegCommandLine.FirstPassCMD;
+        LEncodeJob.SourceDuration := FMasterFileInfoList[FileIndex].EndPosition - FMasterFileInfoList[FileIndex].StartPosition;
+        LEncodeJob.ProcessType := UnitEncoder.TProcessType.ffmpeg;
+        LEncodeJob.ProcessPath := FFFMpegPath;
+        LEncodeJob.SourceFileName := LSourceFileNamePath;
+        LEncodeJob.EncodingInformation := ' 1st pass of 2';
+        LEncodeJob.FileListIndex := FileIndex;
+        LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
+        FEncoders[0].EncodeJobs.Add(LEncodeJob);
+      finally
+        LFFMpegCMD.Free;
+      end;
+          // second pass
+      LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
+          // create command line
+      LFFMpegCMD := TFFMpegCommandLineCreator.Create(FileIndex);
+      try
+        LEncodeJob.CommandLine := LFFMpegCMD.FMpegCommandLine.SeconPassCMD;
+        LEncodeJob.SourceDuration := FMasterFileInfoList[FileIndex].EndPosition - FMasterFileInfoList[FileIndex].StartPosition;
+        LEncodeJob.ProcessType := UnitEncoder.TProcessType.ffmpeg;
+        LEncodeJob.ProcessPath := FFFMpegPath;
+        LEncodeJob.SourceFileName := LSourceFileNamePath;
+        LEncodeJob.EncodingInformation := ' 2nd pass of 2';
+        LEncodeJob.FileListIndex := FileIndex;
+        LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
+        FEncoders[0].EncodeJobs.Add(LEncodeJob);
+            // output file to be checked
+        FFilesToCheck.Add(LFFMpegCMD.OutputFile);
+      finally
+        LFFMpegCMD.Free;
+      end;
+    end
+    else
+    begin
+          // do single pass
+      LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
+      AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(LSourceFileNamePath) + ')';
+          // create command line
+      LFFMpegCMD := TFFMpegCommandLineCreator.Create(FileIndex);
+      try
+        LEncodeJob.CommandLine := LFFMpegCMD.FMpegCommandLine.SinglePassCMD;
+        LEncodeJob.SourceDuration := FMasterFileInfoList[FileIndex].EndPosition - FMasterFileInfoList[FileIndex].StartPosition;
+        LEncodeJob.ProcessType := UnitEncoder.TProcessType.ffmpeg;
+        LEncodeJob.ProcessPath := FFFMpegPath;
+        LEncodeJob.SourceFileName := LSourceFileNamePath;
+        LEncodeJob.EncodingInformation := ' Encoding';
+        LEncodeJob.FileListIndex := FileIndex;
+        LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
+        FEncoders[0].EncodeJobs.Add(LEncodeJob);
+            // output file to be checked
+        FFilesToCheck.Add(LFFMpegCMD.OutputFile);
+      finally
+        LFFMpegCMD.Free;
+      end;
+    end;
+  end;
 end;
 
 function TMainForm.CreateTempName: string;
@@ -7435,11 +7536,28 @@ var
   i: Integer;
   Date: TDateTime;
   ScriptFile: TStringList;
-  NumberOfProcesses: integer;
+  LNumberOfProcesses: integer;
   j: Integer;
 begin
 
 {$REGION 'codec checks'}
+  // if merge and mencoder selected
+  if MergeBtn.Checked and (EncoderList.ItemIndex = 0) then
+  begin
+    Application.MessageBox('Cannot use merge with MEncoder', 'Error', MB_ICONERROR);
+    Exit;
+  end;
+
+  // merge requires a codec to be selected
+  if MergeBtn.Checked then
+  begin
+    if (VideoEncoderList.ItemIndex = 11) or (VideoEncoderList.ItemIndex = 10) then
+    begin
+      Application.MessageBox('Please select a video codec. Cannot merge without re-encoding.', 'Error', MB_ICONEXCLAMATION);
+      exit;
+    end;
+  end;
+
   // if none is selected as both video and audio codec
   if (VideoEncoderList.ItemIndex = 11) and (AudioEncoderList.ItemIndex = 10) then
   begin
@@ -7609,46 +7727,64 @@ begin
       end;
       FFileAddingStoppedByUser := False;
       for I := Low(FEncoders) to High(FEncoders) do
+      begin
         FEncoders[i].ResetValues;
+      end;
       FTimePassed := 0;
       FFilesToCheck.Clear;
 
       // decide number of processes
       if (SettingsForm.NumberOfThreadsList.ItemIndex + 1) > FileList.Items.Count then
       begin
-        NumberOfProcesses := FileList.Items.Count;
+        LNumberOfProcesses := FileList.Items.Count;
       end
       else
       begin
-        NumberOfProcesses := SettingsForm.NumberOfThreadsList.ItemIndex + 1;
+        LNumberOfProcesses := SettingsForm.NumberOfThreadsList.ItemIndex + 1;
       end;
-      if NumberOfProcesses > Info.CPU.ProcessorCount then
+
+      // there is one process when using merge
+      if MergeBtn.Checked then
       begin
-        AddToLog(0, '[Warning] Number of parallel processes is greater than CPU core count.');
+        LNumberOfProcesses := 1;
       end;
-      FEncodeProcessCount := NumberOfProcesses;
+      FEncodeProcessCount := LNumberOfProcesses;
       // if video codec is x264 and user wants to run single ffmpeg instance
       if (VideoEncoderList.ItemIndex = 4) then
       begin
         if SettingsForm.x264Btn.Checked then
         begin
-          NumberOfProcesses := 1;
+          LNumberOfProcesses := 1;
         end;
+      end;
+
+      if LNumberOfProcesses > Info.CPU.ProcessorCount then
+      begin
+        AddToLog(0, '[Warning] Number of parallel processes is greater than CPU core count.');
       end;
 
       FConstEncoderIndex := EncoderList.ItemIndex;
       FConstTwoPassMode := DoTwoPassBtn.Checked;
-      // add commands
-      for I := 0 to FileList.Items.Count - 1 do
+      if MergeBtn.Checked then
       begin
-        Application.ProcessMessages;
 
-        CreateEncodingCommands(i, (i mod NumberOfProcesses));
+      end
+      else
+      begin
+        // add commands for normal encoding
+        for I := 0 to FileList.Items.Count - 1 do
+        begin
+          Application.ProcessMessages;
+
+          CreateEncodingCommands(i, (i mod LNumberOfProcesses));
+        end;
       end;
 
       FConverterTotalCMDCount := 0;
       for I := Low(FEncoders) to High(FEncoders) do
+      begin
         inc(FConverterTotalCMDCount, FEncoders[i].CommandCount);
+      end;
 
       TotalProgress.Max := 100;
       FillSummary;
