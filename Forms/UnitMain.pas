@@ -25,18 +25,19 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Gauges, JvComponentBase, Mask, ComCtrls, JvComputerInfoEx,
   JvThreadTimer, ShellAPI, IniFiles, JvBaseDlg, JvBrowseFolder, JvSearchFiles,
-  Menus, MediaInfoDll, Buttons, sBitBtn, sListBox,
-  sComboBox, sEdit, sButton, sCheckBox, sLabel, AppEvnts, ExtCtrls,
-  sPanel, windows7taskbar, acPNG, sGauge, JvDragDrop,
-  sSkinProvider, sSkinManager, JvFormPlacement, JvAppStorage, JvAppIniStorage,
-  JvSpin, StrUtils, UnitFFmpegCommandLineCreator,
-  UnitMencoderCommandLineCreator, JvTimer, acTitleBar, JvTrayIcon, JvSimScope, UnitEncoder, sTreeView, sSpinEdit,
-  sPageControl, Vcl.XPMan, Vcl.ToolWin, sToolBar, sListView, Vcl.ImgList,
-  acAlphaImageList, acProgressBar, Generics.Collections, DateUtils, System.Zip, System.Types,
-  sScrollBox, UnitYouTubeVideoInfoExtractor, UnitCommonTypes, acImage, UnitFileNameExtractor, Jpeg, Winapi.MMSystem,
+  Menus, MediaInfoDll, Buttons, sBitBtn, sListBox, sComboBox, sEdit, sButton,
+  sCheckBox, sLabel, AppEvnts, ExtCtrls, sPanel, windows7taskbar, acPNG, sGauge,
+  JvDragDrop, sSkinProvider, sSkinManager, JvFormPlacement, JvAppStorage,
+  JvAppIniStorage, JvSpin, StrUtils, UnitFFmpegCommandLineCreator,
+  UnitMencoderCommandLineCreator, JvTimer, acTitleBar, JvTrayIcon, JvSimScope,
+  UnitEncoder, sTreeView, sSpinEdit, sPageControl, Vcl.XPMan, Vcl.ToolWin,
+  sToolBar, sListView, Vcl.ImgList, acAlphaImageList, acProgressBar, Generics.Collections,
+  DateUtils, System.Zip, System.Types, sScrollBox, UnitYouTubeVideoInfoExtractor,
+  UnitCommonTypes, acImage, UnitFileNameExtractor, Jpeg, Winapi.MMSystem,
   sMaskEdit, sCustomComboEdit, sToolEdit, sGroupBox, UnitDVDReader,
-  JvUrlListGrabber, JvUrlGrabbers, JvThread, sStatusBar, UnitDownloadProcess, UnitDVDRipperProcess, UnitFileInfoExtractor,
-  sDialogs, UnitDVDJob, DownloadItemFrame, System.ImageList;
+  JvUrlListGrabber, JvUrlGrabbers, JvThread, sStatusBar, UnitDownloadProcess,
+  UnitDVDRipperProcess, UnitFileInfoExtractor, sDialogs, UnitDVDJob,
+  DownloadItemFrame, System.ImageList, UnitYoutubedlUpdateChecker;
 
 type
   TFileInfoForAdding = packed record
@@ -102,7 +103,6 @@ type
     property SelectedAudio: string read GetAudioID;
     property SelectedMEncoderAudio: string read GetMencoderAudioID;
     property SelectedAudioExt: string read GetAudioExt;
-
     constructor Create;
     destructor Destroy; override;
   end;
@@ -327,6 +327,8 @@ type
     LinkTypeList: TsComboBox;
     AddSingleLinkBtn: TsBitBtn;
     StartDVDBatchBtn: TsBitBtn;
+    UpdateYoutubeDlBtn: TsBitBtn;
+    MergeBtn: TsCheckBox;
     procedure RemoveBtnClick(Sender: TObject);
     procedure RemoveAllBtnClick(Sender: TObject);
     procedure UpBtnClick(Sender: TObject);
@@ -442,6 +444,7 @@ type
     procedure DVDBatchClearBtnClick(Sender: TObject);
     procedure DVDBatchStartBtnClick(Sender: TObject);
     procedure DVDEncodeBtnClick(Sender: TObject);
+    procedure UpdateYoutubeDlBtnClick(Sender: TObject);
 {$ENDREGION}
   private
     { Private declarations }
@@ -463,8 +466,8 @@ type
     // ===downloader===
     FDownloadItems: TDownloadItemList;
     // download processes
-    FVideoDownloadProcesses: array [0 .. 7] of TDownloadProcess;
-    FProgressStrs: array [0 .. 7] of string;
+    FVideoDownloadProcesses: array[0..7] of TDownloadProcess;
+    FProgressStrs: array[0..7] of string;
     // total download cmd
     FVideoDownloadTotalCMDCount: Integer;
     // time passed downloading
@@ -483,14 +486,11 @@ type
     // list is populated by TEncoder.
     procedure DeleteTempFiles();
     procedure ClearDownloadImages();
-
     procedure FillSummary();
     // load/save settings from/to ini file
     procedure SaveOptions();
     procedure LoadOptions();
-
     function ShutDown(RebootParam: Longword): Boolean;
-
     procedure GetFileInfo(FileName: string);
     // stops all encoding processes
     procedure CloseProcesses();
@@ -502,9 +502,7 @@ type
     function CorrectFileName(FileName: string): string;
     // removes all .log files from appdata folder
     procedure RemoveLogs();
-
     procedure ApplyProfile(ProfileName: string);
-
     procedure LoadSkin();
     // adds a file to the list and convertitems
     // also gets related information
@@ -582,13 +580,12 @@ type
     FDVDRenamePath: string;
     FTempFolder: string;
     // process objects
-    FEncoders: array [0 .. 15] of TMyProcess;
+    FEncoders: array[0..15] of TMyProcess;
     // video download list items
     FVideoDownloadListItems: TList<TDownloadUIItem>;
     // dvd ripper process
     FDVDRipperProcess: TDVDRipProcess;
     FStopAddingLink: Boolean;
-
     FTimePassed: Integer;
     // list that holds all the informaiton about files to be converted
     FMasterFileInfoList: TFileInfoList;
@@ -614,9 +611,9 @@ type
     // converts hh:mm:ss.ms to integer
     // function TimeToIntEx(TimeStr: string): Integer;
     // checks if a given string is numeric
-    function IsStringNumeric(Str: String): Boolean;
+    function IsStringNumeric(Str: string): Boolean;
     // backend progress related
-    function GetMencoderPosition(MencoderOutPut: String): String;
+    function GetMencoderPosition(MencoderOutPut: string): string;
     function GetFFmpegPosition(FFmpegOutput: string; Duration: integer): string;
     function GetMp4Progress(const Mp4Output: string): string;
     // adds given links to the lists
@@ -641,18 +638,20 @@ var
 
 implementation
 
-uses UnitAbout, UnitAdd, UnitProperties, UnitLogs,
-  UnitProfileEditor, UnitSettings, UnitEffects, UnitRangeEditor, UnitPreview, UnitAdvancedOptions, UnitImageAudioMerger, UnitDub,
-  UnitVideotoGIF, UnitBatchAdd, UnitWatermark, VideoAdding;
+uses
+  UnitAbout, UnitAdd, UnitProperties, UnitLogs, UnitProfileEditor, UnitSettings,
+  UnitEffects, UnitRangeEditor, UnitPreview, UnitAdvancedOptions,
+  UnitImageAudioMerger, UnitDub, UnitVideotoGIF, UnitBatchAdd, UnitWatermark,
+  VideoAdding;
 
 const
   Portable = False;
-  Build = 5125;
+  Build = 5129;
 
 {$R *.dfm}
 
 procedure TMainForm.A2Click(Sender: TObject);
-Var
+var
   LURL: string;
   LYIE: TYouTubeVideoInfoExtractor;
   I: Integer;
@@ -876,8 +875,7 @@ begin
               end;
 
               // extract video
-              LMp4MuxingCMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LMEncoderCMD.OutputFile) + '\' + ExtractFileName(LMEncoderCMD.OutputFile) + '" -o "' +
-                ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
+              LMp4MuxingCMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LMEncoderCMD.OutputFile) + '\' + ExtractFileName(LMEncoderCMD.OutputFile) + '" -o "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
               LEncodeJob.CommandLine := LMp4MuxingCMD;
               LEncodeJob.ProcessType := mencoder;
               LEncodeJob.EncodingInformation := 'Extracting video';
@@ -890,15 +888,12 @@ begin
               if (FMasterFileInfoList[FileIndex].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
               begin
                 // with audio
-                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' +
-                  ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' + ExtractFileDir(LExtractedAudioFileName) + '\' + ExtractFileName(LExtractedAudioFileName) +
-                  '" -new "' + CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
+                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' + ExtractFileDir(LExtractedAudioFileName) + '\' + ExtractFileName(LExtractedAudioFileName) + '" -new "' + CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
               end
               else
               begin
                 // without audio
-                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' +
-                  ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' + CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
+                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' + CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
               end;
               LEncodeJob.CommandLine := LMp4MuxingCMD;
               LEncodeJob.ProcessType := mp4box;
@@ -987,8 +982,7 @@ begin
               end;
 
               // extract video
-              LMp4MuxingCMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LMEncoderCMD.OutputFile) + '\' + ExtractFileName(LMEncoderCMD.OutputFile) + '" -o "' +
-                ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
+              LMp4MuxingCMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LMEncoderCMD.OutputFile) + '\' + ExtractFileName(LMEncoderCMD.OutputFile) + '" -o "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
               LEncodeJob.CommandLine := LMp4MuxingCMD;
               LEncodeJob.ProcessType := mencoder;
               LEncodeJob.EncodingInformation := 'Extracting video';
@@ -999,14 +993,11 @@ begin
               FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
               if (FMasterFileInfoList[FileIndex].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
               begin
-                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' +
-                  ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' + ExtractFileDir(LExtractedAudioFileName) + '\' + ExtractFileName(LExtractedAudioFileName) +
-                  '" -new "' + CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
+                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' + ExtractFileDir(LExtractedAudioFileName) + '\' + ExtractFileName(LExtractedAudioFileName) + '" -new "' + CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
               end
               else
               begin
-                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' +
-                  ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' + CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
+                LMp4MuxingCMD := ' -add "' + ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' + CreateFileName(LMEncoderCMD.OutputFile, '.mp4') + '"';
               end;
               LEncodeJob.CommandLine := LMp4MuxingCMD;
               LEncodeJob.ProcessType := mp4box;
@@ -1044,8 +1035,7 @@ begin
         begin
           // convert flac audio to ogg using ffmpeg
           LOggRemuxExtension := ExtractFileExt(LMencoderFinalFileName);
-          LOggAudioCMD := '-y -i "' + LMencoderFinalFileName + '" -c:v copy -c:a libvorbis -ab ' + AdvancedOptionsForm.AudioBitrateList.Text + 'k "' +
-            ChangeFileExt(LMencoderFinalFileName, '_temp' + LOggRemuxExtension) + '"';
+          LOggAudioCMD := '-y -i "' + LMencoderFinalFileName + '" -c:v copy -c:a libvorbis -ab ' + AdvancedOptionsForm.AudioBitrateList.Text + 'k "' + ChangeFileExt(LMencoderFinalFileName, '_temp' + LOggRemuxExtension) + '"';
           LEncodeJob.CommandLine := LOggAudioCMD;
           LEncodeJob.ProcessType := ffmpeg;
           LEncodeJob.ProcessPath := FFFMpegPath;
@@ -1152,7 +1142,6 @@ var
   j: integer;
 label
   SubDefTrackSelect, AudDefTrackSelect;
-
 begin
   if (FileExists(FileName)) then
   begin
@@ -1204,14 +1193,15 @@ begin
             begin
               for j := 0 to FFileInfo.SubtitleTracks.Count - 1 do
               begin
-                if FFileInfo.SubtitleTracks[j].Contains(UpperCase(LTmpList[i])) then
+                if FFileInfo.SubtitleTracks[j].contains(UpperCase(LTmpList[i])) then
                 begin
                   SubtitleTrackIndex := j;
                   goto SubDefTrackSelect;
                 end;
               end;
             end;
-          SubDefTrackSelect:
+SubDefTrackSelect:
+
           end
           else
           begin
@@ -1245,14 +1235,15 @@ begin
             begin
               for j := 0 to FFileInfo.AudioStreams.Count - 1 do
               begin
-                if FFileInfo.AudioStreams[j].Contains(UpperCase(LTmpList[i])) then
+                if FFileInfo.AudioStreams[j].contains(UpperCase(LTmpList[i])) then
                 begin
                   AudioIndex := j;
                   goto AudDefTrackSelect;
                 end;
               end;
             end;
-          AudDefTrackSelect:
+AudDefTrackSelect:
+
           end
           else
           begin
@@ -1307,10 +1298,7 @@ begin
       OpenVideo.InitialDir := FLastOpenedDir;
     end;
     OpenVideo.Options := OpenVideo.Options + [ofAllowMultiSelect];
-    OpenVideo.Filter := 'All Supported|*.flv;*.m2v;*.avi;*.mkv;*.mpeg;*.mpg;*.mov;*.wmv;*.mp4;' +
-      '*.m4v;*.dat;*.vob;*.mp3;*.wav;*.aac;*.m4a;*.m4b;*.ac3;*.ogg;*.flac;*.mp2;*.webm;*.m2ts;*.avs;*.rmvb;*.spx;*.mts;*.mxf;*.ts;' +
-      '|Video Files|*.flv;*.m2v;*.avi;*.mkv;*.mpeg;*.mpg;*.mov;*.wmv;*.mp4;' + '*.m4v;*.dat;*.vob;*.rmvb;*.mts;*.mxf' +
-      '|Audio Files|*.mp3;*.wav;*.aac;*.m4a;*.m4b;*.ac3;*.ogg;*.flac;*.mp2;*.opus;*.spx' + '|All Files|*.*';
+    OpenVideo.Filter := 'All Supported|*.flv;*.m2v;*.avi;*.mkv;*.mpeg;*.mpg;*.mov;*.wmv;*.mp4;' + '*.m4v;*.dat;*.vob;*.mp3;*.wav;*.aac;*.m4a;*.m4b;*.ac3;*.ogg;*.flac;*.mp2;*.webm;*.m2ts;*.avs;*.rmvb;*.spx;*.mts;*.mxf;*.ts;' + '|Video Files|*.flv;*.m2v;*.avi;*.mkv;*.mpeg;*.mpg;*.mov;*.wmv;*.mp4;' + '*.m4v;*.dat;*.vob;*.rmvb;*.mts;*.mxf' + '|Audio Files|*.mp3;*.wav;*.aac;*.m4a;*.m4b;*.ac3;*.ogg;*.flac;*.mp2;*.opus;*.spx' + '|All Files|*.*';
 
     if OpenVideo.Execute then
     begin
@@ -1397,8 +1385,8 @@ end;
 procedure TMainForm.AddFolder3Click(Sender: TObject);
 var
   Search: TSearchRec;
-  FileName: String;
-  Extension: String;
+  FileName: string;
+  Extension: string;
   FilesToAdd: TStringList;
   i: integer;
 begin
@@ -1417,7 +1405,7 @@ begin
     FilesToAdd := TStringList.Create;
     try
       if (FindFirst(SelectDirectoryDialog.Directory + '\*.*', faAnyFile, Search) = 0) then
-      Begin
+      begin
         repeat
           Application.ProcessMessages;
           FileName := SelectDirectoryDialog.Directory + '\' + Search.Name;
@@ -1428,11 +1416,7 @@ begin
           else
           begin
             Extension := LowerCase(ExtractFileExt(FileName));
-            if (Extension = '.avi') or (Extension = '.wmv') or (Extension = '.vob') or (Extension = '.dat') or (Extension = '.mp4') or (Extension = '.mpeg') or (Extension = '.mpg') or
-              (Extension = '.mov') or (Extension = '.mkv') or (Extension = '.flv') or (Extension = '.m4v') or (Extension = '.m2v') or (Extension = '.mp3') or (Extension = '.wav') or
-              (Extension = '.aac') or (Extension = '.m4a') or (Extension = '.m4b') or (Extension = '.ac3') or (Extension = '.ogg') or (Extension = '.flac') or (Extension = '.mp2') or
-              (Extension = '.webm') or (Extension = '.m2ts') or (Extension = '.mts') or (Extension = '.rmvb') or (Extension = '.opus') or (Extension = '.spx') or (Extension = '.mxf') or
-              (Extension = '.ts') then
+            if (Extension = '.avi') or (Extension = '.wmv') or (Extension = '.vob') or (Extension = '.dat') or (Extension = '.mp4') or (Extension = '.mpeg') or (Extension = '.mpg') or (Extension = '.mov') or (Extension = '.mkv') or (Extension = '.flv') or (Extension = '.m4v') or (Extension = '.m2v') or (Extension = '.mp3') or (Extension = '.wav') or (Extension = '.aac') or (Extension = '.m4a') or (Extension = '.m4b') or (Extension = '.ac3') or (Extension = '.ogg') or (Extension = '.flac') or (Extension = '.mp2') or (Extension = '.webm') or (Extension = '.m2ts') or (Extension = '.mts') or (Extension = '.rmvb') or (Extension = '.opus') or (Extension = '.spx') or (Extension = '.mxf') or (Extension = '.ts') then
             begin
               FilesToAdd.Add(FileName);
             end;
@@ -2016,7 +2000,7 @@ begin
 end;
 
 procedure TMainForm.BatchAdd(const Links: TStrings; const SingleLink: Boolean);
-Var
+var
   LURL: string;
   LYIE: TYouTubeVideoInfoExtractor;
   I, j: Integer;
@@ -2198,22 +2182,22 @@ var
 begin
   try
     if (FindFirst(FAppDataFolder + '\*.*', faAnyFile, LSearch) = 0) then
-    Begin
+    begin
       repeat
-        try
-          LFileName := FAppDataFolder + '\' + LSearch.Name;
-          LExtension := LowerCase(ExtractFileExt(LFileName));
-          if (LExtension = '.log') or (LExtension = '.mbtree') or (LExtension = '.temp') or (LExtension = '.tmp') then
+      try
+        LFileName := FAppDataFolder + '\' + LSearch.Name;
+        LExtension := LowerCase(ExtractFileExt(LFileName));
+        if (LExtension = '.log') or (LExtension = '.mbtree') or (LExtension = '.temp') or (LExtension = '.tmp') then
+        begin
+          if FileExists(LFileName) then
           begin
-            if FileExists(LFileName) then
-            begin
-              DeleteFile(LFileName);
-            end;
+            DeleteFile(LFileName);
           end;
-        except
-          on E: Exception do
-            Continue;
         end;
+      except
+        on E: Exception do
+          Continue;
+      end;
       until (FindNext(LSearch) <> 0);
       FindClose(LSearch);
     end;
@@ -2623,8 +2607,7 @@ begin
       begin
         if AdvancedOptionsForm.x264CRFBtn.Checked and AdvancedOptionsForm.x264Btn.Checked then
         begin
-          VCodec := ' -c:v libx264 ' + ' -crf ' + AdvancedOptionsForm.x264CRFEdit.Text + ' ' + ' ' + VAspect + ' ' + VFPS + ' ' + FilterCMD + ' ' + ImageAudiotoVideoForm.CreateAdvancedOptions + ' ' +
-            CustomVideoArg;
+          VCodec := ' -c:v libx264 ' + ' -crf ' + AdvancedOptionsForm.x264CRFEdit.Text + ' ' + ' ' + VAspect + ' ' + VFPS + ' ' + FilterCMD + ' ' + ImageAudiotoVideoForm.CreateAdvancedOptions + ' ' + CustomVideoArg;
         end
         else
         begin
@@ -3323,8 +3306,7 @@ begin
     begin
       FPassStr := Mencoder1stPass
     end;
-    Result.FirstPassCMD := ' -mc 0 -priority idle ' + VCodecPart1 + FPassStr + VCodecPart2 + Container + ' -passlogfile "' + PassFile + '" -nosound -o NUL dvd://' +
-      FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
+    Result.FirstPassCMD := ' -mc 0 -priority idle ' + VCodecPart1 + FPassStr + VCodecPart2 + Container + ' -passlogfile "' + PassFile + '" -nosound -o NUL dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
 
     // second pass
     OutName := CreateDVDFileName(ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\' + OutputFileNameEdit.Text, OutExtension);
@@ -3389,8 +3371,7 @@ begin
       FPassStr := Mencoder2ndPass
     end;
 
-    Result.SeconPassCMD := ' -mc 0 -priority idle ' + AudioCMD + VCodecPart1 + FPassStr + VCodecPart2 + Container + ACodec + SubtitleCMD + ' -passlogfile "' + PassFile + '" -o "' + OutName +
-      '" dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
+    Result.SeconPassCMD := ' -mc 0 -priority idle ' + AudioCMD + VCodecPart1 + FPassStr + VCodecPart2 + Container + ACodec + SubtitleCMD + ' -passlogfile "' + PassFile + '" -o "' + OutName + '" dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
 
   end
   else
@@ -3447,8 +3428,7 @@ begin
       SubtitleCMD := ' -nosub ';
     end;
 
-    Result.SinglePassCMD := ' -mc 0 -priority idle ' + AudioCMD + VCodecPart1 + VCodecPart2 + Container + SubtitleCMD + ACodec + ' -o "' + OutName + '" dvd://' + FloatToStr(TitlesList.ItemIndex + 1) +
-      ' -dvd-device "' + DVDFolderEdit.Text + '"';
+    Result.SinglePassCMD := ' -mc 0 -priority idle ' + AudioCMD + VCodecPart1 + VCodecPart2 + Container + SubtitleCMD + ACodec + ' -o "' + OutName + '" dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
   end;
   Result.OutputFile := OutName;
 end;
@@ -3703,6 +3683,7 @@ begin
   LinkEdit.Enabled := True;
   LinkTypeList.Enabled := True;
   AddSingleLinkBtn.Enabled := True;
+  UpdateYoutubeDlBtn.Enabled := True;
   for I := 0 to FVideoDownloadListItems.Count - 1 do
   begin
     for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
@@ -3792,6 +3773,7 @@ begin
   LinkEdit.Enabled := False;
   LinkTypeList.Enabled := False;
   AddSingleLinkBtn.Enabled := False;
+  UpdateYoutubeDlBtn.Enabled := False;
   if PassPnl.Visible then
   begin
     PassPnl.Visible := False;
@@ -3851,11 +3833,7 @@ begin
       begin
         Extension := LowerCase(ExtractFileExt(FileName));
 
-        if (Extension = '.avi') or (Extension = '.wmv') or (Extension = '.vob') or (Extension = '.dat') or (Extension = '.mp4') or (Extension = '.mpeg') or (Extension = '.mpg') or
-          (Extension = '.mov') or (Extension = '.mkv') or (Extension = '.flv') or (Extension = '.m4v') or (Extension = '.m2v') or (Extension = '.mp3') or (Extension = '.wav') or
-          (Extension = '.aac') or (Extension = '.m4a') or (Extension = '.m4b') or (Extension = '.ac3') or (Extension = '.ogg') or (Extension = '.flac') or (Extension = '.mp2') or
-          (Extension = '.webm') or (Extension = '.m2ts') or (Extension = '.mts') or (Extension = '.rmvb') or (Extension = '.opus') or (Extension = '.spx') or (Extension = '.mxf') or (Extension = '.ts')
-        then
+        if (Extension = '.avi') or (Extension = '.wmv') or (Extension = '.vob') or (Extension = '.dat') or (Extension = '.mp4') or (Extension = '.mpeg') or (Extension = '.mpg') or (Extension = '.mov') or (Extension = '.mkv') or (Extension = '.flv') or (Extension = '.m4v') or (Extension = '.m2v') or (Extension = '.mp3') or (Extension = '.wav') or (Extension = '.aac') or (Extension = '.m4a') or (Extension = '.m4b') or (Extension = '.ac3') or (Extension = '.ogg') or (Extension = '.flac') or (Extension = '.mp2') or (Extension = '.webm') or (Extension = '.m2ts') or (Extension = '.mts') or (Extension = '.rmvb') or (Extension = '.opus') or (Extension = '.spx') or (Extension = '.mxf') or (Extension = '.ts') then
         begin
 
           if FFileAddingStoppedByUser then
@@ -4023,8 +4001,7 @@ begin
       begin
         // convert flac audio to ogg usingffmpeg
         LOggRemuxExtension := ExtractFileExt(LCMD.OutputFile);
-        LOggAudioCMD := '-y -i "' + LCMD.OutputFile + '" -c:v copy -c:a libvorbis -ab ' + AdvancedOptionsForm.AudioBitrateList.Text + 'k "' +
-          ChangeFileExt(LCMD.OutputFile, '_temp' + LOggRemuxExtension) + '"';
+        LOggAudioCMD := '-y -i "' + LCMD.OutputFile + '" -c:v copy -c:a libvorbis -ab ' + AdvancedOptionsForm.AudioBitrateList.Text + 'k "' + ChangeFileExt(LCMD.OutputFile, '_temp' + LOggRemuxExtension) + '"';
         LDVDJob.CMDs.Add(LOggAudioCMD);
         LDVDJob.ProcessTypes.Add(dvdffmpeg);
         LDVDJob.EncoderPaths.Add(FFFMpegPath);
@@ -4106,8 +4083,7 @@ begin
         AddToLog(6, 'Audio extraction command: ' + LMp4CMD);
 
         // extract video
-        LMp4CMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LCMD.OutputFile) + '\' + ExtractFileName(LCMD.OutputFile) + '" -o "' +
-          ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
+        LMp4CMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LCMD.OutputFile) + '\' + ExtractFileName(LCMD.OutputFile) + '" -o "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
         LDVDJob.CMDs.Add(LMp4CMD);
         LDVDJob.ProcessTypes.Add(dvdmencoder);
         LDVDJob.Infos.Add('Extracting video');
@@ -4117,13 +4093,11 @@ begin
         AddToLog(6, 'Video extraction command: ' + LMp4CMD);
         if (not DisableAudioBtn.Checked) and (DVDAudioTracksList.ItemIndex > -1) then
         begin
-          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' +
-            ExtractFileDir(LExtractAudioFile) + '\' + ExtractFileName(LExtractAudioFile) + '" -new "' + CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
+          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' + ExtractFileDir(LExtractAudioFile) + '\' + ExtractFileName(LExtractAudioFile) + '" -new "' + CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
         end
         else
         begin
-          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' +
-            CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
+          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' + CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
         end;
         LDVDJob.CMDs.Add(LMp4CMD);
         LDVDJob.ProcessTypes.Add(dvdmp4box);
@@ -4579,8 +4553,7 @@ begin
       begin
         // convert flac audio to ogg usingffmpeg
         LOggRemuxExtension := ExtractFileExt(LCMD.OutputFile);
-        LOggAudioCMD := '-y -i "' + LCMD.OutputFile + '" -c:v copy -c:a libvorbis -ab ' + AdvancedOptionsForm.AudioBitrateList.Text + 'k "' +
-          ChangeFileExt(LCMD.OutputFile, '_temp' + LOggRemuxExtension) + '"';
+        LOggAudioCMD := '-y -i "' + LCMD.OutputFile + '" -c:v copy -c:a libvorbis -ab ' + AdvancedOptionsForm.AudioBitrateList.Text + 'k "' + ChangeFileExt(LCMD.OutputFile, '_temp' + LOggRemuxExtension) + '"';
         FDVDRipperProcess.CommandLines.Add(LOggAudioCMD);
         FDVDRipperProcess.ProcessTypes.Add(dvdffmpeg);
         FDVDRipperProcess.EncoderPaths.Add(FFFMpegPath);
@@ -4658,8 +4631,7 @@ begin
         AddToLog(6, 'Audio extraction command: ' + LMp4CMD);
 
         // extract video
-        LMp4CMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LCMD.OutputFile) + '\' + ExtractFileName(LCMD.OutputFile) + '" -o "' +
-          ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
+        LMp4CMD := ' -of rawvideo -ovc copy -nosound "' + ExtractFileDir(LCMD.OutputFile) + '\' + ExtractFileName(LCMD.OutputFile) + '" -o "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '"';
         FDVDRipperProcess.CommandLines.Add(LMp4CMD);
         FDVDRipperProcess.ProcessTypes.Add(dvdmencoder);
         FDVDRipperProcess.Infos.Add('Extracting video');
@@ -4668,13 +4640,11 @@ begin
         AddToLog(6, 'Video extraction command: ' + LMp4CMD);
         if (not DisableAudioBtn.Checked) and (DVDAudioTracksList.ItemIndex > -1) then
         begin
-          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' +
-            ExtractFileDir(LExtractAudioFile) + '\' + ExtractFileName(LExtractAudioFile) + '" -new "' + CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
+          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -add "' + ExtractFileDir(LExtractAudioFile) + '\' + ExtractFileName(LExtractAudioFile) + '" -new "' + CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
         end
         else
         begin
-          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' +
-            CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
+          LMp4CMD := ' -add "' + ExtractFileDir(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LCMD.OutputFile, LMEncoderMp4MuxExt)) + '" -new "' + CreateDVDFileName(LCMD.OutputFile, '.mp4') + '"';
         end;
         FDVDRipperProcess.CommandLines.Add(LMp4CMD);
         FDVDRipperProcess.ProcessTypes.Add(dvdmp4box);
@@ -4877,7 +4847,8 @@ begin
     // step info
     DVDInfoLabel.Caption := FDVDRipperProcess.Info + ' [' + IntegerToTime(FTimePassed) + ']';
     // total progress
-    LTotalProgress := ((100 * FDVDRipperProcess.FilesDone) div FDVDRipperProcess.CommandCount) + (DVDProgressBar.Position div FDVDRipperProcess.CommandCount);;
+    LTotalProgress := ((100 * FDVDRipperProcess.FilesDone) div FDVDRipperProcess.CommandCount) + (DVDProgressBar.Position div FDVDRipperProcess.CommandCount);
+    ;
     if LTotalProgress > DVDTotalProgressBar.Position then
     begin
       DVDTotalProgressBar.Position := LTotalProgress;
@@ -5040,8 +5011,7 @@ begin
   end;
 
   // output file name
-  OutputFileNameEdit.Text := ExtractFileName(ChangeFileExt(DVDFolderEdit.Text, '')) + '_title' + FloatToStr(TitlesList.ItemIndex + 1) + '_chapters' + FloatToStr(StartChaperList.ItemIndex + 1) + '-' +
-    FloatToStr(EndChapterList.ItemIndex + 1);
+  OutputFileNameEdit.Text := ExtractFileName(ChangeFileExt(DVDFolderEdit.Text, '')) + '_title' + FloatToStr(TitlesList.ItemIndex + 1) + '_chapters' + FloatToStr(StartChaperList.ItemIndex + 1) + '-' + FloatToStr(EndChapterList.ItemIndex + 1);
 end;
 
 procedure TMainForm.ExchangeItems(lv: TsListView; const i, j: Integer);
@@ -5498,6 +5468,27 @@ begin
       Application.MessageBox('You seem to have Windows 7 but program can''t start taskbar progressbar!', 'Error', MB_ICONERROR);
     end;
   end;
+
+  // copy youtube-dl.exe to appdata folder for installed version
+  if not Portable then
+  begin
+    if not FileExists(FAppDataFolder + '\youtube-dl.exe') then
+    begin
+      if not CopyFile(PWideChar(FYoutubedlPath), PWideChar(FAppDataFolder + '\youtube-dl.exe'), false) then
+      begin
+        Application.MessageBox('Unable to copy youtube-dl to appdata folder.', 'Fatal Error', MB_ICONERROR);
+        Application.ProcessMessages;
+      end
+      else
+      begin
+        FYoutubedlPath := FAppDataFolder + '\youtube-dl.exe';
+      end;
+    end
+    else
+    begin
+      FYoutubedlPath := FAppDataFolder + '\youtube-dl.exe';
+    end;
+  end;
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -5831,9 +5822,9 @@ function TMainForm.GetFFmpegPosition(FFmpegOutput: string; Duration: integer): s
 var
   pos1: Integer;
   pos2: Integer;
-  Text: String;
-  prog: String;
-  last: String;
+  Text: string;
+  prog: string;
+  last: string;
   PositionInt: Integer;
 begin
   Text := FFmpegOutput;
@@ -6058,12 +6049,12 @@ begin
 
 end;
 
-function TMainForm.GetMencoderPosition(MencoderOutPut: String): String;
+function TMainForm.GetMencoderPosition(MencoderOutPut: string): string;
 var
   pos1: Integer;
   pos2: Integer;
-  Text: String;
-  prog: String;
+  Text: string;
+  prog: string;
 begin
   Result := '0';
   if Length(MencoderOutPut) > 0 then
@@ -6259,7 +6250,7 @@ var
   minute: Integer;
   strhour: string;
   strminute: string;
-  strsecond: String;
+  strsecond: string;
 begin
 
   if (Time > 0) then
@@ -6355,7 +6346,7 @@ begin
 
 end;
 
-function TMainForm.IsStringNumeric(Str: String): Boolean;
+function TMainForm.IsStringNumeric(Str: string): Boolean;
 var
   P: PChar;
 begin
@@ -6373,7 +6364,7 @@ begin
   begin
     Application.ProcessMessages;
 
-    if (Not CharInSet(P^, ['0' .. '9'])) then
+    if (not CharInSet(P^, ['0'..'9'])) then
     begin
       Exit;
     end;
@@ -6456,7 +6447,7 @@ begin
 
     // search for built in profiles
     if (FindFirst(ExtractFileDir(Application.ExeName) + '\Profiles\*.pdo', faAnyFile, lSearchRec) = 0) then
-    Begin
+    begin
       repeat
         Application.ProcessMessages;
         ProfilesList.Items.Add(ChangeFileExt(lSearchRec.Name, ''));
@@ -6466,7 +6457,7 @@ begin
 
     // search for user created profiles
     if (FindFirst(FAppDataFolder + '\*.pdo', faAnyFile, lSearchRec) = 0) then
-    Begin
+    begin
       repeat
         Application.ProcessMessages;
         ProfilesList.Items.Add(ChangeFileExt(lSearchRec.Name, ''));
@@ -6991,8 +6982,7 @@ begin
         TitlesListChange(Self);
 
         // output file name
-        OutputFileNameEdit.Text := ExtractFileName(ChangeFileExt(DVDFolderEdit.Text, '')) + '_title' + FloatToStr(TitlesList.ItemIndex + 1) + '_chapters' + FloatToStr(StartChaperList.ItemIndex + 1) +
-          '-' + FloatToStr(EndChapterList.ItemIndex + 1);
+        OutputFileNameEdit.Text := ExtractFileName(ChangeFileExt(DVDFolderEdit.Text, '')) + '_title' + FloatToStr(TitlesList.ItemIndex + 1) + '_chapters' + FloatToStr(StartChaperList.ItemIndex + 1) + '-' + FloatToStr(EndChapterList.ItemIndex + 1);
       end;
     finally
       LDTE.Free;
@@ -7055,7 +7045,7 @@ var
   Search: TSearchRec;
 begin
   if (FindFirst(FAppDataFolder + '\*.log', faAnyFile, Search) = 0) then
-  Begin
+  begin
     repeat
       Application.ProcessMessages;
       DeleteFile(FAppDataFolder + '\' + Search.Name);
@@ -7303,7 +7293,7 @@ begin
     RaiseLastOSError;
   try
 
-    DateTimeToSystemTime(TTimeZone.Local.ToUniversalTime(DateTime.CreateDate), SystemTime);
+    DateTimeToSystemTime(TTimeZone.local.ToUniversalTime(DateTime.CreateDate), SystemTime);
     if not SystemTimeToFileTime(SystemTime, FileTime) then
       RaiseLastOSError;
     if not SetFileTime(Handle, @FileTime, nil, nil) then
@@ -7359,17 +7349,17 @@ end;
 
 procedure TMainForm.sLabelFX1Click(Sender: TObject);
 begin
-  ShellExecute(Application.Handle, 'open', PChar('http://www.fosshub.com/TAudioConverter.html'), nil, nil, SW_SHOWNORMAL);
+  ShellExecute(Application.Handle, 'open', PWideChar('http://www.fosshub.com/TAudioConverter.html'), nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TMainForm.sLabelFX2Click(Sender: TObject);
 begin
-  ShellExecute(Application.Handle, 'open', PChar('http://sourceforge.net/projects/instagramsaver/'), nil, nil, SW_SHOWNORMAL);
+  ShellExecute(Application.Handle, 'open', PWideChar('http://sourceforge.net/projects/instagramsaver/'), nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TMainForm.sLabelFX3Click(Sender: TObject);
 begin
-  ShellExecute(Application.Handle, 'open', PChar('https://sourceforge.net/projects/tebookconverter/'), nil, nil, SW_SHOWNORMAL);
+  ShellExecute(Application.Handle, 'open', PWideChar('https://sourceforge.net/projects/tebookconverter/'), nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TMainForm.sStatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
@@ -7432,8 +7422,7 @@ begin
   end;
 
   // speex sample rate limit
-  if (AudioEncoderList.ItemIndex = 8) and ((AdvancedOptionsForm.AudioSampleRateList.ItemIndex <> 0) and (AdvancedOptionsForm.AudioSampleRateList.ItemIndex <> 2) and
-    (AdvancedOptionsForm.AudioSampleRateList.ItemIndex <> 4) and (AdvancedOptionsForm.AudioSampleRateList.ItemIndex <> 7)) then
+  if (AudioEncoderList.ItemIndex = 8) and ((AdvancedOptionsForm.AudioSampleRateList.ItemIndex <> 0) and (AdvancedOptionsForm.AudioSampleRateList.ItemIndex <> 2) and (AdvancedOptionsForm.AudioSampleRateList.ItemIndex <> 4) and (AdvancedOptionsForm.AudioSampleRateList.ItemIndex <> 7)) then
   begin
     Application.MessageBox('Selected sample rate is not supported by Speex! Speex supports 8000Hz, 16000Hz and 32000Hz sampling rates.', 'Error', MB_ICONERROR);
     Exit;
@@ -7488,7 +7477,7 @@ begin
   // ffmpeg
   if (AudioEncoderList.ItemIndex = 0) and (EncoderList.ItemIndex = 0) then
   begin
-    if not(ID_YES = Application.MessageBox('Directly copying audio stream only works with FFMpeg. Do you want to change encoder to it?', 'Audio direct copy', MB_ICONQUESTION or MB_YESNO)) then
+    if not (ID_YES = Application.MessageBox('Directly copying audio stream only works with FFMpeg. Do you want to change encoder to it?', 'Audio direct copy', MB_ICONQUESTION or MB_YESNO)) then
     begin
       Exit;
     end
@@ -7531,7 +7520,7 @@ begin
   if (FileList.Items.Count > 0) and (Length(DirectoryEdit.Text) > 0) then
   begin
 
-    if Not DirectoryExists(DirectoryEdit.Text) then
+    if not DirectoryExists(DirectoryEdit.Text) then
     begin
       if not CreateDir(DirectoryEdit.Text) then
       begin
@@ -7542,9 +7531,7 @@ begin
     // ffmpeg and subtitle
     if (EncoderList.ItemIndex = 1) and EnableSubBtn.Checked then
     begin
-      if ID_YES = Application.MessageBox
-        ('You enabled subtitles but selected FFmpeg as encoder. FFmpeg cannot hard-code subtitles to videos. Mencoder can do that. Change encoder to Mencoder from FFmpeg?',
-        'Subtitles, FFmpeg and Mencoder', MB_ICONQUESTION or MB_YESNO) then
+      if ID_YES = Application.MessageBox('You enabled subtitles but selected FFmpeg as encoder. FFmpeg cannot hard-code subtitles to videos. Mencoder can do that. Change encoder to Mencoder from FFmpeg?', 'Subtitles, FFmpeg and Mencoder', MB_ICONQUESTION or MB_YESNO) then
       begin
         EncoderList.ItemIndex := 0;
       end;
@@ -7589,7 +7576,7 @@ begin
       // if video codec is x264 and user wants to run single ffmpeg instance
       if (VideoEncoderList.ItemIndex = 4) then
       begin
-        If SettingsForm.x264Btn.Checked Then
+        if SettingsForm.x264Btn.Checked then
         begin
           NumberOfProcesses := 1;
         end;
@@ -7706,8 +7693,7 @@ begin
   end;
 
   // output file name
-  OutputFileNameEdit.Text := ExtractFileName(ChangeFileExt(DVDFolderEdit.Text, '')) + '_title' + FloatToStr(TitlesList.ItemIndex + 1) + '_chapters' + FloatToStr(StartChaperList.ItemIndex + 1) + '-' +
-    FloatToStr(EndChapterList.ItemIndex + 1);
+  OutputFileNameEdit.Text := ExtractFileName(ChangeFileExt(DVDFolderEdit.Text, '')) + '_title' + FloatToStr(TitlesList.ItemIndex + 1) + '_chapters' + FloatToStr(StartChaperList.ItemIndex + 1) + '-' + FloatToStr(EndChapterList.ItemIndex + 1);
 end;
 
 procedure TMainForm.StartDownloadBtnClick(Sender: TObject);
@@ -7742,7 +7728,7 @@ begin
         begin
           if ForceDirectories(DirectoryEdit.Text) then
           begin
-            if not(ForceDirectories(ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\Downloaded')) then
+            if not (ForceDirectories(ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\Downloaded')) then
             begin
               Application.MessageBox('Cannot create output folder.', 'Error', MB_ICONERROR);
               Exit;
@@ -7780,8 +7766,7 @@ begin
         end;
         FSkippedVideoCount := 0;
 {$ENDREGION}
-        if ((AudioEncoderList.ItemIndex = 10) and (VideoEncoderList.ItemIndex = 11)) or ((AudioEncoderList.ItemIndex = 0) and ((VideoEncoderList.ItemIndex = 10) or (VideoEncoderList.ItemIndex = 11)))
-        then
+        if ((AudioEncoderList.ItemIndex = 10) and (VideoEncoderList.ItemIndex = 11)) or ((AudioEncoderList.ItemIndex = 0) and ((VideoEncoderList.ItemIndex = 10) or (VideoEncoderList.ItemIndex = 11))) then
         begin
           AddToLog(0, 'Skipping downloaded video encoding. Selected audio and video codec combination cannot be used.');
         end;
@@ -7829,13 +7814,11 @@ begin
           case FDownloadItems[i].LinkType of
             general:
               begin
-                LCMD := ' ' + LPass + ' -o "' + ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\Downloaded\%(uploader)s - %(title)s.%(ext)s" -i --no-playlist -f ' +
-                  FDownloadItems[i].FormatIntegers[FDownloadItems[i].FormatIndex];
+                LCMD := ' ' + LPass + ' -o "' + ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\Downloaded\%(uploader)s - %(title)s.%(ext)s" -i --no-playlist -f ' + FDownloadItems[i].FormatIntegers[FDownloadItems[i].FormatIndex];
               end;
             soundcloud:
               begin
-                LCMD := ' ' + LPass + ' -o "' + ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\Downloaded\%(uploader)s - %(title)s.%(ext)s" -i --no-playlist -x --audio-format ' +
-                  FDownloadItems[i].FormatIntegers[FDownloadItems[i].FormatIndex];
+                LCMD := ' ' + LPass + ' -o "' + ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\Downloaded\%(uploader)s - %(title)s.%(ext)s" -i --no-playlist -x --audio-format ' + FDownloadItems[i].FormatIntegers[FDownloadItems[i].FormatIndex];
               end;
           end;
           LDownloadSub := False;
@@ -7861,17 +7844,14 @@ begin
             LDASHVideoExt := VideoTypeToVideo(LSelectedFormatStr);
             LDASHAudioCode := VideoTypeToAudioCode(LSelectedFormatStr);
             // get audio
-            FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].CommandLines.Add(' -o "' + ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\Downloaded\%(uploader)s - %(title)s"' +
-              LDASHAudioExt + ' -i --no-playlist -f ' + LDASHAudioCode + ' -c -w ' + FVideoDownloadListItems[i].LinkLabel.Caption);
+            FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].CommandLines.Add(' -o "' + ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\Downloaded\%(uploader)s - %(title)s"' + LDASHAudioExt + ' -i --no-playlist -f ' + LDASHAudioCode + ' -c -w ' + FVideoDownloadListItems[i].LinkLabel.Caption);
             FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].ProcessTypes.Add('5');
             FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].EncoderPaths.Add(FYoutubedlPath);
             FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].FileIndexes.Add(FloatToStr(i));
             FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].Infos.Add('[Downloading]');
             Inc(FVideoDownloadTotalCMDCount);
             // mux both into video file
-            FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].CommandLines.Add(' -y -i "' + DirectoryEdit.Text + '\Downloaded\' + FVideoDownloadListItems[i].FileNameLabel.Caption +
-              LDASHVideoExt + '" -i "' + DirectoryEdit.Text + '\Downloaded\' + FVideoDownloadListItems[i].FileNameLabel.Caption + LDASHAudioExt + '" -c:a copy -c:v copy "' + DirectoryEdit.Text +
-              '\Downloaded\' + FVideoDownloadListItems[i].FileNameLabel.Caption + '_muxed' + LDASHVideoExt + '"');
+            FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].CommandLines.Add(' -y -i "' + DirectoryEdit.Text + '\Downloaded\' + FVideoDownloadListItems[i].FileNameLabel.Caption + LDASHVideoExt + '" -i "' + DirectoryEdit.Text + '\Downloaded\' + FVideoDownloadListItems[i].FileNameLabel.Caption + LDASHAudioExt + '" -c:a copy -c:v copy "' + DirectoryEdit.Text + '\Downloaded\' + FVideoDownloadListItems[i].FileNameLabel.Caption + '_muxed' + LDASHVideoExt + '"');
             FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].ProcessTypes.Add('');
             FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].EncoderPaths.Add(FFFMpegPath);
             FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].FileIndexes.Add(FloatToStr(i));
@@ -7896,8 +7876,7 @@ begin
           // convert
           if ConvertDownloadedBtn.Checked then
           begin
-            if not(((AudioEncoderList.ItemIndex = 10) and (VideoEncoderList.ItemIndex = 11)) or
-              ((AudioEncoderList.ItemIndex = 0) and ((VideoEncoderList.ItemIndex = 10) or (VideoEncoderList.ItemIndex = 11)))) then
+            if not (((AudioEncoderList.ItemIndex = 10) and (VideoEncoderList.ItemIndex = 11)) or ((AudioEncoderList.ItemIndex = 0) and ((VideoEncoderList.ItemIndex = 10) or (VideoEncoderList.ItemIndex = 11)))) then
             begin
               LCMD := CreateDownloadConvertCMD(DirectoryEdit.Text + '\Downloaded\' + LOutputFile);
               FVideoDownloadProcesses[i mod SettingsForm.ProcessCountBar.Position].CommandLines.Add(LCMD);
@@ -8342,8 +8321,7 @@ begin
     DVDAudioTracksList.Refresh;
     DVDSubtitleTracksList.Refresh;
     // output file name
-    OutputFileNameEdit.Text := ExtractFileName(ChangeFileExt(DVDFolderEdit.Text, '')) + '_title' + FloatToStr(TitlesList.ItemIndex + 1) + '_chapters' + FloatToStr(StartChaperList.ItemIndex + 1) + '-'
-      + FloatToStr(EndChapterList.ItemIndex + 1);
+    OutputFileNameEdit.Text := ExtractFileName(ChangeFileExt(DVDFolderEdit.Text, '')) + '_title' + FloatToStr(TitlesList.ItemIndex + 1) + '_chapters' + FloatToStr(StartChaperList.ItemIndex + 1) + '-' + FloatToStr(EndChapterList.ItemIndex + 1);
   end;
 end;
 
@@ -8522,6 +8500,13 @@ begin
     end;
   end;
   MainSummaryList.FullExpand;
+end;
+
+procedure TMainForm.UpdateYoutubeDlBtnClick(Sender: TObject);
+begin
+  YoutubedlUpdateChecker.Path := FYoutubedlPath;
+  Self.Enabled := false;
+  YoutubedlUpdateChecker.Show;
 end;
 
 procedure TMainForm.UseSourceChkBtnClick(Sender: TObject);
@@ -8732,3 +8717,4 @@ begin
 end;
 
 end.
+

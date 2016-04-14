@@ -492,7 +492,7 @@ begin
     // Video Options
 
     // bitrate
-    LVideoBitrate := AdvancedOptionsForm.VideobitrateList.Text + '000 ';
+    LVideoBitrate := AdvancedOptionsForm.VideobitrateList.Text + 'k ';
 
     // do cbr encoding
     if AdvancedOptionsForm.VideoCBrBtn.Checked then

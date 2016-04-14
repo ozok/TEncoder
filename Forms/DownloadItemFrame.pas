@@ -38,6 +38,7 @@ type
     DeleteButton: TsButton;
     sPanel2: TsPanel;
     PrevievImg: TsImage;
+    sBevel1: TsBevel;
   private
     { Private declarations }
   public

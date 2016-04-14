@@ -1,5 +1,15 @@
 TEncoder Change Log
 
+--4.6.0
+-Added: Improved way to update youtube-dl
+-Updated: Internal libraries
+
+--4.5.10
+-Workaround: [Video Converter & DVD Ripper] For errors that may occur while updating progress info
+-Workaround: [General] For errors that may occur while clearing temp folder
+-Fixed: [Video Downloader] An error that may occur while removing items from the list
+-Other small fixes
+
 --4.5.9
 -Fixed: [Video Downloader] Removing one item from the list didn't move other item to the top of the list
 -Fixed: [General] A possible fix to AV errors regarding file list

@@ -5,41 +5,42 @@ uses
   madLinkDisAsm,
   madListModules,
   Forms,
-  UnitMain in 'Forms\UnitMain.pas' {MainForm} ,
-  UnitAbout in 'Forms\UnitAbout.pas' {AboutForm} ,
-  UnitAdd in 'Forms\UnitAdd.pas' {AddForm} ,
-  UnitProperties in 'Forms\UnitProperties.pas' {InfoForm} ,
-  UnitLogs in 'Forms\UnitLogs.pas' {LogForm} ,
-  UnitProfileEditor in 'Forms\UnitProfileEditor.pas' {ProfileForm} ,
-  UnitSettings in 'Forms\UnitSettings.pas' {SettingsForm} ,
+  UnitMain in 'Forms\UnitMain.pas' {MainForm},
+  UnitAbout in 'Forms\UnitAbout.pas' {AboutForm},
+  UnitAdd in 'Forms\UnitAdd.pas' {AddForm},
+  UnitProperties in 'Forms\UnitProperties.pas' {InfoForm},
+  UnitLogs in 'Forms\UnitLogs.pas' {LogForm},
+  UnitProfileEditor in 'Forms\UnitProfileEditor.pas' {ProfileForm},
+  UnitSettings in 'Forms\UnitSettings.pas' {SettingsForm},
   windows7taskbar in 'Units\windows7taskbar.pas',
-  UnitEffects in 'Forms\UnitEffects.pas' {EffectForm} ,
-  UnitRangeEditor in 'Forms\UnitRangeEditor.pas' {RangeEditorForm} ,
-  UnitPreview in 'Forms\UnitPreview.pas' {PreviewForm} ,
+  UnitEffects in 'Forms\UnitEffects.pas' {EffectForm},
+  UnitRangeEditor in 'Forms\UnitRangeEditor.pas' {RangeEditorForm},
+  UnitPreview in 'Forms\UnitPreview.pas' {PreviewForm},
   UnitPlayer in 'Units\UnitPlayer.pas',
   UnitFFmpegCommandLineCreator in 'Units\UnitFFmpegCommandLineCreator.pas',
   UnitMencoderCommandLineCreator in 'Units\UnitMencoderCommandLineCreator.pas',
   MediaInfoDLL in 'Units\MediaInfoDLL.pas',
-  UnitAdvancedOptions in 'Forms\UnitAdvancedOptions.pas' {AdvancedOptionsForm} ,
+  UnitAdvancedOptions in 'Forms\UnitAdvancedOptions.pas' {AdvancedOptionsForm},
   UnitEncoder in 'Units\UnitEncoder.pas',
   UnitFileItem in 'Units\UnitFileItem.pas',
-  UnitImageAudioMerger in 'Forms\UnitImageAudioMerger.pas' {ImageAudiotoVideoForm} ,
-  UnitDub in 'Forms\UnitDub.pas' {DubForm} ,
-  UnitVideotoGIF in 'Forms\UnitVideotoGIF.pas' {VideoToGIFForm} ,
+  UnitImageAudioMerger in 'Forms\UnitImageAudioMerger.pas' {ImageAudiotoVideoForm},
+  UnitDub in 'Forms\UnitDub.pas' {DubForm},
+  UnitVideotoGIF in 'Forms\UnitVideotoGIF.pas' {VideoToGIFForm},
   UnitCommonTypes in 'Units\DownloaderUnits\UnitCommonTypes.pas',
   UnitImageResize in 'Units\DownloaderUnits\UnitImageResize.pas',
   UnitYouTubeVideoInfoExtractor in 'Units\DownloaderUnits\UnitYouTubeVideoInfoExtractor.pas',
-  UnitBatchAdd in 'Forms\UnitBatchAdd.pas' {BatchAddForm} ,
+  UnitBatchAdd in 'Forms\UnitBatchAdd.pas' {BatchAddForm},
   UnitFileNameExtractor in 'Units\DownloaderUnits\UnitFileNameExtractor.pas',
   UnitImageTypeExtractor in 'Units\DownloaderUnits\UnitImageTypeExtractor.pas',
   UnitDVDReader in 'Units\UnitDVDReader.pas',
-  UnitWatermark in 'Forms\UnitWatermark.pas' {WatermarkForm} ,
+  UnitWatermark in 'Forms\UnitWatermark.pas' {WatermarkForm},
   UnitDownloadProcess in 'Units\UnitDownloadProcess.pas',
   UnitDVDRipperProcess in 'Units\UnitDVDRipperProcess.pas',
   UnitFileInfoExtractor in 'Units\UnitFileInfoExtractor.pas',
   UnitDVDJob in 'Units\UnitDVDJob.pas',
-  VideoAdding in 'Forms\VideoAdding.pas' {VideoAddingForm} ,
-  DownloadItemFrame in 'Forms\DownloadItemFrame.pas' {DownloadUIItem: TFrame};
+  VideoAdding in 'Forms\VideoAdding.pas' {VideoAddingForm},
+  DownloadItemFrame in 'Forms\DownloadItemFrame.pas' {DownloadUIItem: TFrame},
+  UnitYoutubedlUpdateChecker in 'Forms\UnitYoutubedlUpdateChecker.pas' {YoutubedlUpdateChecker};
 
 {$R *.res}
 
@@ -66,6 +67,7 @@ begin
   Application.CreateForm(TBatchAddForm, BatchAddForm);
   Application.CreateForm(TWatermarkForm, WatermarkForm);
   Application.CreateForm(TVideoAddingForm, VideoAddingForm);
+  Application.CreateForm(TYoutubedlUpdateChecker, YoutubedlUpdateChecker);
   Application.Run;
 
 end.

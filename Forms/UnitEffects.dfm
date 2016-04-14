@@ -203,7 +203,7 @@ object EffectForm: TEffectForm
     Top = 8
     Width = 560
     Height = 170
-    ActivePage = sTabSheet3
+    ActivePage = sTabSheet1
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 3
     SkinData.SkinSection = 'PAGECONTROL'
@@ -211,10 +211,6 @@ object EffectForm: TEffectForm
       Caption = 'Deinterlace'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object sLabel1: TsLabel
         Left = 3
         Top = 72
@@ -286,10 +282,6 @@ object EffectForm: TEffectForm
       Caption = 'Crop'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label5: TsLabel
         Left = 10
         Top = 68
@@ -410,10 +402,6 @@ object EffectForm: TEffectForm
       Caption = 'Rotate'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object RotateList: TsComboBox
         Left = 45
         Top = 16
@@ -451,10 +439,6 @@ object EffectForm: TEffectForm
       Caption = 'Volume'
       SkinData.CustomColor = False
       SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object VolumeEnableBtn: TsCheckBox
         Left = 10
         Top = 16

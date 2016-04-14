@@ -5,24 +5,31 @@ object DownloadUIItem: TDownloadUIItem
   Height = 141
   Anchors = [akLeft, akTop, akRight]
   TabOrder = 0
+  object sBevel1: TsBevel
+    Left = 0
+    Top = 138
+    Width = 1116
+    Height = 3
+    Align = alBottom
+    Shape = bsBottomLine
+    ExplicitTop = 91
+  end
   object sPanel1: TsPanel
     Left = 227
     Top = 0
     Width = 889
-    Height = 141
+    Height = 138
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0
     SkinData.SkinSection = 'PANEL'
-    ExplicitLeft = 178
-    ExplicitWidth = 938
-    ExplicitHeight = 112
+    ExplicitHeight = 141
     DesignSize = (
       889
-      141)
+      138)
     object ProgressLabel: TsLabel
       Left = 55
-      Top = 96
+      Top = 93
       Width = 67
       Height = 13
       Anchors = [akLeft, akBottom]
@@ -31,7 +38,7 @@ object DownloadUIItem: TDownloadUIItem
     end
     object ProgressBar: TsGauge
       Left = 6
-      Top = 113
+      Top = 110
       Width = 791
       Height = 19
       Anchors = [akLeft, akRight, akBottom]
@@ -73,20 +80,10 @@ object DownloadUIItem: TDownloadUIItem
       Alignment = taLeftJustify
       BoundLabel.Active = True
       BoundLabel.Caption = 'Format:'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
       VerticalAlignment = taAlignTop
       Style = csDropDownList
       ItemIndex = -1
       TabOrder = 0
-      ExplicitWidth = 866
     end
     object SubtitleList: TsComboBox
       Left = 55
@@ -97,46 +94,36 @@ object DownloadUIItem: TDownloadUIItem
       Alignment = taLeftJustify
       BoundLabel.Active = True
       BoundLabel.Caption = 'Subtitles:'
-      BoundLabel.Indent = 0
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clWindowText
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      BoundLabel.Layout = sclLeft
-      BoundLabel.MaxWidth = 0
-      BoundLabel.UseSkinColor = True
       VerticalAlignment = taAlignTop
       Style = csDropDownList
       ItemIndex = -1
       TabOrder = 1
-      ExplicitWidth = 866
     end
     object DeleteButton: TsButton
       Left = 803
-      Top = 110
+      Top = 107
       Width = 75
       Height = 25
       Anchors = [akRight, akBottom]
       Caption = 'Remove'
       TabOrder = 2
-      ExplicitLeft = 852
-      ExplicitTop = 81
+      ExplicitTop = 110
     end
   end
   object sPanel2: TsPanel
     Left = 0
     Top = 0
     Width = 227
-    Height = 141
+    Height = 138
     Align = alLeft
     TabOrder = 1
     SkinData.SkinSection = 'PANEL'
+    ExplicitHeight = 141
     object PrevievImg: TsImage
       Left = 1
       Top = 1
       Width = 225
-      Height = 139
+      Height = 136
       Align = alClient
       Center = True
       Picture.Data = {07544269746D617000000000}
