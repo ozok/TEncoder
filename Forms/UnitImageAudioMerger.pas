@@ -47,7 +47,7 @@ type
     procedure StopBtnClick(Sender: TObject);
   private
     { Private declarations }
-    FEncoder: TMyProcess;
+    FEncoder: TEncodingProcess;
     FDuration: string;
     FOutputFile: string;
 
@@ -674,7 +674,7 @@ end;
 
 procedure TImageAudiotoVideoForm.FormCreate(Sender: TObject);
 begin
-  FEncoder := TMyProcess.Create;
+  FEncoder := TEncodingProcess.Create;
   AudioEdit.Dialog.Filter := 'Audio Files|*.mp3;*.wav;*.aac;*.m4a;*.m4b;*.ac3;*.ogg;*.flac;*.mp2;*.opus;*.spx';
   ImageEdit.Dialog.Filter := 'Image Files|*.jpeg;*.jpg;*.bmp;*.gif;*.png';
 end;

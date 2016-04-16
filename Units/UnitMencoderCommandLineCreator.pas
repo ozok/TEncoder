@@ -21,7 +21,7 @@ unit UnitMencoderCommandLineCreator;
 
 interface
 
-uses Classes, Windows, SysUtils, Messages, Dialogs, StrUtils, UnitEffects;
+uses Classes, Windows, SysUtils, Messages, Dialogs, StrUtils, UnitEffects, UnitSubtitleTypes;
 
 type
   TMencoderCommandLine = record

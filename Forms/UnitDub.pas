@@ -46,7 +46,7 @@ type
     procedure StopBtnClick(Sender: TObject);
   private
     { Private declarations }
-    FEncoder: TMyProcess;
+    FEncoder: TEncodingProcess;
     FDuration: string;
     FOutputFile: string;
 
@@ -173,7 +173,7 @@ end;
 
 procedure TDubForm.FormCreate(Sender: TObject);
 begin
-  FEncoder := TMyProcess.Create;
+  FEncoder := TEncodingProcess.Create;
   VideoEdit.Dialog.Filter := 'Video Files|*.flv;*.m2v;*.avi;*.mkv;*.mpeg;*.mpg;*.mov;*.wmv;*.mp4;' + '*.m4v;*.dat;*.vob;*.rmvb;*.mts;*.mxf';
   AudioEdit.Dialog.Filter := 'Audio Files|*.mp3;*.wav;*.aac;*.m4a;*.m4b;*.ac3;*.ogg;*.flac;*.mp2;*.opus;*.spx';
   DeleteTempFile;

@@ -21,7 +21,7 @@ unit UnitPlayer;
 
 interface
 
-uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, UnitEffects, dialogs;
+uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, UnitEffects, dialogs, UnitSubtitleTypes;
 
 type
   TPlayerStatus = (psPlaying, psPaused, psStopped, psFontCache);

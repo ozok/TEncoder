@@ -38,7 +38,8 @@ uses
   JvUrlListGrabber, JvUrlGrabbers, JvThread, sStatusBar, UnitDownloadProcess,
   UnitDVDRipperProcess, UnitFileInfoExtractor, sDialogs, UnitDVDJob,
   DownloadItemFrame, System.ImageList, UnitYoutubedlUpdateChecker,
-  UnitYouTubeDlVersionReader;
+  UnitYouTubeDlVersionReader, UnitFileInfoItem, UnitFFmpegMergeCMDCreator,
+  UnitSubtitleTypes;
 
 type
   TFileInfoForAdding = packed record
@@ -49,66 +50,8 @@ type
     SubDelay: string;
   end;
 
-type
-  TFileDatePair = record
-    CreateDate: TDateTime;
-    ModifiedDate: TDateTime;
-  end;
 
-type
-  TSubtitleType = (embedded = 0, subfile = 1);
 
-type
-  TSubtitleTrack = packed record
-    Info: string;
-    ID: integer;
-  end;
-
-  // holds information about a file in the file list
-type
-  TFileInfoItem = class(TObject)
-    // Video ids
-    FFMmpegVideoID: integer;
-    MEncoderVideoID: integer;
-    // subtitle
-    SubtitleFiles: TStringList;
-    SubtitleIndex: integer;
-    SubtitleDelay: Extended;
-    SubtitleTracks: TStringList;
-    SubtitleTrackIndex: integer;
-    SubtitleTrackIndexes: TList<Integer>;
-    SelectedSubtitleType: TSubtitleType;
-    // audio
-    AudioTracks: TStringList;
-    AudioIndex: integer;
-    AudioIDs: TList<Integer>;
-    AudioMencoderIDs: TList<Integer>;
-    AudioExtensions: TStringList;
-    AudioDelay: Extended;
-    // range
-    StartPosition: integer;
-    EndPosition: integer;
-    ConstDuration: integer;
-    // general
-    FilePath: string;
-    FileDate: TFileDatePair;
-  private
-    function GetSubtitle: string;
-    function GetAudioID: string;
-    function GetAudioExt: string;
-    function GetMencoderAudioID: string;
-    function GetSubtitleTrackID: string;
-  public
-    property SelectedSubtitleFile: string read GetSubtitle;
-    property SelectedSubtitleTrack: string read GetSubtitleTrackID;
-    property SelectedAudio: string read GetAudioID;
-    property SelectedMEncoderAudio: string read GetMencoderAudioID;
-    property SelectedAudioExt: string read GetAudioExt;
-    constructor Create;
-    destructor Destroy; override;
-  end;
-
-  TFileInfoList = TList<TFileInfoItem>;
 
   // dvd ripper command line
 type
@@ -533,7 +476,7 @@ type
     // adds command line to TEncoder object
     procedure CreateEncodingCommands(FileIndex: Integer; const EncoderIndex: integer);
     // generates merge command line
-    procedure CreateMergeCommandLine();
+    procedure CreateMergeCommandLine(const OutputFilePath: string);
 
     // video download fncs.
     // download link
@@ -583,7 +526,7 @@ type
     FDVDRenamePath: string;
     FTempFolder: string;
     // process objects
-    FEncoders: array[0..15] of TMyProcess;
+    FEncoders: array[0..15] of TEncodingProcess;
     // video download list items
     FVideoDownloadListItems: TList<TDownloadUIItem>;
     // dvd ripper process
@@ -818,6 +761,7 @@ begin
             LEncodeJob.FileListIndex := FileIndex;
             LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
             LEncodeJob.EncodingInformation := ' 1st pass of 2';
+            LEncodeJob.IsMergeJob := False;
             FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
           finally
             LMEncoderCMD.Free;
@@ -832,6 +776,7 @@ begin
             LEncodeJob.FileListIndex := FileIndex;
             LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
             LEncodeJob.EncodingInformation := ' 2nd pass of 2';
+            LEncodeJob.IsMergeJob := False;
             FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
             // mux to mp4 using mp4box
             if ContainerList.ItemIndex = 2 then
@@ -873,6 +818,7 @@ begin
                 LEncodeJob.SourceDuration := GetFileDuration(FileIndex);
                 LEncodeJob.FileListIndex := FileIndex;
                 LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+                LEncodeJob.IsMergeJob := False;
                 FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
               end;
 
@@ -885,6 +831,7 @@ begin
               LEncodeJob.SourceFileName := LSourceFileNamePath;
               LEncodeJob.FileListIndex := FileIndex;
               LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+              LEncodeJob.IsMergeJob := False;
               FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
               // muxing all
               if (FMasterFileInfoList[FileIndex].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
@@ -905,6 +852,7 @@ begin
               LEncodeJob.SourceDuration := GetFileDuration(FileIndex);
               LEncodeJob.FileListIndex := FileIndex;
               LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+              LEncodeJob.IsMergeJob := False;
               FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
               // temp files to be deleted
               FTempFilesToDelete.Add(ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)));
@@ -941,6 +889,7 @@ begin
             LEncodeJob.SourceFileName := LSourceFileNamePath;
             LEncodeJob.FileListIndex := FileIndex;
             LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+            LEncodeJob.IsMergeJob := False;
             FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
             // mp4box for mp4
             if ContainerList.ItemIndex = 2 then
@@ -980,6 +929,7 @@ begin
                 LEncodeJob.SourceDuration := GetFileDuration(FileIndex);
                 LEncodeJob.FileListIndex := FileIndex;
                 LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+                LEncodeJob.IsMergeJob := False;
                 FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
               end;
 
@@ -992,6 +942,7 @@ begin
               LEncodeJob.SourceFileName := LSourceFileNamePath;
               LEncodeJob.FileListIndex := FileIndex;
               LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+              LEncodeJob.IsMergeJob := False;
               FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
               if (FMasterFileInfoList[FileIndex].AudioIndex <> -1) and (AudioEncoderList.ItemIndex <> 10) then
               begin
@@ -1009,6 +960,7 @@ begin
               LEncodeJob.SourceDuration := GetFileDuration(FileIndex);
               LEncodeJob.FileListIndex := FileIndex;
               LEncodeJob.EncodingOutputFilePath := LMEncoderCMD.OutputFile;
+              LEncodeJob.IsMergeJob := False;
               FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
               // delete temp files
               FTempFilesToDelete.Add(ExtractFileDir(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)) + '\' + ExtractFileName(ChangeFileExt(LMEncoderCMD.OutputFile, LMEncoderMp4MuxExt)));
@@ -1043,6 +995,7 @@ begin
           LEncodeJob.ProcessPath := FFFMpegPath;
           LEncodeJob.SourceFileName := LSourceFileNamePath;
           LEncodeJob.EncodingInformation := 'Encoding';
+          LEncodeJob.IsMergeJob := False;
           FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
           AddToLog(6, 'Ogg encoding command: ' + LOggAudioCMD);
           // rename converted file to original output file name
@@ -1056,6 +1009,7 @@ begin
             LEncodeJob.SourceFileName := LSourceFileNamePath;
             LEncodeJob.ProcessPath := '';
             LEncodeJob.EncodingInformation := 'Renaming';
+            LEncodeJob.IsMergeJob := False;
             FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
             AddToLog(6, 'Renaming command: "' + FDVDRenamePath + '" "' + FTempFolder + '\dvdogg.txt"');
             FTempFilesToDelete.Add(FDVDRenamePath + '" "' + FTempFolder + '\dvdogg.txt');
@@ -1084,6 +1038,7 @@ begin
             LEncodeJob.EncodingInformation := ' 1st pass of 2';
             LEncodeJob.FileListIndex := FileIndex;
             LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
+            LEncodeJob.IsMergeJob := False;
             FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
           finally
             LFFMpegCMD.Free;
@@ -1101,6 +1056,7 @@ begin
             LEncodeJob.EncodingInformation := ' 2nd pass of 2';
             LEncodeJob.FileListIndex := FileIndex;
             LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
+            LEncodeJob.IsMergeJob := False;
             FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
             // output file to be checked
             FFilesToCheck.Add(LFFMpegCMD.OutputFile);
@@ -1124,6 +1080,7 @@ begin
             LEncodeJob.EncodingInformation := ' Encoding';
             LEncodeJob.FileListIndex := FileIndex;
             LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
+            LEncodeJob.IsMergeJob := False;
             FEncoders[EncoderIndex].EncodeJobs.Add(LEncodeJob);
             // output file to be checked
             FFilesToCheck.Add(LFFMpegCMD.OutputFile);
@@ -3533,12 +3490,9 @@ begin
   Result := OutFileName;
 end;
 
-procedure TMainForm.CreateMergeCommandLine();
+procedure TMainForm.CreateMergeCommandLine(const OutputFilePath: string);
 var
-  LSourceFileNamePath: string;
-  LMEncoderCMD: TMencoderCommandLineCreator;
   LMp4MuxingCMD: string;
-  LFFMpegCMD: TFFMpegCommandLineCreator;
   LExtractedAudioFileName: string;
   LMEncoderMp4MuxExt: string;
   LOggRemuxExtension: string;
@@ -3549,87 +3503,41 @@ var
   LEncodeJobs: TEncodeJobs;
   LEncodeJob: TEncodeJob;
   FileIndex: Integer;
-  LListOfFilesToBeEncoded: TStringList;
+  LListOfFilesToBeEncoded: TFileInfoList;
+  LFFMpegMergeCMDCreator: TFFMpegMergeCMDCreator;
+  LTotalSourceDurations: integer;
 begin
   try
-    LListOfFilesToBeEncoded := TStringList.Create;
+    LTotalSourceDurations := 0;
+    LListOfFilesToBeEncoded := TFileInfoList.Create;
     for FileIndex := 0 to FMasterFileInfoList.Count - 1 do
     begin
       // no merge unless we have a video stream
       if FMasterFileInfoList[FileIndex].FFMmpegVideoID > -1 then
       begin
-        LListOfFilesToBeEncoded.Add(FMasterFileInfoList[FileIndex].FilePath);
+        LListOfFilesToBeEncoded.Add(FMasterFileInfoList[FileIndex]);
+        Inc(LTotalSourceDurations, FMasterFileInfoList[FileIndex].ConstDuration);
       end;
+    end;
+    LFFMpegMergeCMDCreator := TFFMpegMergeCMDCreator.Create(LListOfFilesToBeEncoded, OutputFilePath);
+    try
+      LEncodeJob.CommandLine := LFFMpegMergeCMDCreator.FMpegCommandLine;
+      LEncodeJob.SourceDuration := LTotalSourceDurations;
+      LEncodeJob.ProcessType := UnitEncoder.TProcessType.ffmpeg;
+      LEncodeJob.ProcessPath := FFFMpegPath;
+      LEncodeJob.SourceFileName := '';
+      LEncodeJob.EncodingInformation := ' Merging';
+      LEncodeJob.FileListIndex := 0;
+      LEncodeJob.EncodingOutputFilePath := LFFMpegMergeCMDCreator.OutputFile;
+      LEncodeJob.IsMergeJob := True;
+      FEncoders[0].EncodeJobs.Add(LEncodeJob);
+      // output file to be checked
+      FFilesToCheck.Add(LFFMpegMergeCMDCreator.OutputFile);
+    finally
+      LFFMpegMergeCMDCreator.Free;
     end;
   finally
     LListOfFilesToBeEncoded.Free;
-  end;
-  for FileIndex := 0 to FMasterFileInfoList.Count - 1 do
-  begin
-    if DoTwoPassBtn.Checked then
-    begin
-          // do two passes
-          // first pass
-      LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
-      AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(LSourceFileNamePath) + ')';
-          // create command line
-      LFFMpegCMD := TFFMpegCommandLineCreator.Create(FileIndex);
-      try
-        LEncodeJob.CommandLine := LFFMpegCMD.FMpegCommandLine.FirstPassCMD;
-        LEncodeJob.SourceDuration := FMasterFileInfoList[FileIndex].EndPosition - FMasterFileInfoList[FileIndex].StartPosition;
-        LEncodeJob.ProcessType := UnitEncoder.TProcessType.ffmpeg;
-        LEncodeJob.ProcessPath := FFFMpegPath;
-        LEncodeJob.SourceFileName := LSourceFileNamePath;
-        LEncodeJob.EncodingInformation := ' 1st pass of 2';
-        LEncodeJob.FileListIndex := FileIndex;
-        LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
-        FEncoders[0].EncodeJobs.Add(LEncodeJob);
-      finally
-        LFFMpegCMD.Free;
-      end;
-          // second pass
-      LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
-          // create command line
-      LFFMpegCMD := TFFMpegCommandLineCreator.Create(FileIndex);
-      try
-        LEncodeJob.CommandLine := LFFMpegCMD.FMpegCommandLine.SeconPassCMD;
-        LEncodeJob.SourceDuration := FMasterFileInfoList[FileIndex].EndPosition - FMasterFileInfoList[FileIndex].StartPosition;
-        LEncodeJob.ProcessType := UnitEncoder.TProcessType.ffmpeg;
-        LEncodeJob.ProcessPath := FFFMpegPath;
-        LEncodeJob.SourceFileName := LSourceFileNamePath;
-        LEncodeJob.EncodingInformation := ' 2nd pass of 2';
-        LEncodeJob.FileListIndex := FileIndex;
-        LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
-        FEncoders[0].EncodeJobs.Add(LEncodeJob);
-            // output file to be checked
-        FFilesToCheck.Add(LFFMpegCMD.OutputFile);
-      finally
-        LFFMpegCMD.Free;
-      end;
-    end
-    else
-    begin
-          // do single pass
-      LSourceFileNamePath := FMasterFileInfoList[FileIndex].FilePath;
-      AddForm.StatusLabel.Caption := 'Creating command lines (' + ExtractFileName(LSourceFileNamePath) + ')';
-          // create command line
-      LFFMpegCMD := TFFMpegCommandLineCreator.Create(FileIndex);
-      try
-        LEncodeJob.CommandLine := LFFMpegCMD.FMpegCommandLine.SinglePassCMD;
-        LEncodeJob.SourceDuration := FMasterFileInfoList[FileIndex].EndPosition - FMasterFileInfoList[FileIndex].StartPosition;
-        LEncodeJob.ProcessType := UnitEncoder.TProcessType.ffmpeg;
-        LEncodeJob.ProcessPath := FFFMpegPath;
-        LEncodeJob.SourceFileName := LSourceFileNamePath;
-        LEncodeJob.EncodingInformation := ' Encoding';
-        LEncodeJob.FileListIndex := FileIndex;
-        LEncodeJob.EncodingOutputFilePath := LFFMpegCMD.OutputFile;
-        FEncoders[0].EncodeJobs.Add(LEncodeJob);
-            // output file to be checked
-        FFilesToCheck.Add(LFFMpegCMD.OutputFile);
-      finally
-        LFFMpegCMD.Free;
-      end;
-    end;
   end;
 end;
 
@@ -5570,7 +5478,7 @@ begin
   FFileAddingStoppedByUser := False;
 
   for I := Low(FEncoders) to High(FEncoders) do
-    FEncoders[i] := TMyProcess.Create;
+    FEncoders[i] := TEncodingProcess.Create;
 
   ClearTempFolder;
   FTimePassed := 0;
@@ -7534,10 +7442,11 @@ end;
 procedure TMainForm.StartBtnClick(Sender: TObject);
 var
   i: Integer;
-  Date: TDateTime;
-  ScriptFile: TStringList;
+  LDate: TDateTime;
+  LScriptFile: TStringList;
   LNumberOfProcesses: integer;
   j: Integer;
+  LMergeOutputFileName: string;
 begin
 
 {$REGION 'codec checks'}
@@ -7716,22 +7625,24 @@ begin
     try
 
       // reset
-      TotalProgress.Position := 0;
-      TrayIcon.Active := False;
-      DeleteTempFiles;
-      FTempFilesToDelete.Clear;
-      ProgressList.Items.Clear;
-      for i := low(FProgressStrs) to High(FProgressStrs) do
-      begin
-        FProgressStrs[i] := '';
-      end;
-      FFileAddingStoppedByUser := False;
-      for I := Low(FEncoders) to High(FEncoders) do
-      begin
-        FEncoders[i].ResetValues;
-      end;
-      FTimePassed := 0;
-      FFilesToCheck.Clear;
+{$REGION 'reset region'}
+        TotalProgress.Position := 0;
+        TrayIcon.Active := False;
+        DeleteTempFiles;
+        FTempFilesToDelete.Clear;
+        ProgressList.Items.Clear;
+        for i := low(FProgressStrs) to High(FProgressStrs) do
+        begin
+          FProgressStrs[i] := '';
+        end;
+        FFileAddingStoppedByUser := False;
+        for I := Low(FEncoders) to High(FEncoders) do
+        begin
+          FEncoders[i].ResetValues;
+        end;
+        FTimePassed := 0;
+        FFilesToCheck.Clear;
+{$ENDREGION}
 
       // decide number of processes
       if (SettingsForm.NumberOfThreadsList.ItemIndex + 1) > FileList.Items.Count then
@@ -7767,7 +7678,16 @@ begin
       FConstTwoPassMode := DoTwoPassBtn.Checked;
       if MergeBtn.Checked then
       begin
-
+        // create single cmd for merge all to one
+        LMergeOutputFileName := InputBox('Output file path', 'Merged file name', '');
+        if Length(LMergeOutputFileName) > 0 then
+        begin
+          CreateMergeCommandLine(DirectoryEdit.Text + '\' + LMergeOutputFileName);
+        end
+        else
+        begin
+          Exit;
+        end;
       end
       else
       begin
@@ -7780,10 +7700,11 @@ begin
         end;
       end;
 
+      // calculate the total number of command lines
       FConverterTotalCMDCount := 0;
       for I := Low(FEncoders) to High(FEncoders) do
       begin
-        inc(FConverterTotalCMDCount, FEncoders[i].CommandCount);
+        Inc(FConverterTotalCMDCount, FEncoders[i].CommandCount);
       end;
 
       TotalProgress.Max := 100;
@@ -7795,6 +7716,7 @@ begin
         begin
           AddToLog(0, '');
         end;
+        // run encoders
         for I := Low(FEncoders) to High(FEncoders) do
         begin
           if FEncoders[i].CommandCount > 0 then
@@ -7807,40 +7729,31 @@ begin
         TotalProgress.Max := FConverterTotalCMDCount;
         TrayIcon.Active := True;
       end;
-
     finally
-
       // save script
       if ExportScriptBtn.Checked then
       begin
-        Date := Now;
-
-        ScriptFile := TStringList.Create;
+        LDate := Now;
+        LScriptFile := TStringList.Create;
         try
-
           case EncoderList.ItemIndex of
             0: // mencoder
               begin
-
                 for i := Low(FEncoders) to High(FEncoders) do
                 begin
                   Application.ProcessMessages;
-
                   if FEncoders[i].CommandCount > 0 then
                   begin
                     for j := 0 to FEncoders[i].CommandCount - 1 do
                     begin
-                      ScriptFile.Add('"' + FEncoders[i].EncodeJobs[j].ProcessPath + '" ' + FEncoders[i].EncodeJobs[j].CommandLine);
+                      LScriptFile.Add('"' + FEncoders[i].EncodeJobs[j].ProcessPath + '" ' + FEncoders[i].EncodeJobs[j].CommandLine);
                     end;
                   end;
-
                 end;
-
-                ScriptFile.SaveToFile(FAppDataFolder + 'Script\(Mencoder)' + CorrectFileName(DateTimeToStr(Date)) + '.bat');
+                LScriptFile.SaveToFile(FAppDataFolder + 'Script\(Mencoder)' + CorrectFileName(DateTimeToStr(LDate)) + '.bat');
               end;
             1: // ffmpeg
               begin
-
                 for i := Low(FEncoders) to High(FEncoders) do
                 begin
                   Application.ProcessMessages;
@@ -7849,27 +7762,22 @@ begin
                   begin
                     for j := 0 to FEncoders[i].CommandCount - 1 do
                     begin
-                      ScriptFile.Add('"' + FEncoders[i].EncodeJobs[j].ProcessPath + '" ' + FEncoders[i].EncodeJobs[j].CommandLine);
+                      LScriptFile.Add('"' + FEncoders[i].EncodeJobs[j].ProcessPath + '" ' + FEncoders[i].EncodeJobs[j].CommandLine);
                     end;
                   end;
                 end;
-
-                ScriptFile.SaveToFile(FAppDataFolder + 'Script\(FFMpeg)' + CorrectFileName(DateTimeToStr(Date)) + '.bat');
+                LScriptFile.SaveToFile(FAppDataFolder + 'Script\(FFMpeg)' + CorrectFileName(DateTimeToStr(LDate)) + '.bat');
               end;
           end;
-
         finally
-          FreeAndNil(ScriptFile);
+          FreeAndNil(LScriptFile);
         end;
-
       end;
-
       AddForm.AbortBtn.Enabled := True;
       AddForm.Close;
       PositionTimer.Enabled := True;
       Timer.Enabled := True;
       SwitchToEncoding();
-
       ProgressLabel.Caption := '0/' + IntToStr(FConverterTotalCMDCount);
     end;
   end;
@@ -8846,93 +8754,6 @@ begin
     AdvancedOptionsForm.VideoCBrBtn.Enabled := True;
   end;
   UpdateSummary;
-end;
-
-{ TConverterItem }
-
-constructor TFileInfoItem.Create;
-begin
-  inherited;
-  SubtitleFiles := TStringList.Create;
-  AudioTracks := TStringList.Create;
-  AudioIDs := TList<Integer>.Create;
-  AudioExtensions := TStringList.Create;
-  SubtitleTracks := TStringList.Create;
-  AudioMencoderIDs := TList<Integer>.Create;
-  SubtitleTrackIndexes := TList<Integer>.Create;
-end;
-
-destructor TFileInfoItem.Destroy;
-begin
-  inherited;
-  SubtitleFiles.Free;
-  AudioTracks.Free;
-  AudioIDs.Free;
-  AudioExtensions.Free;
-  SubtitleTracks.Free;
-  AudioMencoderIDs.Free;
-  SubtitleTrackIndexes.Free;
-
-end;
-
-function TFileInfoItem.GetAudioExt: string;
-begin
-  Result := '.wav';
-  if AudioIndex > -1 then
-  begin
-    if AudioIndex < AudioExtensions.Count then
-    begin
-      Result := AudioExtensions[AudioIndex];
-    end;
-  end;
-end;
-
-function TFileInfoItem.GetAudioID: string;
-begin
-  Result := '1';
-  if AudioIndex > -1 then
-  begin
-    if AudioIndex < AudioIDs.Count then
-    begin
-      Result := FloatToStr(AudioIDs[AudioIndex]);
-    end;
-  end;
-end;
-
-function TFileInfoItem.GetMencoderAudioID: string;
-begin
-  Result := '1';
-  if AudioIndex > -1 then
-  begin
-    if AudioIndex < AudioMencoderIDs.Count then
-    begin
-      Result := FloatToStr(AudioMencoderIDs[AudioIndex]);
-    end;
-  end;
-end;
-
-function TFileInfoItem.GetSubtitle: string;
-begin
-  Result := '';
-  if SubtitleIndex > -1 then
-  begin
-    if SubtitleIndex < SubtitleFiles.Count then
-    begin
-      Result := SubtitleFiles[SubtitleIndex];
-    end;
-  end;
-end;
-
-function TFileInfoItem.GetSubtitleTrackID: string;
-begin
-  Result := '';
-  if SubtitleTrackIndex > -1 then
-  begin
-    if SubtitleTrackIndex < SubtitleTrackIndexes.Count then
-    begin
-      Result := FloatToStr(SubtitleTrackIndexes[SubtitleTrackIndex]);
-    end;
-  end;
 end;
 
 end.

@@ -41,7 +41,10 @@ uses
   VideoAdding in 'Forms\VideoAdding.pas' {VideoAddingForm},
   DownloadItemFrame in 'Forms\DownloadItemFrame.pas' {DownloadUIItem: TFrame},
   UnitYoutubedlUpdateChecker in 'Forms\UnitYoutubedlUpdateChecker.pas' {YoutubedlUpdateChecker},
-  UnitYouTubeDlVersionReader in 'Units\DownloaderUnits\UnitYouTubeDlVersionReader.pas';
+  UnitYouTubeDlVersionReader in 'Units\DownloaderUnits\UnitYouTubeDlVersionReader.pas',
+  UnitFFmpegMergeCMDCreator in 'Units\UnitFFmpegMergeCMDCreator.pas',
+  UnitFileInfoItem in 'Units\UnitFileInfoItem.pas',
+  UnitSubtitleTypes in 'Units\UnitSubtitleTypes.pas';
 
 {$R *.res}
 

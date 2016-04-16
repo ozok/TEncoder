@@ -41,13 +41,14 @@ type
     FileListIndex: integer;
     EncodingOutputFilePath: string;
     FinalFilePath: string;
+    IsMergeJob: Boolean;
   end;
 
 type
   TEncodeJobs = TList<TEncodeJob>;
 
 type
-  TMyProcess = class(TObject)
+  TEncodingProcess = class(TObject)
   private
     // process
     FProcess: TJvCreateProcess;
@@ -110,7 +111,7 @@ implementation
 
 uses UnitMain;
 
-constructor TMyProcess.Create;
+constructor TEncodingProcess.Create;
 begin
   inherited Create;
 
@@ -141,7 +142,7 @@ begin
   FCommandIndex := 0;
 end;
 
-destructor TMyProcess.Destroy;
+destructor TEncodingProcess.Destroy;
 begin
   FreeAndNil(FEncodeJobs);
   FProcess.Free;
@@ -149,55 +150,55 @@ begin
 
 end;
 
-function TMyProcess.GetCommandCount: integer;
+function TEncodingProcess.GetCommandCount: integer;
 begin
   Result := FEncodeJobs.Count;
 end;
 
-function TMyProcess.GetConsoleOutput: TStrings;
+function TEncodingProcess.GetConsoleOutput: TStrings;
 begin
   Result := FProcess.ConsoleOutput;
 end;
 
-function TMyProcess.GetCurrentDuration: integer;
+function TEncodingProcess.GetCurrentDuration: integer;
 begin
   if FCommandIndex < FEncodeJobs.Count then
     Result := FEncodeJobs[FDurationIndex].SourceDuration;
 end;
 
-function TMyProcess.GetCurrentProcessType: TProcessType;
+function TEncodingProcess.GetCurrentProcessType: TProcessType;
 begin
   Result := ffmpeg;
   if FCommandIndex < FEncodeJobs.Count then
     Result := FEncodeJobs[FCommandIndex].ProcessType;
 end;
 
-function TMyProcess.GetExeName: string;
+function TEncodingProcess.GetExeName: string;
 begin
   if FCommandIndex < FEncodeJobs.Count then
     Result := FEncodeJobs[FCommandIndex].ProcessPath;
 end;
 
-function TMyProcess.GetFileIndex: Integer;
+function TEncodingProcess.GetFileIndex: Integer;
 begin
   Result := 0;
   if FCommandIndex < FEncodeJobs.Count then
     Result := FEncodeJobs[FCommandIndex].FileListIndex;
 end;
 
-function TMyProcess.GetFileName: string;
+function TEncodingProcess.GetFileName: string;
 begin
   if FCommandIndex < FEncodeJobs.Count then
     Result := FEncodeJobs[FCommandIndex].SourceFileName;
 end;
 
-function TMyProcess.GetInfo: string;
+function TEncodingProcess.GetInfo: string;
 begin
   if FCommandIndex < FEncodeJobs.Count then
     Result := FEncodeJobs[FCommandIndex].EncodingInformation;
 end;
 
-function TMyProcess.GetPercentage: integer;
+function TEncodingProcess.GetPercentage: integer;
 var
   LPercentageStr: string;
   LPercentageInt: Integer;
@@ -229,12 +230,12 @@ begin
   end;
 end;
 
-function TMyProcess.GetProcessID: integer;
+function TEncodingProcess.GetProcessID: integer;
 begin
   Result := FProcess.ProcessInfo.hProcess;
 end;
 
-procedure TMyProcess.ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
+procedure TEncodingProcess.ProcessRead(Sender: TObject; const S: string; const StartsOnNewLine: Boolean);
 var
   LCurrVal: integer;
 begin
@@ -260,7 +261,7 @@ begin
   end;
 end;
 
-procedure TMyProcess.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
+procedure TEncodingProcess.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 begin
   FEncoderStatus := esStopped;
   if FStoppedByUser then
@@ -328,7 +329,7 @@ begin
   end;
 end;
 
-procedure TMyProcess.ResetValues;
+procedure TEncodingProcess.ResetValues;
 begin
   // reset all lists, indexes etc
   FEncodeJobs.Clear;
@@ -341,7 +342,7 @@ begin
   FTerminateCounter := 0;
 end;
 
-procedure TMyProcess.Start;
+procedure TEncodingProcess.Start;
 begin
   if FProcess.ProcessInfo.hProcess = 0 then
   begin
@@ -378,7 +379,7 @@ begin
     FConsoleOutput := 'not 0'
 end;
 
-procedure TMyProcess.Stop;
+procedure TEncodingProcess.Stop;
 begin
   if FProcess.ProcessInfo.hProcess > 0 then
   begin
@@ -388,7 +389,7 @@ begin
   end;
 end;
 
-procedure TMyProcess.UpdateProgressItem(const Msg: string; const Progress: string; const StateIndex: integer);
+procedure TEncodingProcess.UpdateProgressItem(const Msg: string; const Progress: string; const StateIndex: integer);
 begin
   try
     if Assigned(FItem) then

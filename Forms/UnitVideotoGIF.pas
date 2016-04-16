@@ -68,7 +68,7 @@ type
     FDuration: Integer;
     FStart: Integer;
     FEnd: Integer;
-    FConverter: TMyProcess;
+    FConverter: TEncodingProcess;
 
     function GetDuration(const FileName: string): integer;
     function TimetoStrEx(const Time: Integer): string;
@@ -149,7 +149,7 @@ end;
 
 procedure TVideoToGIFForm.FormCreate(Sender: TObject);
 begin
-  FConverter := TMyProcess.Create;
+  FConverter := TEncodingProcess.Create;
   ImageMagickPath := ExtractFileDir(Application.ExeName) + '\convert.exe';
   SourceEdit.Filter := 'Video Files|*.flv;*.m2v;*.avi;*.mkv;*.mpeg;*.mpg;*.mov;*.wmv;*.mp4;' + '*.m4v;*.dat;*.vob;*.rmvb;*.mts;*.mxf';
   LoadSettings;
