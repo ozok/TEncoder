@@ -255,9 +255,6 @@ var
   CustomVideoArg: string;
   CustomAudioArg: string;
   CustomArgs: string;
-  LMergeCMD: string;
-  LMergeVideoCMD: string;
-  LMergeAudioCMD: string;
 begin
   // output extension and container options
   LContainer := 'avi';
@@ -557,6 +554,11 @@ begin
       else
       begin
         FilterCMD := '-vf transpose=' + FloatToStr(EffectForm.RotateList.ItemIndex - 1)
+      end;
+      // 180
+      if EffectForm.RotateList.ItemIndex > 4 then
+      begin
+        FilterCMD := FilterCMD + ',transpose=' + FloatToStr(EffectForm.RotateList.ItemIndex - 1)
       end;
     end;
 

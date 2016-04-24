@@ -32,8 +32,6 @@ type
     function CreateCommandline(): string;
     function CreateFileName(const FileName: string; const Extension: string): string;
     function GetFileFolderName(const FileName: string): string;
-    function IntegerToTime(Time: Integer): string;
-    function IsStringNumeric(Str: string): Boolean;
     function CreateAdvancedOptions(): string;
   public
     property FMpegCommandLine: string read CreateCommandline;
@@ -233,16 +231,12 @@ var
   LAudioChannels: string;
   LOutputFileExtension: string;
   LAudioCommandLine: string;
-  LPassFilePath: string;
   LOutputFileName: string;
   LContainer: string;
   LVolumeCMD: string;
   CustomVideoArg: string;
   CustomAudioArg: string;
   CustomArgs: string;
-  LMergeCMD: string;
-  LMergeVideoCMD: string;
-  LMergeAudioCMD: string;
   LInputCMD: string;
   LConcatCMD: string;
   I: integer;
@@ -683,87 +677,6 @@ begin
     end;
   end;
 
-end;
-
-function TFFMpegMergeCMDCreator.IntegerToTime(Time: Integer): string;
-var
-  hour: Integer;
-  second: Integer;
-  minute: Integer;
-  strhour: string;
-  strminute: string;
-  strsecond: string;
-begin
-
-  if (Time > 0) then
-  begin
-
-    hour := Time div 3600;
-    minute := (Time div 60) - (hour * 60);
-    second := (Time mod 60);
-
-    if (second < 10) then
-    begin
-      strsecond := '0' + FloatToStr(second);
-    end
-    else
-    begin
-      strsecond := FloatToStr(second);
-    end;
-
-    if (minute < 10) then
-    begin
-      strminute := '0' + FloatToStr(minute);
-    end
-    else
-    begin
-      strminute := FloatToStr(minute);
-    end;
-
-    if (hour < 10) then
-    begin
-      strhour := '0' + FloatToStr(hour);
-    end
-    else
-    begin
-      strhour := FloatToStr(hour);
-    end;
-
-    Result := strhour + ':' + strminute + ':' + strsecond;
-  end
-  else
-  begin
-    Result := '00:00:00';
-  end;
-
-end;
-
-function TFFMpegMergeCMDCreator.IsStringNumeric(Str: string): Boolean;
-var
-  p: PChar;
-begin
-
-  if Length(Str) < 1 then
-  begin
-    Result := False;
-    Exit;
-  end;
-
-  p := PChar(Str);
-  Result := False;
-
-  while p^ <> #0 do
-  begin
-
-    if (not CharInSet(p^, ['0'..'9'])) then
-    begin
-      Exit;
-    end;
-
-    Inc(p);
-  end;
-
-  Result := True;
 end;
 
 end.

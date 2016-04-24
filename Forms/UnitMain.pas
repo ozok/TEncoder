@@ -706,7 +706,6 @@ var
   LRenameFile: TStringList;
   LMencoderFinalFileName: string;
   LEncoderIndex: integer;
-  LEncodeJobs: TEncodeJobs;
   LEncodeJob: TEncodeJob;
 begin
   // if audio only then we must use ffmpeg and do single pass
@@ -2202,7 +2201,6 @@ var
   lFind: integer;
   lPath: string;
   LType: string;
-  i: integer;
 begin
   lPath := IncludeTrailingPathDelimiter(FTempFolder);
   if DeleteOnlyText then
@@ -2869,6 +2867,7 @@ var
   FilterCMD: string;
   LVolumeCMD: string;
   FPassStr: string;
+  LChapterCMD: string;
 begin
 
   // output extension and container options
@@ -3041,7 +3040,7 @@ begin
       end;
     2: // aac
       begin
-        ACodec := ASR + ' -oac faac -faacopts br=' + ABitrate + '' + ':' + AChan + LVolumeCMD;
+        ACodec := ASR + ' -oac lavc -lavcopts acodec=libfdk_aac:abitrate=' + ABitrate + '' + ':' + AChan + LVolumeCMD;
       end;
     3: // ogg
       begin
@@ -3078,6 +3077,9 @@ begin
         ACodec := ' -oac  lavc -lavcopts acodec=flac ';
       end;
   end;
+
+  // chapter selection
+  LChapterCMD := ' -chapter ' + FloatToStr(StartChaperList.ItemIndex + 1) + '-' + FloatToStr(EndChapterList.ItemIndex + 1);
 
   // Video Options
 
@@ -3297,7 +3299,7 @@ begin
     begin
       FPassStr := Mencoder1stPass
     end;
-    Result.FirstPassCMD := ' -mc 0 -priority idle ' + VCodecPart1 + FPassStr + VCodecPart2 + Container + ' -passlogfile "' + PassFile + '" -nosound -o NUL dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
+    Result.FirstPassCMD := ' -mc 0 -priority idle '  + LChapterCMD + ' ' + VCodecPart1 + FPassStr + VCodecPart2 + Container + ' -passlogfile "' + PassFile + '" -nosound -o NUL dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
 
     // second pass
     OutName := CreateDVDFileName(ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\' + OutputFileNameEdit.Text, OutExtension);
@@ -3362,7 +3364,7 @@ begin
       FPassStr := Mencoder2ndPass
     end;
 
-    Result.SeconPassCMD := ' -mc 0 -priority idle ' + AudioCMD + VCodecPart1 + FPassStr + VCodecPart2 + Container + ACodec + SubtitleCMD + ' -passlogfile "' + PassFile + '" -o "' + OutName + '" dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
+    Result.SeconPassCMD := ' -mc 0 -priority idle '  + LChapterCMD + ' ' + AudioCMD + VCodecPart1 + FPassStr + VCodecPart2 + Container + ACodec + SubtitleCMD + ' -passlogfile "' + PassFile + '" -o "' + OutName + '" dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
 
   end
   else
@@ -3419,7 +3421,7 @@ begin
       SubtitleCMD := ' -nosub ';
     end;
 
-    Result.SinglePassCMD := ' -mc 0 -priority idle ' + AudioCMD + VCodecPart1 + VCodecPart2 + Container + SubtitleCMD + ACodec + ' -o "' + OutName + '" dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
+    Result.SinglePassCMD := ' -mc 0 -priority idle ' + LChapterCMD + ' ' + AudioCMD + VCodecPart1 + VCodecPart2 + Container + SubtitleCMD + ACodec + ' -o "' + OutName + '" dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
   end;
   Result.OutputFile := OutName;
 end;
@@ -3492,15 +3494,6 @@ end;
 
 procedure TMainForm.CreateMergeCommandLine(const OutputFilePath: string);
 var
-  LMp4MuxingCMD: string;
-  LExtractedAudioFileName: string;
-  LMEncoderMp4MuxExt: string;
-  LOggRemuxExtension: string;
-  LOggAudioCMD: string;
-  LRenameFile: TStringList;
-  LMencoderFinalFileName: string;
-  LEncoderIndex: integer;
-  LEncodeJobs: TEncodeJobs;
   LEncodeJob: TEncodeJob;
   FileIndex: Integer;
   LListOfFilesToBeEncoded: TFileInfoList;
@@ -3525,7 +3518,7 @@ begin
       LEncodeJob.SourceDuration := LTotalSourceDurations;
       LEncodeJob.ProcessType := UnitEncoder.TProcessType.ffmpeg;
       LEncodeJob.ProcessPath := FFFMpegPath;
-      LEncodeJob.SourceFileName := '';
+      LEncodeJob.SourceFileName := OutputFilePath;
       LEncodeJob.EncodingInformation := ' Merging';
       LEncodeJob.FileListIndex := 0;
       LEncodeJob.EncodingOutputFilePath := LFFMpegMergeCMDCreator.OutputFile;
@@ -4325,12 +4318,7 @@ end;
 procedure TMainForm.DVDBatchStartBtnClick(Sender: TObject);
 var
   LCMD: TCommandLine;
-  LMp4CMD: string;
-  LExtractAudioFile: string;
   LMEncoderMp4MuxExt: string;
-  LOggAudioCMD: string;
-  LOggRemuxExtension: string;
-  LRenameFile: TStringList;
   I: Integer;
 begin
   if FDVDJobs.Count > 0 then
@@ -5349,7 +5337,7 @@ begin
   FFFMpegPath := ExtractFileDir(Application.ExeName) + '\FFmpeg\ffmpeg.exe';
   FMencoderPath := ExtractFileDir(Application.ExeName) + '\MEncoder\Mencoder.exe';
 {$IFDEF WIN64}
-  FMEncoder64Path := ExtractFileDir(Application.ExeName) + '\MEncoder\MEncoder64\Mencoder.exe';
+  FMEncoder64Path := ExtractFileDir(Application.ExeName) + '\MEncoder\Mencoder.exe';
 {$ELSE}
   FMEncoder64Path := FMencoderPath;
 {$ENDIF}
@@ -7815,9 +7803,6 @@ var
   LRenameJob: TRenameJob;
   LSubLangStr: string;
   LSubtitleFilePath: string;
-  LOutExt: string;
-  LVideoSubExt: string;
-  LSubLangSplitIndex: integer;
   LCMDCounter: integer;
 begin
   LCMDCounter := 0;

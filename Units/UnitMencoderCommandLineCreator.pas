@@ -428,7 +428,7 @@ begin
         end;
       2: // aac
         begin
-          ACodec := ASR + ' -oac faac -faacopts br=' + Abitrate + '' + ':' + CustomAudioArg + AChan + AudioDelayCMD + LVolumeCMD;
+          ACodec := ASR + ' -oac lavc -lavcopts acodec=libfdk_aac:abitrate=' + Abitrate + ':' + CustomAudioArg + AChan + AudioDelayCMD + LVolumeCMD;
         end;
       3: // ogg
         begin
