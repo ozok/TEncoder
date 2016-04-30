@@ -23,7 +23,7 @@ object ProfileForm: TProfileForm
     316)
   PixelsPerInch = 96
   TextHeight = 13
-  object CloseBtn: TsBitBtn
+  object CloseBtn: TBitBtn
     Left = 375
     Top = 283
     Width = 65
@@ -96,23 +96,12 @@ object ProfileForm: TProfileForm
       00000000000000000000}
     TabOrder = 0
     OnClick = CloseBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object ProfileList: TsComboBox
+  object ProfileList: TComboBox
     Left = 48
     Top = 8
     Width = 369
     Height = 21
-    Alignment = taLeftJustify
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Profile:'
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = 15000804
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-    SkinData.SkinSection = 'COMBOBOX'
-    VerticalAlignment = taAlignTop
     Style = csDropDownList
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
@@ -120,12 +109,11 @@ object ProfileForm: TProfileForm
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    ItemIndex = -1
     ParentFont = False
     TabOrder = 1
     OnChange = ProfileListChange
   end
-  object SaveProfileBtn: TsBitBtn
+  object SaveProfileBtn: TBitBtn
     Left = 304
     Top = 283
     Width = 65
@@ -199,9 +187,8 @@ object ProfileForm: TProfileForm
       00000000000000000000}
     TabOrder = 2
     OnClick = SaveProfileBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object NewProfileBtn: TsBitBtn
+  object NewProfileBtn: TBitBtn
     Left = 160
     Top = 283
     Width = 65
@@ -274,9 +261,8 @@ object ProfileForm: TProfileForm
       00000000000000000000}
     TabOrder = 3
     OnClick = NewProfileBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object ResetBtn: TsBitBtn
+  object ResetBtn: TBitBtn
     Left = 8
     Top = 283
     Width = 120
@@ -349,7 +335,6 @@ object ProfileForm: TProfileForm
       00000000000000000000}
     TabOrder = 4
     OnClick = ResetBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
   object GroupBox1: TGroupBox
     Left = 8
@@ -374,21 +359,11 @@ object ProfileForm: TProfileForm
       Height = 13
       Caption = 'X'
     end
-    object VCodecList: TsComboBox
+    object VCodecList: TComboBox
       Left = 81
       Top = 19
       Width = 128
       Height = 21
-      Alignment = taLeftJustify
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'Codec:'
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clBlack
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      SkinData.SkinSection = 'COMBOBOX'
-      VerticalAlignment = taAlignTop
       Style = csDropDownList
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
@@ -396,78 +371,45 @@ object ProfileForm: TProfileForm
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemIndex = -1
       ParentFont = False
       TabOrder = 0
       OnChange = VCodecListChange
     end
-    object VBitrateList: TsComboBox
+    object VBitrateList: TComboBox
       Left = 81
       Top = 47
       Width = 128
       Height = 21
-      Alignment = taLeftJustify
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'Bitrate (kbps):'
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clBlack
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      SkinData.SkinSection = 'COMBOBOX'
-      VerticalAlignment = taAlignTop
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemIndex = -1
       ParentFont = False
       TabOrder = 1
       OnChange = VCodecListChange
     end
-    object VSizeList: TsComboBox
+    object VSizeList: TComboBox
       Left = 81
       Top = 75
       Width = 128
       Height = 21
-      Alignment = taLeftJustify
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'Common sizes:'
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clBlack
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      SkinData.SkinSection = 'COMBOBOX'
-      VerticalAlignment = taAlignTop
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemIndex = -1
       ParentFont = False
       TabOrder = 2
       OnChange = VCodecListChange
     end
-    object VASRList: TsComboBox
+    object VASRList: TComboBox
       Left = 81
       Top = 129
       Width = 128
       Height = 21
-      Alignment = taLeftJustify
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'Aspect Ratio:'
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clBlack
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      SkinData.SkinSection = 'COMBOBOX'
-      VerticalAlignment = taAlignTop
       Style = csDropDownList
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
@@ -475,38 +417,26 @@ object ProfileForm: TProfileForm
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemIndex = -1
       ParentFont = False
       TabOrder = 3
       OnChange = VCodecListChange
     end
-    object VFPSList: TsComboBox
+    object VFPSList: TComboBox
       Left = 81
       Top = 156
       Width = 128
       Height = 21
-      Alignment = taLeftJustify
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'FPS:'
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clBlack
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      SkinData.SkinSection = 'COMBOBOX'
-      VerticalAlignment = taAlignTop
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemIndex = -1
       ParentFont = False
       TabOrder = 4
       OnChange = VCodecListChange
     end
-    object WidthEdit: TsSpinEdit
+    object WidthEdit: TJvSpinEdit
       Left = 80
       Top = 102
       Width = 50
@@ -517,16 +447,14 @@ object ProfileForm: TProfileForm
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      NumbersOnly = True
-      ParentFont = False
-      TabOrder = 5
-      OnChange = WidthEditChange
-      SkinData.SkinSection = 'EDIT'
       MaxValue = 0
       MinValue = 0
+      ParentFont = False
+      TabOrder = 5
       Value = 0
+      OnChange = WidthEditChange
     end
-    object HeightEdit: TsSpinEdit
+    object HeightEdit: TJvSpinEdit
       Left = 152
       Top = 102
       Width = 50
@@ -537,14 +465,12 @@ object ProfileForm: TProfileForm
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      NumbersOnly = True
-      ParentFont = False
-      TabOrder = 6
-      OnChange = HeightEditChange
-      SkinData.SkinSection = 'EDIT'
       MaxValue = 0
       MinValue = 0
+      ParentFont = False
+      TabOrder = 6
       Value = 0
+      OnChange = HeightEditChange
     end
   end
   object GroupBox2: TGroupBox
@@ -554,21 +480,11 @@ object ProfileForm: TProfileForm
     Height = 133
     Caption = 'Audio Options'
     TabOrder = 6
-    object ACodecList: TsComboBox
+    object ACodecList: TComboBox
       Left = 81
       Top = 19
       Width = 128
       Height = 21
-      Alignment = taLeftJustify
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'Codec:'
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clBlack
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      SkinData.SkinSection = 'COMBOBOX'
-      VerticalAlignment = taAlignTop
       Style = csDropDownList
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
@@ -576,52 +492,30 @@ object ProfileForm: TProfileForm
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemIndex = -1
       ParentFont = False
       TabOrder = 0
       OnChange = VCodecListChange
     end
-    object ABitrateList: TsComboBox
+    object ABitrateList: TComboBox
       Left = 82
       Top = 47
       Width = 128
       Height = 21
-      Alignment = taLeftJustify
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'Bitrate (kbps):'
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clBlack
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      SkinData.SkinSection = 'COMBOBOX'
-      VerticalAlignment = taAlignTop
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemIndex = -1
       ParentFont = False
       TabOrder = 1
       OnChange = VCodecListChange
     end
-    object ASampleRateList: TsComboBox
+    object ASampleRateList: TComboBox
       Left = 82
       Top = 75
       Width = 128
       Height = 21
-      Alignment = taLeftJustify
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'Sample Rate:'
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clBlack
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      SkinData.SkinSection = 'COMBOBOX'
-      VerticalAlignment = taAlignTop
       Style = csDropDownList
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
@@ -629,26 +523,15 @@ object ProfileForm: TProfileForm
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemIndex = -1
       ParentFont = False
       TabOrder = 2
       OnChange = VCodecListChange
     end
-    object AChanList: TsComboBox
+    object AChanList: TComboBox
       Left = 81
       Top = 103
       Width = 128
       Height = 21
-      Alignment = taLeftJustify
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'Channels:'
-      BoundLabel.Font.Charset = DEFAULT_CHARSET
-      BoundLabel.Font.Color = clBlack
-      BoundLabel.Font.Height = -11
-      BoundLabel.Font.Name = 'Tahoma'
-      BoundLabel.Font.Style = []
-      SkinData.SkinSection = 'COMBOBOX'
-      VerticalAlignment = taAlignTop
       Style = csDropDownList
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
@@ -656,13 +539,12 @@ object ProfileForm: TProfileForm
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemIndex = -1
       ParentFont = False
       TabOrder = 3
       OnChange = VCodecListChange
     end
   end
-  object RefreshBtn: TsBitBtn
+  object RefreshBtn: TBitBtn
     Left = 423
     Top = 6
     Width = 25
@@ -736,23 +618,12 @@ object ProfileForm: TProfileForm
     ShowHint = True
     TabOrder = 7
     OnClick = RefreshBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object EncoderList: TsComboBox
+  object EncoderList: TComboBox
     Left = 312
     Top = 175
     Width = 128
     Height = 21
-    Alignment = taLeftJustify
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Encoder:'
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clBlack
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-    SkinData.SkinSection = 'COMBOBOX'
-    VerticalAlignment = taAlignTop
     Style = csDropDownList
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
@@ -760,11 +631,10 @@ object ProfileForm: TProfileForm
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    ItemIndex = -1
     ParentFont = False
     TabOrder = 8
   end
-  object DeleteBtn: TsBitBtn
+  object DeleteBtn: TBitBtn
     Left = 231
     Top = 283
     Width = 65
@@ -808,23 +678,12 @@ object ProfileForm: TProfileForm
       0000000000000000000000000000000000000000000000000000}
     TabOrder = 9
     OnClick = DeleteBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object LContainerList: TsComboBox
+  object LContainerList: TComboBox
     Left = 312
     Top = 202
     Width = 128
     Height = 21
-    Alignment = taLeftJustify
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Container:'
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clBlack
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-    SkinData.SkinSection = 'COMBOBOX'
-    VerticalAlignment = taAlignTop
     Style = csDropDownList
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
@@ -832,11 +691,10 @@ object ProfileForm: TProfileForm
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    ItemIndex = -1
     ParentFont = False
     TabOrder = 10
   end
-  object CustomVideoEdit: TsEdit
+  object CustomVideoEdit: TEdit
     Left = 120
     Top = 229
     Width = 320
@@ -850,16 +708,8 @@ object ProfileForm: TProfileForm
     ParentFont = False
     TabOrder = 11
     OnChange = CustomVideoEditChange
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Custom video options:'
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clBlack
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
   end
-  object CustomAudioEdit: TsEdit
+  object CustomAudioEdit: TEdit
     Left = 120
     Top = 256
     Width = 320
@@ -873,25 +723,5 @@ object ProfileForm: TProfileForm
     ParentFont = False
     TabOrder = 12
     OnChange = CustomAudioEditChange
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Custom audio options:'
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clBlack
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 408
-    Top = 56
   end
 end

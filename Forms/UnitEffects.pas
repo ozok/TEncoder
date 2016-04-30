@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -23,35 +23,33 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, StdCtrls, Buttons, sBitBtn, sSkinProvider, ExtCtrls,
-  sPanel,
-  sComboBox, sCheckBox, sLabel, IniFiles, Vcl.Mask, JvExMask, JvSpin, sPageControl, sEdit, sSpinEdit;
+  Dialogs, ComCtrls, StdCtrls, Buttons, ExtCtrls, IniFiles, Vcl.Mask, JvExMask,
+  JvSpin, Vcl.Samples.Spin;
 
 type
   TEffectForm = class(TForm)
-    CloseBtn: TsBitBtn;
-    sSkinProvider1: TsSkinProvider;
-    PreviewBtn: TsBitBtn;
-    PreviewList: TsComboBox;
-    DeintEnblBtn: TsCheckBox;
-    DeintMethodList: TsComboBox;
-    sLabel1: TsLabel;
-    sLabel2: TsLabel;
-    sPageControl1: TsPageControl;
-    sTabSheet1: TsTabSheet;
-    sTabSheet2: TsTabSheet;
-    Label5: TsLabel;
-    CropEnable: TsCheckBox;
-    CropHeightEdit: TsSpinEdit;
-    CropWidthEdit: TsSpinEdit;
-    CropXEdit: TsSpinEdit;
-    CropYEdit: TsSpinEdit;
-    sTabSheet3: TsTabSheet;
-    RotateList: TsComboBox;
-    sTabSheet4: TsTabSheet;
-    VolumeEnableBtn: TsCheckBox;
-    VolumeMencoderEdit: TsSpinEdit;
-    VolumeFFMpegEdit: TsSpinEdit;
+    CloseBtn: TBitBtn;
+    PreviewBtn: TBitBtn;
+    PreviewList: TComboBox;
+    DeintEnblBtn: TCheckBox;
+    DeintMethodList: TComboBox;
+    sLabel1: TLabel;
+    sLabel2: TLabel;
+    sPageControl1: TPageControl;
+    sTabSheet1: TTabSheet;
+    sTabSheet2: TTabSheet;
+    Label5: TLabel;
+    CropEnable: TCheckBox;
+    CropHeightEdit: TJvSpinEdit;
+    CropWidthEdit: TJvSpinEdit;
+    CropXEdit: TJvSpinEdit;
+    CropYEdit: TJvSpinEdit;
+    sTabSheet3: TTabSheet;
+    RotateList: TComboBox;
+    sTabSheet4: TTabSheet;
+    VolumeEnableBtn: TCheckBox;
+    VolumeMencoderEdit: TJvSpinEdit;
+    VolumeFFMpegEdit: TJvSpinEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure CloseBtnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -72,7 +70,8 @@ var
 
 implementation
 
-uses UnitMain, UnitPreview;
+uses
+  UnitMain, UnitPreview;
 
 {$R *.dfm}
 
@@ -113,10 +112,7 @@ end;
 
 procedure TEffectForm.FormCreate(Sender: TObject);
 begin
-
-  sSkinProvider1.SkinData.SkinManager := MainForm.sSkinManager1;
   LoadSettings;
-
 end;
 
 procedure TEffectForm.LoadSettings;
@@ -214,3 +210,4 @@ begin
 end;
 
 end.
+

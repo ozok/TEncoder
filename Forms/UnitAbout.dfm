@@ -3935,7 +3935,7 @@ object AboutForm: TAboutForm
       00E0000000C007000080030000800300008003000080030000C0070000C40700
       00E20F0000FEFF0000FFFF0000FFFF0000}
   end
-  object OkBtn: TsBitBtn
+  object OkBtn: TBitBtn
     Left = 213
     Top = 223
     Width = 100
@@ -4008,9 +4008,8 @@ object AboutForm: TAboutForm
       00000000000000000000}
     TabOrder = 0
     OnClick = OkBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object HomepageBtn: TsBitBtn
+  object HomepageBtn: TBitBtn
     Left = 8
     Top = 223
     Width = 120
@@ -4083,9 +4082,8 @@ object AboutForm: TAboutForm
       00000000000000000000}
     TabOrder = 1
     OnClick = HomepageBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object sPageControl1: TsPageControl
+  object sPageControl1: TPageControl
     Left = 8
     Top = 71
     Width = 305
@@ -4093,12 +4091,9 @@ object AboutForm: TAboutForm
     ActivePage = sTabSheet1
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 2
-    SkinData.SkinSection = 'PAGECONTROL'
-    object sTabSheet1: TsTabSheet
+    object sTabSheet1: TTabSheet
       Caption = 'About'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object Label1: TsLabel
+      object Label1: TLabel
         Left = 0
         Top = 0
         Width = 297
@@ -4107,15 +4102,15 @@ object AboutForm: TAboutForm
         Alignment = taCenter
         AutoSize = False
         Caption = 'TEncoder'
-        ParentFont = False
-        Layout = tlCenter
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
+        Layout = tlCenter
       end
-      object Label2: TsLabel
+      object Label2: TLabel
         Left = 0
         Top = 17
         Width = 297
@@ -4124,15 +4119,15 @@ object AboutForm: TAboutForm
         Alignment = taCenter
         AutoSize = False
         Caption = '4.5.10.5129'
-        ParentFont = False
-        Layout = tlCenter
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
+        Layout = tlCenter
       end
-      object Label3: TsLabel
+      object Label3: TLabel
         Left = 0
         Top = 34
         Width = 297
@@ -4140,17 +4135,17 @@ object AboutForm: TAboutForm
         Align = alTop
         Alignment = taCenter
         AutoSize = False
-        Caption = '(C) 2011-2014 ozok - ozok26@gmail.com'
-        ParentFont = False
-        Layout = tlCenter
+        Caption = '(C) 2011-2016 ozok - ozok26@gmail.com'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
+        Layout = tlCenter
         ExplicitTop = 26
       end
-      object Label4: TsLabel
+      object Label4: TLabel
         Left = 0
         Top = 51
         Width = 297
@@ -4159,16 +4154,16 @@ object AboutForm: TAboutForm
         Alignment = taCenter
         AutoSize = False
         Caption = 'Licenced under the terms of GPL version 2 or above.'
-        ParentFont = False
-        Layout = tlCenter
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
+        Layout = tlCenter
         ExplicitTop = 39
       end
-      object Label13: TsLabel
+      object Label13: TLabel
         Left = 0
         Top = 68
         Width = 297
@@ -4177,177 +4172,158 @@ object AboutForm: TAboutForm
         Alignment = taCenter
         AutoSize = False
         Caption = 'Please feel free to send bug reports, suggestions etc.'
-        ParentFont = False
-        Layout = tlCenter
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
+        Layout = tlCenter
         ExplicitTop = 56
       end
     end
-    object sTabSheet2: TsTabSheet
+    object sTabSheet2: TTabSheet
       Caption = '3rd Parties'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object Label10: TsLabel
+      object Label10: TLabel
         Left = 159
         Top = 73
         Width = 125
         Height = 13
         Cursor = crHandPoint
         Caption = 'http://jvcl.delphi-jedi.org/'
-        ParentFont = False
-        OnClick = Label6Click
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = [fsUnderline]
-        UseSkinColor = False
+        ParentFont = False
+        OnClick = Label6Click
       end
-      object Label11: TsLabel
+      object Label11: TLabel
         Left = 148
         Top = 92
         Width = 136
         Height = 13
         Cursor = crHandPoint
         Caption = 'http://www.alphaskins.com/'
-        ParentFont = False
-        OnClick = Label6Click
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = [fsUnderline]
-        UseSkinColor = False
+        ParentFont = False
+        OnClick = Label6Click
       end
-      object Label12: TsLabel
+      object Label12: TLabel
         Left = 166
         Top = 35
         Width = 118
         Height = 13
         Cursor = crHandPoint
         Caption = 'http://www.ffmpeg.org/'
-        ParentFont = False
-        OnClick = Label6Click
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = [fsUnderline]
-        UseSkinColor = False
+        ParentFont = False
+        OnClick = Label6Click
       end
-      object Label5: TsLabel
+      object Label5: TLabel
         Left = 16
         Top = 16
         Width = 47
         Height = 13
         Caption = 'Mencoder'
-        ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
       end
-      object Label6: TsLabel
+      object Label6: TLabel
         Left = 186
         Top = 16
         Width = 98
         Height = 13
         Cursor = crHandPoint
         Caption = 'www.mplayerhq.hu/'
-        ParentFont = False
-        OnClick = Label6Click
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = [fsUnderline]
-        UseSkinColor = False
+        ParentFont = False
+        OnClick = Label6Click
       end
-      object Label7: TsLabel
+      object Label7: TLabel
         Left = 16
         Top = 54
         Width = 48
         Height = 13
         Caption = 'MediaInfo'
-        ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
       end
-      object Label8: TsLabel
+      object Label8: TLabel
         Left = 124
         Top = 54
         Width = 160
         Height = 13
         Cursor = crHandPoint
         Caption = 'http://mediainfo.sourceforge.net'
-        ParentFont = False
-        OnClick = Label6Click
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = [fsUnderline]
-        UseSkinColor = False
+        ParentFont = False
+        OnClick = Label6Click
       end
-      object Label9: TsLabel
+      object Label9: TLabel
         Left = 16
         Top = 73
         Width = 23
         Height = 13
         Caption = 'JVCL'
-        ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
       end
-      object sLabel4: TsLabel
+      object sLabel4: TLabel
         Left = 16
         Top = 35
         Width = 38
         Height = 13
         Caption = 'FFMpeg'
-        ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
       end
-      object sLabel6: TsLabel
+      object sLabel6: TLabel
         Left = 16
         Top = 92
         Width = 67
         Height = 13
         Caption = 'AlphaControls'
-        ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
       end
     end
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 224
-    Top = 16
   end
 end

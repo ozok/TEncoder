@@ -21,7 +21,7 @@ object EffectForm: TEffectForm
     217)
   PixelsPerInch = 96
   TextHeight = 13
-  object CloseBtn: TsBitBtn
+  object CloseBtn: TBitBtn
     Left = 448
     Top = 184
     Width = 120
@@ -94,9 +94,8 @@ object EffectForm: TEffectForm
       00000000000000000000}
     TabOrder = 0
     OnClick = CloseBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object PreviewBtn: TsBitBtn
+  object PreviewBtn: TBitBtn
     Left = 8
     Top = 184
     Width = 100
@@ -169,36 +168,24 @@ object EffectForm: TEffectForm
       FF00FFFFFF00FFFFFF00}
     TabOrder = 1
     OnClick = PreviewBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object PreviewList: TsComboBox
+  object PreviewList: TComboBox
     Left = 168
     Top = 185
     Width = 274
     Height = 21
-    Anchors = [akLeft, akRight, akBottom]
-    Alignment = taLeftJustify
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Select file:'
-    BoundLabel.Font.Charset = DEFAULT_CHARSET
-    BoundLabel.Font.Color = clBlack
-    BoundLabel.Font.Height = -11
-    BoundLabel.Font.Name = 'Tahoma'
-    BoundLabel.Font.Style = []
-    SkinData.SkinSection = 'COMBOBOX'
-    VerticalAlignment = taAlignTop
     Style = csDropDownList
+    Anchors = [akLeft, akRight, akBottom]
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    ItemIndex = -1
     ParentFont = False
     TabOrder = 2
   end
-  object sPageControl1: TsPageControl
+  object sPageControl1: TPageControl
     Left = 8
     Top = 8
     Width = 560
@@ -206,12 +193,9 @@ object EffectForm: TEffectForm
     ActivePage = sTabSheet1
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 3
-    SkinData.SkinSection = 'PAGECONTROL'
-    object sTabSheet1: TsTabSheet
+    object sTabSheet1: TTabSheet
       Caption = 'Deinterlace'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object sLabel1: TsLabel
+      object sLabel1: TLabel
         Left = 3
         Top = 72
         Width = 361
@@ -220,14 +204,14 @@ object EffectForm: TEffectForm
           'This options is for MEncoder. FFmpeg has only one option for dei' +
           'nterlacing.'
       end
-      object sLabel2: TsLabel
+      object sLabel2: TLabel
         Left = 3
         Top = 91
         Width = 289
         Height = 13
         Caption = 'Preview may be different if you choose FFmpeg as encoder.'
       end
-      object DeintEnblBtn: TsCheckBox
+      object DeintEnblBtn: TCheckBox
         Left = 10
         Top = 16
         Width = 58
@@ -235,25 +219,12 @@ object EffectForm: TEffectForm
         Caption = 'Enable'
         TabOrder = 0
         OnClick = DeintEnblBtnClick
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object DeintMethodList: TsComboBox
+      object DeintMethodList: TComboBox
         Left = 60
         Top = 41
         Width = 145
         Height = 21
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Method:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clBlack
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Enabled = False
@@ -262,10 +233,8 @@ object EffectForm: TEffectForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
-        Text = 'Yadif=0'
         Items.Strings = (
           'Yadif=0'
           'Yadif=1:1'
@@ -278,11 +247,13 @@ object EffectForm: TEffectForm
           'Lavcdeint')
       end
     end
-    object sTabSheet2: TsTabSheet
+    object sTabSheet2: TTabSheet
       Caption = 'Crop'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object Label5: TsLabel
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object Label5: TLabel
         Left = 10
         Top = 68
         Width = 370
@@ -291,7 +262,7 @@ object EffectForm: TEffectForm
           'Make sure width and height values match with  the values from ma' +
           'in window.'
       end
-      object CropEnable: TsCheckBox
+      object CropEnable: TCheckBox
         Left = 10
         Top = 16
         Width = 58
@@ -299,16 +270,12 @@ object EffectForm: TEffectForm
         Caption = 'Enable'
         TabOrder = 0
         OnClick = CropEnableClick
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object CropHeightEdit: TsSpinEdit
+      object CropHeightEdit: TJvSpinEdit
         Left = 156
         Top = 41
         Width = 50
         Height = 21
-        Alignment = taCenter
         Color = clWhite
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
@@ -316,23 +283,14 @@ object EffectForm: TEffectForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        NumbersOnly = True
         ParentFont = False
         TabOrder = 1
-        Text = '0'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Heigth:'
-        MaxValue = 0
-        MinValue = 0
-        Value = 0
       end
-      object CropWidthEdit: TsSpinEdit
+      object CropWidthEdit: TJvSpinEdit
         Left = 46
         Top = 41
         Width = 50
         Height = 21
-        Alignment = taCenter
         Color = clWhite
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
@@ -340,23 +298,14 @@ object EffectForm: TEffectForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        NumbersOnly = True
         ParentFont = False
         TabOrder = 2
-        Text = '0'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Width:'
-        MaxValue = 0
-        MinValue = 0
-        Value = 0
       end
-      object CropXEdit: TsSpinEdit
+      object CropXEdit: TJvSpinEdit
         Left = 239
         Top = 41
         Width = 50
         Height = 21
-        Alignment = taCenter
         Color = clWhite
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
@@ -366,20 +315,12 @@ object EffectForm: TEffectForm
         Font.Style = []
         ParentFont = False
         TabOrder = 3
-        Text = '0'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'X:'
-        MaxValue = 0
-        MinValue = 0
-        Value = 0
       end
-      object CropYEdit: TsSpinEdit
+      object CropYEdit: TJvSpinEdit
         Left = 330
         Top = 41
         Width = 50
         Height = 21
-        Alignment = taCenter
         Color = clWhite
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
@@ -389,29 +330,19 @@ object EffectForm: TEffectForm
         Font.Style = []
         ParentFont = False
         TabOrder = 4
-        Text = '0'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Y:'
-        MaxValue = 0
-        MinValue = 0
-        Value = 0
       end
     end
-    object sTabSheet3: TsTabSheet
+    object sTabSheet3: TTabSheet
       Caption = 'Rotate'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object RotateList: TsComboBox
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object RotateList: TComboBox
         Left = 45
         Top = 16
         Width = 276
         Height = 21
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Rotate:'
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
@@ -419,10 +350,8 @@ object EffectForm: TEffectForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 0
-        Text = 'Do not rotate'
         Items.Strings = (
           'Do not rotate'
           'Rotate by 90 degrees clockwise and flip (default).'
@@ -435,11 +364,13 @@ object EffectForm: TEffectForm
           'Rotate by 180 degrees counterclockwise and flip.')
       end
     end
-    object sTabSheet4: TsTabSheet
+    object sTabSheet4: TTabSheet
       Caption = 'Volume'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object VolumeEnableBtn: TsCheckBox
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object VolumeEnableBtn: TCheckBox
         Left = 10
         Top = 16
         Width = 58
@@ -447,68 +378,39 @@ object EffectForm: TEffectForm
         Caption = 'Enable'
         TabOrder = 0
         OnClick = VolumeEnableBtnClick
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object VolumeMencoderEdit: TsSpinEdit
+      object VolumeMencoderEdit: TJvSpinEdit
         Left = 200
         Top = 40
         Width = 75
         Height = 21
-        Alignment = taCenter
+        MaxValue = 60.000000000000000000
+        MinValue = -200.000000000000000000
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        NumbersOnly = True
         ParentFont = False
         TabOrder = 1
-        Text = '0'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'MEncoder volume level (-200 - 60 dB)'
-        MaxValue = 60
-        MinValue = -200
-        Value = 0
       end
-      object VolumeFFMpegEdit: TsSpinEdit
+      object VolumeFFMpegEdit: TJvSpinEdit
         Left = 200
         Top = 67
         Width = 75
         Height = 21
-        Alignment = taCenter
+        MaxValue = 100.000000000000000000
+        Value = 100.000000000000000000
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        NumbersOnly = True
         ParentFont = False
         TabOrder = 2
-        Text = '100'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'FFMpeg volume level (%):'
-        MaxValue = 100
-        MinValue = 0
-        Value = 100
       end
     end
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 456
-    Top = 56
   end
 end

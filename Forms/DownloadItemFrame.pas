@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,23 +22,23 @@ unit DownloadItemFrame;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, sPanel,
-  sGauge, Vcl.StdCtrls, sComboBox, sLabel, acImage, sButton, sBevel;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, 
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, 
+  Vcl.StdCtrls, Vcl.Samples.Gauges;
 
 type
   TDownloadUIItem = class(TFrame)
-    LinkLabel: TsLabel;
-    FileNameLabel: TsLabel;
-    FormatList: TsComboBox;
-    SubtitleList: TsComboBox;
-    ProgressLabel: TsLabel;
-    ProgressBar: TsGauge;
-    sPanel1: TsPanel;
-    DeleteButton: TsButton;
-    sPanel2: TsPanel;
-    PrevievImg: TsImage;
-    sBevel1: TsBevel;
+    LinkLabel: TLabel;
+    FileNameLabel: TLabel;
+    FormatList: TComboBox;
+    SubtitleList: TComboBox;
+    ProgressLabel: TLabel;
+    ProgressBar: TGauge;
+    sPanel1: TPanel;
+    DeleteButton: TButton;
+    sPanel2: TPanel;
+    PrevievImg: TImage;
+    sBevel1: TBevel;
   private
     { Private declarations }
   public
@@ -77,4 +77,4 @@ begin
   ProgressBar.Progress := 0;
 end;
 
-end.
+end.

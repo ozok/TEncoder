@@ -21,7 +21,7 @@ object YoutubedlUpdateChecker: TYoutubedlUpdateChecker
     172)
   PixelsPerInch = 96
   TextHeight = 13
-  object OutputList: TsMemo
+  object OutputList: TMemo
     Left = 8
     Top = 8
     Width = 629
@@ -38,7 +38,7 @@ object YoutubedlUpdateChecker: TYoutubedlUpdateChecker
     ScrollBars = ssBoth
     TabOrder = 0
   end
-  object CloseBtn: TsButton
+  object CloseBtn: TButton
     Left = 562
     Top = 139
     Width = 75
@@ -48,11 +48,11 @@ object YoutubedlUpdateChecker: TYoutubedlUpdateChecker
     TabOrder = 1
     OnClick = CloseBtnClick
   end
-  object ProgressBar: TsProgressBar
+  object ProgressBar: TProgressBar
     Left = 8
-    Top = 139
-    Width = 548
-    Height = 25
+    Top = 142
+    Width = 537
+    Height = 17
     TabOrder = 2
   end
   object Downloader: TIdHTTP
@@ -96,17 +96,5 @@ object YoutubedlUpdateChecker: TYoutubedlUpdateChecker
     OnExecute = UpdateThreadExecute
     Left = 280
     Top = 24
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 312
-    Top = 88
   end
 end

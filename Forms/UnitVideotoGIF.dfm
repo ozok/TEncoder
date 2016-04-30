@@ -24,169 +24,86 @@ object VideoToGIFForm: TVideoToGIFForm
     270)
   PixelsPerInch = 96
   TextHeight = 13
-  object SourceEdit: TsFilenameEdit
-    Left = 64
-    Top = 8
-    Width = 712
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    AutoSize = False
-    Color = clWhite
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    MaxLength = 255
-    ParentFont = False
-    TabOrder = 0
-    Text = ''
-    CheckOnExit = True
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Source:'
-    SkinData.SkinSection = 'EDIT'
-    GlyphMode.Blend = 0
-    GlyphMode.Grayed = False
-    OnAfterDialog = SourceEditAfterDialog
-  end
-  object DestEdit: TsFilenameEdit
-    Left = 64
-    Top = 35
-    Width = 712
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    AutoSize = False
-    Color = clWhite
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    MaxLength = 255
-    ParentFont = False
-    TabOrder = 1
-    Text = ''
-    CheckOnExit = True
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Destination:'
-    SkinData.SkinSection = 'EDIT'
-    GlyphMode.Blend = 0
-    GlyphMode.Grayed = False
-    Filter = 'GIF|*.gif'
-  end
-  object WidthEdit: TsSpinEdit
+  object WidthEdit: TJvSpinEdit
     Left = 64
     Top = 62
     Width = 75
     Height = 21
-    Alignment = taCenter
+    Value = 320.000000000000000000
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    NumbersOnly = True
     ParentFont = False
-    TabOrder = 2
-    Text = '320'
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Width:'
-    MaxValue = 0
-    MinValue = 0
-    Value = 320
+    TabOrder = 0
   end
-  object HeightEdit: TsSpinEdit
+  object HeightEdit: TJvSpinEdit
     Left = 184
     Top = 62
     Width = 75
     Height = 21
-    Alignment = taCenter
+    Value = 240.000000000000000000
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    NumbersOnly = True
     ParentFont = False
-    TabOrder = 3
-    Text = '240'
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Height:'
-    MaxValue = 0
-    MinValue = 0
-    Value = 240
+    TabOrder = 1
   end
-  object KeepAspectBtn: TsCheckBox
+  object KeepAspectBtn: TCheckBox
     Left = 265
     Top = 62
     Width = 110
     Height = 19
     Caption = 'Keep aspect ratio'
-    TabOrder = 4
+    TabOrder = 2
     OnClick = KeepAspectBtnClick
-    SkinData.SkinSection = 'CHECKBOX'
-    ImgChecked = 0
-    ImgUnchecked = 0
   end
-  object DelayEdit: TsSpinEdit
+  object DelayEdit: TJvSpinEdit
     Left = 701
     Top = 62
     Width = 75
     Height = 21
-    Alignment = taCenter
-    Anchors = [akTop, akRight]
+    Value = 20.000000000000000000
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    NumbersOnly = True
+    Anchors = [akTop, akRight]
     ParentFont = False
-    TabOrder = 5
-    Text = '20'
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Delay between GIF frames (ms):'
-    MaxValue = 0
-    MinValue = 0
-    Value = 20
+    TabOrder = 3
   end
-  object StartBar: TsTrackBar
+  object StartBar: TTrackBar
     Left = 145
     Top = 116
     Width = 631
     Height = 25
     Anchors = [akLeft, akTop, akRight]
     ShowSelRange = False
-    TabOrder = 6
+    TabOrder = 4
     TickMarks = tmBoth
     TickStyle = tsNone
     OnChange = StartBarChange
-    SkinData.SkinSection = 'TRACKBAR'
-    BarOffsetV = 0
-    BarOffsetH = 0
   end
-  object EndBar: TsTrackBar
+  object EndBar: TTrackBar
     Left = 145
     Top = 147
     Width = 631
     Height = 25
     Anchors = [akLeft, akTop, akRight]
     ShowSelRange = False
-    TabOrder = 7
+    TabOrder = 5
     TickMarks = tmBoth
     TickStyle = tsNone
     OnChange = EndBarChange
-    SkinData.SkinSection = 'TRACKBAR'
-    BarOffsetV = 0
-    BarOffsetH = 0
   end
-  object StartEdit: TsEdit
+  object StartEdit: TEdit
     Left = 64
     Top = 118
     Width = 75
@@ -200,13 +117,10 @@ object VideoToGIFForm: TVideoToGIFForm
     Font.Style = []
     ParentFont = False
     ReadOnly = True
-    TabOrder = 8
+    TabOrder = 6
     Text = '00:00:00.000'
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Start:'
   end
-  object EndEdit: TsEdit
+  object EndEdit: TEdit
     Left = 64
     Top = 149
     Width = 75
@@ -220,24 +134,20 @@ object VideoToGIFForm: TVideoToGIFForm
     Font.Style = []
     ParentFont = False
     ReadOnly = True
-    TabOrder = 9
+    TabOrder = 7
     Text = '00:00:00.000'
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'End:'
   end
-  object StartBtn: TsButton
+  object StartBtn: TButton
     Left = 676
     Top = 232
     Width = 100
     Height = 30
     Anchors = [akRight, akBottom]
     Caption = 'Start'
-    TabOrder = 10
+    TabOrder = 8
     OnClick = StartBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object StopBtn: TsButton
+  object StopBtn: TButton
     Left = 570
     Top = 232
     Width = 100
@@ -245,21 +155,19 @@ object VideoToGIFForm: TVideoToGIFForm
     Anchors = [akRight, akBottom]
     Caption = 'Stop'
     Enabled = False
-    TabOrder = 11
+    TabOrder = 9
     OnClick = StopBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object ResetBtn: TsButton
+  object ResetBtn: TButton
     Left = 8
     Top = 232
     Width = 100
     Height = 30
     Anchors = [akLeft, akBottom]
     Caption = 'Reset'
-    TabOrder = 12
-    SkinData.SkinSection = 'BUTTON'
+    TabOrder = 10
   end
-  object DurationEdit: TsEdit
+  object DurationEdit: TEdit
     Left = 701
     Top = 178
     Width = 75
@@ -273,13 +181,10 @@ object VideoToGIFForm: TVideoToGIFForm
     Font.Style = []
     ParentFont = False
     ReadOnly = True
-    TabOrder = 13
+    TabOrder = 11
     Text = '00:00:00.000'
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Duration of selected part:'
   end
-  object ConsoleEdit: TsEdit
+  object ConsoleEdit: TEdit
     Left = 8
     Top = 205
     Width = 768
@@ -294,11 +199,9 @@ object VideoToGIFForm: TVideoToGIFForm
     Font.Style = []
     ParentFont = False
     ReadOnly = True
-    TabOrder = 14
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Caption = 'FFMpeg:'
+    TabOrder = 12
   end
-  object InfoEdit: TsEdit
+  object InfoEdit: TEdit
     Left = 362
     Top = 237
     Width = 206
@@ -313,30 +216,14 @@ object VideoToGIFForm: TVideoToGIFForm
     Font.Style = []
     ParentFont = False
     ReadOnly = True
-    TabOrder = 15
-    SkinData.SkinSection = 'EDIT'
+    TabOrder = 14
   end
-  object ProgressBar1: TsProgressBar
-    Left = 114
-    Top = 232
-    Width = 242
-    Height = 30
-    Anchors = [akLeft, akRight, akBottom]
-    DoubleBuffered = False
-    ParentDoubleBuffered = False
-    Smooth = True
-    Style = pbstMarquee
-    MarqueeInterval = 50
-    TabOrder = 16
-    Visible = False
-    SkinData.SkinSection = 'GAUGE'
-  end
-  object MemoryEdit: TsSpinEdit
+  object MemoryEdit: TJvSpinEdit
     Left = 145
     Top = 89
     Width = 114
     Height = 21
-    Alignment = taCenter
+    Value = 512.000000000000000000
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
@@ -344,50 +231,46 @@ object VideoToGIFForm: TVideoToGIFForm
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    TabOrder = 17
-    Text = '512'
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Max Memory Usage (MB):'
-    MaxValue = 0
-    MinValue = 0
-    Value = 512
+    TabOrder = 13
   end
-  object FPSEdit: TsSpinEdit
+  object FPSEdit: TJvSpinEdit
     Left = 701
     Top = 89
     Width = 75
     Height = 21
-    Alignment = taCenter
-    Anchors = [akTop, akRight]
+    Value = 5.000000000000000000
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    NumbersOnly = True
+    Anchors = [akTop, akRight]
     ParentFont = False
-    TabOrder = 18
-    Text = '5'
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Number of frames per second to be extracted from video:'
-    MaxValue = 0
-    MinValue = 0
-    Value = 5
+    TabOrder = 15
   end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 336
+  object SourceEdit: TJvFilenameEdit
+    Left = 64
     Top = 8
+    Width = 712
+    Height = 21
+    TabOrder = 17
+    Text = 'SourceEdit'
+  end
+  object DestEdit: TJvFilenameEdit
+    Left = 64
+    Top = 35
+    Width = 712
+    Height = 21
+    TabOrder = 16
+    Text = 'DestEdit'
+  end
+  object ProgressBar1: TProgressBar
+    Left = 114
+    Top = 232
+    Width = 242
+    Height = 30
+    TabOrder = 18
   end
   object PosTimer: TTimer
     Enabled = False

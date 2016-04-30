@@ -24,7 +24,7 @@ object ImageAudiotoVideoForm: TImageAudiotoVideoForm
     149)
   PixelsPerInch = 96
   TextHeight = 13
-  object sLabel1: TsLabel
+  object sLabel1: TLabel
     Left = 8
     Top = 121
     Width = 404
@@ -34,7 +34,7 @@ object ImageAudiotoVideoForm: TImageAudiotoVideoForm
       'Video/audio options set in the main window will be used (except ' +
       'for encoder option).'
   end
-  object ProgressLabel: TsLabel
+  object ProgressLabel: TLabel
     Left = 601
     Top = 95
     Width = 36
@@ -44,55 +44,7 @@ object ImageAudiotoVideoForm: TImageAudiotoVideoForm
     AutoSize = False
     Caption = '0%'
   end
-  object AudioEdit: TsFilenameEdit
-    Left = 64
-    Top = 8
-    Width = 573
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    AutoSize = False
-    Color = clWhite
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    MaxLength = 255
-    ParentFont = False
-    TabOrder = 0
-    Text = ''
-    CheckOnExit = True
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Audio File:'
-    SkinData.SkinSection = 'EDIT'
-    GlyphMode.Blend = 0
-    GlyphMode.Grayed = False
-  end
-  object ImageEdit: TsFilenameEdit
-    Left = 64
-    Top = 35
-    Width = 573
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    AutoSize = False
-    Color = clWhite
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    MaxLength = 255
-    ParentFont = False
-    TabOrder = 1
-    Text = ''
-    CheckOnExit = True
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Image File:'
-    SkinData.SkinSection = 'EDIT'
-    GlyphMode.Blend = 0
-    GlyphMode.Grayed = False
-  end
-  object OutputEdit: TsEdit
+  object OutputEdit: TEdit
     Left = 64
     Top = 62
     Width = 573
@@ -105,12 +57,9 @@ object ImageAudiotoVideoForm: TImageAudiotoVideoForm
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    TabOrder = 2
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Output File:'
+    TabOrder = 1
   end
-  object StartBtn: TsBitBtn
+  object StartBtn: TBitBtn
     Left = 537
     Top = 116
     Width = 100
@@ -119,9 +68,8 @@ object ImageAudiotoVideoForm: TImageAudiotoVideoForm
     Caption = 'Start'
     TabOrder = 3
     OnClick = StartBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object StopBtn: TsBitBtn
+  object StopBtn: TBitBtn
     Left = 431
     Top = 116
     Width = 100
@@ -129,30 +77,32 @@ object ImageAudiotoVideoForm: TImageAudiotoVideoForm
     Anchors = [akRight, akBottom]
     Caption = 'Stop'
     Enabled = False
-    TabOrder = 4
+    TabOrder = 0
     OnClick = StopBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object ProgressBar: TsProgressBar
+  object ProgressBar: TProgressBar
     Left = 8
     Top = 93
     Width = 587
     Height = 17
     Anchors = [akLeft, akRight, akBottom]
-    TabOrder = 5
-    SkinData.SkinSection = 'GAUGE'
+    TabOrder = 2
   end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 544
-    Top = 40
+  object AudioEdit: TJvFilenameEdit
+    Left = 64
+    Top = 8
+    Width = 573
+    Height = 21
+    TabOrder = 4
+    Text = ''
+  end
+  object ImageEdit: TJvFilenameEdit
+    Left = 64
+    Top = 35
+    Width = 573
+    Height = 21
+    TabOrder = 5
+    Text = ''
   end
   object PosTimer: TTimer
     Enabled = False

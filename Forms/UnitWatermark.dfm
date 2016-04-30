@@ -24,7 +24,7 @@ object WatermarkForm: TWatermarkForm
     170)
   PixelsPerInch = 96
   TextHeight = 13
-  object sLabel1: TsLabel
+  object sLabel1: TLabel
     Left = 8
     Top = 142
     Width = 404
@@ -35,7 +35,7 @@ object WatermarkForm: TWatermarkForm
       'for encoder option).'
     ExplicitTop = 320
   end
-  object ProgressLabel: TsLabel
+  object ProgressLabel: TLabel
     Left = 601
     Top = 116
     Width = 36
@@ -46,64 +46,11 @@ object WatermarkForm: TWatermarkForm
     Caption = '0%'
     ExplicitTop = 294
   end
-  object VideoPathEdit: TsFilenameEdit
-    Left = 56
-    Top = 8
-    Width = 581
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    AutoSize = False
-    Color = clWhite
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    MaxLength = 255
-    ParentFont = False
-    TabOrder = 0
-    Text = ''
-    CheckOnExit = True
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Video:'
-    SkinData.SkinSection = 'EDIT'
-    GlyphMode.Blend = 0
-    GlyphMode.Grayed = False
-  end
-  object ImagePathEdit: TsFilenameEdit
-    Left = 56
-    Top = 35
-    Width = 581
-    Height = 21
-    Anchors = [akLeft, akTop, akRight]
-    AutoSize = False
-    Color = clWhite
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    MaxLength = 255
-    ParentFont = False
-    TabOrder = 1
-    Text = ''
-    CheckOnExit = True
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Image:'
-    SkinData.SkinSection = 'EDIT'
-    GlyphMode.Blend = 0
-    GlyphMode.Grayed = False
-  end
-  object PositionList: TsComboBox
+  object PositionList: TComboBox
     Left = 56
     Top = 89
     Width = 121
     Height = 21
-    Alignment = taLeftJustify
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Position:'
-    SkinData.SkinSection = 'COMBOBOX'
-    VerticalAlignment = taAlignTop
     Style = csDropDownList
     Color = clWhite
     Font.Charset = DEFAULT_CHARSET
@@ -111,10 +58,8 @@ object WatermarkForm: TWatermarkForm
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    ItemIndex = 0
     ParentFont = False
-    TabOrder = 2
-    Text = 'Top left'
+    TabOrder = 0
     OnChange = PositionListChange
     Items.Strings = (
       'Top left'
@@ -128,12 +73,11 @@ object WatermarkForm: TWatermarkForm
       'Bottom right'
       'Custom')
   end
-  object XEdit: TsSpinEdit
+  object XEdit: TJvSpinEdit
     Left = 232
     Top = 89
     Width = 75
     Height = 21
-    Alignment = taCenter
     Color = clWhite
     Enabled = False
     Font.Charset = DEFAULT_CHARSET
@@ -141,23 +85,14 @@ object WatermarkForm: TWatermarkForm
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    NumbersOnly = True
     ParentFont = False
-    TabOrder = 3
-    Text = '0'
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'X:'
-    MaxValue = 0
-    MinValue = 0
-    Value = 0
+    TabOrder = 1
   end
-  object YEdit: TsSpinEdit
+  object YEdit: TJvSpinEdit
     Left = 328
     Top = 89
     Width = 75
     Height = 21
-    Alignment = taCenter
     Color = clWhite
     Enabled = False
     Font.Charset = DEFAULT_CHARSET
@@ -165,18 +100,10 @@ object WatermarkForm: TWatermarkForm
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    NumbersOnly = True
     ParentFont = False
-    TabOrder = 4
-    Text = '0'
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Y:'
-    MaxValue = 0
-    MinValue = 0
-    Value = 0
+    TabOrder = 2
   end
-  object OutputEdit: TsEdit
+  object OutputEdit: TEdit
     Left = 56
     Top = 62
     Width = 581
@@ -189,23 +116,19 @@ object WatermarkForm: TWatermarkForm
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    TabOrder = 5
-    SkinData.SkinSection = 'EDIT'
-    BoundLabel.Active = True
-    BoundLabel.Caption = 'Output:'
+    TabOrder = 4
   end
-  object StartBtn: TsBitBtn
+  object StartBtn: TBitBtn
     Left = 537
     Top = 137
     Width = 100
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Start'
-    TabOrder = 6
+    TabOrder = 5
     OnClick = StartBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object StopBtn: TsBitBtn
+  object StopBtn: TBitBtn
     Left = 431
     Top = 137
     Width = 100
@@ -213,30 +136,31 @@ object WatermarkForm: TWatermarkForm
     Anchors = [akRight, akBottom]
     Caption = 'Stop'
     Enabled = False
-    TabOrder = 7
+    TabOrder = 3
     OnClick = StopBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object ProgressBar: TsProgressBar
+  object VideoPathEdit: TJvFilenameEdit
+    Left = 56
+    Top = 8
+    Width = 581
+    Height = 21
+    TabOrder = 7
+    Text = 'VideoPathEdit'
+  end
+  object ImagePathEdit: TJvFilenameEdit
+    Left = 56
+    Top = 35
+    Width = 581
+    Height = 21
+    TabOrder = 6
+    Text = 'ImagePathEdit'
+  end
+  object ProgressBar: TProgressBar
     Left = 8
     Top = 114
     Width = 587
     Height = 17
-    Anchors = [akLeft, akRight, akBottom]
     TabOrder = 8
-    SkinData.SkinSection = 'GAUGE'
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 520
-    Top = 32
   end
   object PosTimer: TTimer
     Enabled = False

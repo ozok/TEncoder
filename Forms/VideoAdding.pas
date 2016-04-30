@@ -3,16 +3,15 @@ unit VideoAdding;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, sSkinProvider, Vcl.StdCtrls, sButton,
-  sLabel, Vcl.ComCtrls, acProgressBar;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, 
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, 
+  Vcl.ComCtrls;
 
 type
   TVideoAddingForm = class(TForm)
-    sSkinProvider1: TsSkinProvider;
-    VideoAddBar: TsProgressBar;
-    InfoLabel: TsLabel;
-    AbortVideoAddBtn: TsButton;
+    InfoLabel: TLabel;
+    AbortVideoAddBtn: TButton;
+    VideoAddBar: TProgressBar;
     procedure AbortVideoAddBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
@@ -40,4 +39,4 @@ begin
   MainForm.Enabled := True;
 end;
 
-end.
+end.

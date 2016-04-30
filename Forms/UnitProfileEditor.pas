@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,39 +22,39 @@ unit UnitProfileEditor;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, sBitBtn, sSkinProvider, sComboBox, IniFiles,
-  Vcl.Mask, JvExMask, JvSpin, sEdit, StrUtils, sSpinEdit;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Dialogs, StdCtrls, Buttons, IniFiles, Vcl.Mask, JvExMask, JvSpin, StrUtils,
+  Vcl.Samples.Spin;
 
 type
   TProfileForm = class(TForm)
-    sSkinProvider1: TsSkinProvider;
-    CloseBtn: TsBitBtn;
-    ProfileList: TsComboBox;
-    SaveProfileBtn: TsBitBtn;
-    NewProfileBtn: TsBitBtn;
-    ResetBtn: TsBitBtn;
+                                   
+    CloseBtn: TBitBtn;
+    ProfileList: TComboBox;
+    SaveProfileBtn: TBitBtn;
+    NewProfileBtn: TBitBtn;
+    ResetBtn: TBitBtn;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
-    VCodecList: TsComboBox;
-    VBitrateList: TsComboBox;
-    VSizeList: TsComboBox;
-    VASRList: TsComboBox;
-    VFPSList: TsComboBox;
-    ACodecList: TsComboBox;
-    ABitrateList: TsComboBox;
-    ASampleRateList: TsComboBox;
-    AChanList: TsComboBox;
-    RefreshBtn: TsBitBtn;
-    EncoderList: TsComboBox;
-    DeleteBtn: TsBitBtn;
-    WidthEdit: TsSpinEdit;
-    HeightEdit: TsSpinEdit;
+    VCodecList: TComboBox;
+    VBitrateList: TComboBox;
+    VSizeList: TComboBox;
+    VASRList: TComboBox;
+    VFPSList: TComboBox;
+    ACodecList: TComboBox;
+    ABitrateList: TComboBox;
+    ASampleRateList: TComboBox;
+    AChanList: TComboBox;
+    RefreshBtn: TBitBtn;
+    EncoderList: TComboBox;
+    DeleteBtn: TBitBtn;
+    WidthEdit: TJvSpinEdit;
+    HeightEdit: TJvSpinEdit;
     Label1: TLabel;
     Label2: TLabel;
-    LContainerList: TsComboBox;
-    CustomVideoEdit: TsEdit;
-    CustomAudioEdit: TsEdit;
+    LContainerList: TComboBox;
+    CustomVideoEdit: TEdit;
+    CustomAudioEdit: TEdit;
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -465,4 +465,4 @@ begin
   SaveProfileBtn.Enabled := True;
 end;
 
-end.
+end.

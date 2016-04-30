@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,22 +22,22 @@ unit UnitImageAudioMerger;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, acProgressBar, Vcl.StdCtrls, sLabel, Vcl.Buttons, sBitBtn, sEdit, sSkinProvider, Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit, UnitEncoder,
-  MediaInfoDll, StrUtils, Vcl.ExtCtrls;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.Mask, UnitEncoder, MediaInfoDll, StrUtils, Vcl.ExtCtrls,
+  JvExMask, JvToolEdit;
 
 type
   TImageAudiotoVideoForm = class(TForm)
-    AudioEdit: TsFilenameEdit;
-    ImageEdit: TsFilenameEdit;
-    sSkinProvider1: TsSkinProvider;
-    OutputEdit: TsEdit;
-    StartBtn: TsBitBtn;
-    StopBtn: TsBitBtn;
-    sLabel1: TsLabel;
-    ProgressBar: TsProgressBar;
-    ProgressLabel: TsLabel;
+    OutputEdit: TEdit;
+    StartBtn: TBitBtn;
+    StopBtn: TBitBtn;
+    sLabel1: TLabel;
+    ProgressBar: TProgressBar;
+    ProgressLabel: TLabel;
     PosTimer: TTimer;
+    AudioEdit: TJvFilenameEdit;
+    ImageEdit: TJvFilenameEdit;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -50,20 +50,15 @@ type
     FEncoder: TEncodingProcess;
     FDuration: string;
     FOutputFile: string;
-
     function CreateCMD: string;
-
     function GetDuration(const FileName: string): string;
-
     procedure EncodingState;
     procedure NormalState;
   public
     { Public declarations }
 
     function CreateFileName(const FileName: string; const Extension: string): string;
-
     function FFMpegPosition(const FFMpegOutput: string; const Duration: string): string;
-
     function CreateAdvancedOptions(): string;
   end;
 
@@ -74,7 +69,8 @@ implementation
 
 {$R *.dfm}
 
-uses UnitMain, UnitEffects, UnitAdvancedOptions, UnitLogs, UnitDub;
+uses
+  UnitMain, UnitEffects, UnitAdvancedOptions, UnitLogs, UnitDub;
 
 function TImageAudiotoVideoForm.CreateAdvancedOptions: string;
 var
@@ -573,7 +569,7 @@ begin
       end;
     12: // h265
       begin
-            VCodec := ' -c:v libx265 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
+        VCodec := ' -c:v libx265 ' + ' -b:v ' + VBitrate + VAspect + VFPS + FilterCMD + CreateAdvancedOptions + CustomVideoArg;
       end;
   end;
 
@@ -582,8 +578,7 @@ begin
 
   CustomArgs := AdvancedOptionsForm.CustomFFmpegEdit.Text;
 
-  Result := ' -y -threads 0 -f image2 -loop 1 -i "' + ImageEdit.Text + '" -i "' + AudioEdit.Text + '" ' + CustomArgs + ' -t ' + GetDuration(AudioEdit.Text) + ' ' + VCodec + Container + AudioCMD +
-    ACodec + ' "' + OutName + '"';
+  Result := ' -y -threads 0 -f image2 -loop 1 -i "' + ImageEdit.Text + '" -i "' + AudioEdit.Text + '" ' + CustomArgs + ' -t ' + GetDuration(AudioEdit.Text) + ' ' + VCodec + Container + AudioCMD + ACodec + ' "' + OutName + '"';
 
 end;
 
@@ -641,9 +636,9 @@ function TImageAudiotoVideoForm.FFMpegPosition(const FFMpegOutput, Duration: str
 var
   pos1: Integer;
   pos2: Integer;
-  Text: String;
-  prog: String;
-  last: String;
+  Text: string;
+  prog: string;
+  last: string;
   PositionInt: Integer;
 begin
   Result := '0';
@@ -850,5 +845,4 @@ begin
 end;
 
 end.
-
 

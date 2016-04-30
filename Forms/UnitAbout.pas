@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,35 +22,34 @@ unit UnitAbout;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, acPNG, ShellAPI, Buttons, sBitBtn, sLabel,
-  sCheckBox, IniFiles, JvComponentBase, JvThread, JvUrlListGrabber,
-  JvUrlGrabbers, sSkinProvider, sPanel, Vcl.ComCtrls, sPageControl;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Dialogs, StdCtrls, ExtCtrls, ShellAPI, Buttons, IniFiles, JvComponentBase,
+  JvThread, JvUrlListGrabber, JvUrlGrabbers, Vcl.ComCtrls;
 
 type
   TAboutForm = class(TForm)
     Image1: TImage;
-    OkBtn: TsBitBtn;
-    HomepageBtn: TsBitBtn;
-    sSkinProvider1: TsSkinProvider;
-    sPageControl1: TsPageControl;
-    sTabSheet1: TsTabSheet;
-    sTabSheet2: TsTabSheet;
-    Label1: TsLabel;
-    Label2: TsLabel;
-    Label3: TsLabel;
-    Label4: TsLabel;
-    Label13: TsLabel;
-    Label10: TsLabel;
-    Label11: TsLabel;
-    Label12: TsLabel;
-    Label5: TsLabel;
-    Label6: TsLabel;
-    Label7: TsLabel;
-    Label8: TsLabel;
-    Label9: TsLabel;
-    sLabel4: TsLabel;
-    sLabel6: TsLabel;
+    OkBtn: TBitBtn;
+    HomepageBtn: TBitBtn;
+                                   
+    sPageControl1: TPageControl;
+    sTabSheet1: TTabSheet;
+    sTabSheet2: TTabSheet;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label13: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    sLabel4: TLabel;
+    sLabel6: TLabel;
     procedure OkBtnClick(Sender: TObject);
     procedure Label6Click(Sender: TObject);
     procedure HomepageBtnClick(Sender: TObject);
@@ -100,7 +99,7 @@ end;
 procedure TAboutForm.Label6Click(Sender: TObject);
 begin
 
-  ShellExecute(0, 'open', PChar((Sender as TsLabel).Caption), nil, nil, SW_SHOWNORMAL);
+  ShellExecute(0, 'open', PChar((Sender as TLabel).Caption), nil, nil, SW_SHOWNORMAL);
 
 end;
 
@@ -111,4 +110,4 @@ begin
 
 end;
 
-end.
+end.

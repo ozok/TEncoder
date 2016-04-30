@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -23,38 +23,36 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, sBitBtn, sSkinProvider, ComCtrls, sListBox,
-  sComboBox, Menus, sPageControl, acProgressBar, sMemo, System.Types;
+  Dialogs, StdCtrls, Buttons, ComCtrls, Menus, System.Types;
 
 type
   TLogForm = class(TForm)
-    sSkinProvider1: TsSkinProvider;
-    OkBtn: TsBitBtn;
-    ClearBtn: TsBitBtn;
-    SaveBtn: TsBitBtn;
+    OkBtn: TBitBtn;
+    ClearBtn: TBitBtn;
+    SaveBtn: TBitBtn;
     SaveDialog: TSaveDialog;
     ClearPopup: TPopupMenu;
     ClearSelected1: TMenuItem;
     ClearAll1: TMenuItem;
-    VideoEncoderList: TsMemo;
+    VideoEncoderList: TMemo;
     MPlayerLogList: TMemo;
-    Logs: TsPageControl;
-    sTabSheet1: TsTabSheet;
-    sTabSheet9: TsTabSheet;
-    sTabSheet10: TsTabSheet;
-    OtherLog: TsMemo;
-    sTabSheet11: TsTabSheet;
-    LogList: TsComboBox;
-    DownloadLog: TsMemo;
-    sTabSheet12: TsTabSheet;
-    MainLog: TsMemo;
-    VideoEncoderLogsList: TsComboBox;
-    sTabSheet2: TsTabSheet;
-    DVDPages: TsPageControl;
-    sTabSheet3: TsTabSheet;
-    sTabSheet4: TsTabSheet;
-    DVDLog: TsMemo;
-    DVDCMDLog: TsMemo;
+    Logs: TPageControl;
+    sTabSheet1: TTabSheet;
+    sTabSheet9: TTabSheet;
+    sTabSheet10: TTabSheet;
+    OtherLog: TMemo;
+    sTabSheet11: TTabSheet;
+    LogList: TComboBox;
+    DownloadLog: TMemo;
+    sTabSheet12: TTabSheet;
+    MainLog: TMemo;
+    VideoEncoderLogsList: TComboBox;
+    sTabSheet2: TTabSheet;
+    DVDPages: TPageControl;
+    sTabSheet3: TTabSheet;
+    sTabSheet4: TTabSheet;
+    DVDLog: TMemo;
+    DVDCMDLog: TMemo;
     procedure FormCreate(Sender: TObject);
     procedure OkBtnClick(Sender: TObject);
     procedure SaveBtnClick(Sender: TObject);
@@ -69,7 +67,7 @@ type
     { Private declarations }
   public
     { Public declarations }
-    FEncoderLogs: array [0 .. 15] of TStringList;
+    FEncoderLogs: array[0..15] of TStringList;
   end;
 
 var
@@ -77,7 +75,8 @@ var
 
 implementation
 
-uses UnitMain;
+uses
+  UnitMain;
 
 {$R *.dfm}
 
@@ -277,3 +276,4 @@ begin
 end;
 
 end.
+

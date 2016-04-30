@@ -24,7 +24,7 @@ object SettingsForm: TSettingsForm
     390)
   PixelsPerInch = 96
   TextHeight = 13
-  object ResetBtn: TsBitBtn
+  object ResetBtn: TBitBtn
     Left = 8
     Top = 357
     Width = 120
@@ -98,10 +98,8 @@ object SettingsForm: TSettingsForm
       00000000000000000000}
     TabOrder = 1
     OnClick = ResetBtnClick
-    SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 234
   end
-  object CloseBtn: TsBitBtn
+  object CloseBtn: TBitBtn
     Left = 337
     Top = 357
     Width = 120
@@ -175,10 +173,8 @@ object SettingsForm: TSettingsForm
       00000000000000000000}
     TabOrder = 0
     OnClick = CloseBtnClick
-    SkinData.SkinSection = 'BUTTON'
-    ExplicitTop = 234
   end
-  object SettingsList: TsPageControl
+  object SettingsList: TPageControl
     Left = 8
     Top = 8
     Width = 449
@@ -186,14 +182,13 @@ object SettingsForm: TSettingsForm
     ActivePage = sTabSheet1
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 2
-    SkinData.SkinSection = 'PAGECONTROL'
-    ExplicitHeight = 220
-    object sTabSheet1: TsTabSheet
+    object sTabSheet1: TTabSheet
       Caption = 'General'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      ExplicitHeight = 192
-      object GeneralPanel: TsPanel
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object GeneralPanel: TPanel
         Left = 0
         Top = 0
         Width = 441
@@ -202,9 +197,7 @@ object SettingsForm: TSettingsForm
         Alignment = taRightJustify
         BevelOuter = bvNone
         TabOrder = 0
-        SkinData.SkinSection = 'CHECKBOX'
-        ExplicitHeight = 192
-        object CheckUpdatesChckBtn: TsCheckBox
+        object CheckUpdatesChckBtn: TCheckBox
           Left = 16
           Top = 16
           Width = 150
@@ -216,11 +209,8 @@ object SettingsForm: TSettingsForm
           ParentColor = False
           State = cbChecked
           TabOrder = 0
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
         end
-        object ClearTempFolderBtn: TsBitBtn
+        object ClearTempFolderBtn: TBitBtn
           Left = 16
           Top = 49
           Width = 169
@@ -292,9 +282,8 @@ object SettingsForm: TSettingsForm
             FF00FFFFFF00FFFFFF00}
           TabOrder = 1
           OnClick = ClearTempFolderBtnClick
-          SkinData.SkinSection = 'BUTTON'
         end
-        object DefaultAudioLangEdit: TsEdit
+        object DefaultAudioLangEdit: TEdit
           Left = 165
           Top = 85
           Width = 125
@@ -308,11 +297,8 @@ object SettingsForm: TSettingsForm
           ParentFont = False
           TabOrder = 2
           Text = 'english;eng;en'
-          SkinData.SkinSection = 'EDIT'
-          BoundLabel.Active = True
-          BoundLabel.Caption = 'Default audio track language:'
         end
-        object DefaultSubLangEdit: TsEdit
+        object DefaultSubLangEdit: TEdit
           Left = 165
           Top = 112
           Width = 125
@@ -326,18 +312,16 @@ object SettingsForm: TSettingsForm
           ParentFont = False
           TabOrder = 3
           Text = 'english;eng;en'
-          SkinData.SkinSection = 'EDIT'
-          BoundLabel.Active = True
-          BoundLabel.Caption = 'Default subtitle track language:'
         end
       end
     end
-    object sTabSheet2: TsTabSheet
+    object sTabSheet2: TTabSheet
       Caption = 'Subtitle'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      ExplicitHeight = 192
-      object SubtitlePanel: TsPanel
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object SubtitlePanel: TPanel
         Left = 0
         Top = 0
         Width = 441
@@ -345,37 +329,25 @@ object SettingsForm: TSettingsForm
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        SkinData.SkinSection = 'CHECKBOX'
-        ExplicitHeight = 192
-        object sLabel1: TsLabel
+        object sLabel1: TLabel
           Left = 35
           Top = 130
           Width = 80
           Height = 13
           Caption = 'Subtitle position:'
-          ParentFont = False
           Font.Charset = DEFAULT_CHARSET
           Font.Color = 2171169
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
+          ParentFont = False
         end
-        object AutoScaleList: TsComboBox
+        object AutoScaleList: TComboBox
           Left = 120
           Top = 70
           Width = 310
           Height = 21
           Hint = 'How to size subtitle'
-          Alignment = taLeftJustify
-          BoundLabel.Active = True
-          BoundLabel.Caption = 'Auto-scale method:'
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = 2171169
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          SkinData.SkinSection = 'COMBOBOX'
-          VerticalAlignment = taAlignTop
           Style = csDropDownList
           Color = clWhite
           Font.Charset = DEFAULT_CHARSET
@@ -383,32 +355,20 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
-          ItemIndex = 3
           ParentFont = False
           TabOrder = 0
-          Text = 'Proportinal to video diagonal'
           Items.Strings = (
             'No Autoscale'
             'Proportinal to video height'
             'Proportinal to video width'
             'Proportinal to video diagonal')
         end
-        object LangIdList: TsComboBox
+        object LangIdList: TComboBox
           Left = 120
           Top = 15
           Width = 310
           Height = 21
           Hint = 'Character encoding of subtitle'
-          Alignment = taLeftJustify
-          BoundLabel.Active = True
-          BoundLabel.Caption = 'Language:'
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = 2171169
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          SkinData.SkinSection = 'COMBOBOX'
-          VerticalAlignment = taAlignTop
           Style = csDropDownList
           Color = clWhite
           Font.Charset = DEFAULT_CHARSET
@@ -416,10 +376,8 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
-          ItemIndex = 0
           ParentFont = False
           TabOrder = 1
-          Text = 'Unicode (Unicode)'
           Items.Strings = (
             'Unicode (Unicode)'
             'UTF-8 (UTF-8)'
@@ -447,7 +405,7 @@ object SettingsForm: TSettingsForm
             'Arabic Windows (CP1256)'
             'None')
         end
-        object SubposBar: TsTrackBar
+        object SubposBar: TTrackBar
           Left = 121
           Top = 125
           Width = 238
@@ -462,11 +420,8 @@ object SettingsForm: TSettingsForm
           TickMarks = tmBoth
           TickStyle = tsNone
           OnChange = SubposBarChange
-          SkinData.SkinSection = 'TRACKBAR'
-          BarOffsetV = 0
-          BarOffsetH = 0
         end
-        object SubPosEdit: TsEdit
+        object SubPosEdit: TEdit
           Left = 365
           Top = 125
           Width = 65
@@ -480,23 +435,12 @@ object SettingsForm: TSettingsForm
           ParentFont = False
           ReadOnly = True
           TabOrder = 3
-          SkinData.SkinSection = 'EDIT'
         end
-        object FontList: TsComboBox
+        object FontList: TComboBox
           Left = 121
           Top = 43
           Width = 309
           Height = 21
-          Alignment = taLeftJustify
-          BoundLabel.Active = True
-          BoundLabel.Caption = 'Fonts:'
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = 2171169
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          SkinData.SkinSection = 'COMBOBOX'
-          VerticalAlignment = taAlignTop
           Style = csDropDownList
           Color = clWhite
           Font.Charset = DEFAULT_CHARSET
@@ -504,35 +448,26 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
-          ItemIndex = -1
           ParentFont = False
           TabOrder = 4
         end
-        object DefScaleEdit: TsSpinEdit
+        object DefScaleEdit: TJvSpinEdit
           Left = 121
           Top = 99
           Width = 100
-          Height = 21
+          Height = 22
           Hint = 'Default scale value of subtitle'
-          Alignment = taCenter
+          Value = 10.000000000000000000
           Color = clWhite
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
-          NumbersOnly = True
           ParentFont = False
           TabOrder = 5
-          Text = '10'
-          SkinData.SkinSection = 'EDIT'
-          BoundLabel.Active = True
-          BoundLabel.Caption = 'Default scale:'
-          MaxValue = 0
-          MinValue = 0
-          Value = 10
         end
-        object SubSSABtn: TsCheckBox
+        object SubSSABtn: TCheckBox
           Left = 3
           Top = 160
           Width = 220
@@ -541,18 +476,16 @@ object SettingsForm: TSettingsForm
           Checked = True
           State = cbChecked
           TabOrder = 6
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
         end
       end
     end
-    object Encoding: TsTabSheet
+    object Encoding: TTabSheet
       Caption = 'Encoding'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      ExplicitHeight = 192
-      object EncodingPanel: TsPanel
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object EncodingPanel: TPanel
         Left = 0
         Top = 0
         Width = 441
@@ -560,9 +493,7 @@ object SettingsForm: TSettingsForm
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        SkinData.SkinSection = 'CHECKBOX'
-        ExplicitHeight = 192
-        object sLabel2: TsLabel
+        object sLabel2: TLabel
           Left = 428
           Top = 16
           Width = 5
@@ -571,22 +502,12 @@ object SettingsForm: TSettingsForm
           Caption = '?'
           OnClick = sLabel2Click
         end
-        object NumberOfThreadsList: TsComboBox
+        object NumberOfThreadsList: TComboBox
           Left = 120
           Top = 15
           Width = 49
           Height = 21
           Hint = 'Number of processes that will be run at the same time'
-          Alignment = taLeftJustify
-          BoundLabel.Active = True
-          BoundLabel.Caption = 'Number of processes:'
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = clBlack
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          SkinData.SkinSection = 'COMBOBOX'
-          VerticalAlignment = taAlignTop
           Style = csDropDownList
           Color = clWhite
           Font.Charset = DEFAULT_CHARSET
@@ -594,10 +515,8 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
-          ItemIndex = 0
           ParentFont = False
           TabOrder = 0
-          Text = '1'
           Items.Strings = (
             '1'
             '2'
@@ -616,7 +535,7 @@ object SettingsForm: TSettingsForm
             '15'
             '16')
         end
-        object ResetThreadBtn: TsButton
+        object ResetThreadBtn: TButton
           Left = 175
           Top = 11
           Width = 90
@@ -625,9 +544,8 @@ object SettingsForm: TSettingsForm
           Caption = 'Reset'
           TabOrder = 1
           OnClick = ResetThreadBtnClick
-          SkinData.SkinSection = 'BUTTON'
         end
-        object ThreadChkBtn: TsCheckBox
+        object ThreadChkBtn: TCheckBox
           Left = 271
           Top = 16
           Width = 151
@@ -635,25 +553,12 @@ object SettingsForm: TSettingsForm
           Hint = 'Use extra option to improve encoding performance'
           Caption = 'Use extra threads options'
           TabOrder = 2
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
         end
-        object PostEncodeActionList: TsComboBox
+        object PostEncodeActionList: TComboBox
           Left = 120
           Top = 42
           Width = 145
           Height = 21
-          Alignment = taLeftJustify
-          BoundLabel.Active = True
-          BoundLabel.Caption = 'Post-encode action:'
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = clBlack
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          SkinData.SkinSection = 'COMBOBOX'
-          VerticalAlignment = taAlignTop
           Style = csDropDownList
           Color = clWhite
           Font.Charset = DEFAULT_CHARSET
@@ -661,10 +566,8 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
-          ItemIndex = 0
           ParentFont = False
           TabOrder = 3
-          Text = 'Nothing'
           OnChange = PostEncodeActionListChange
           Items.Strings = (
             'Nothing'
@@ -674,7 +577,7 @@ object SettingsForm: TSettingsForm
             'Log Off'
             'Restart')
         end
-        object DeleteUnfinBtn: TsCheckBox
+        object DeleteUnfinBtn: TCheckBox
           Left = 12
           Top = 70
           Width = 131
@@ -683,11 +586,8 @@ object SettingsForm: TSettingsForm
           Checked = True
           State = cbChecked
           TabOrder = 4
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
         end
-        object x264Btn: TsCheckBox
+        object x264Btn: TCheckBox
           Left = 12
           Top = 95
           Width = 236
@@ -696,33 +596,24 @@ object SettingsForm: TSettingsForm
           Checked = True
           State = cbChecked
           TabOrder = 5
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
         end
-        object FolderStructBtn: TsCheckBox
+        object FolderStructBtn: TCheckBox
           Left = 12
           Top = 120
           Width = 216
           Height = 19
           Caption = 'Do not create folder structure in output'
           TabOrder = 6
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
         end
-        object CopyDateBtn: TsCheckBox
+        object CopyDateBtn: TCheckBox
           Left = 271
           Top = 74
           Width = 157
           Height = 19
           Caption = 'Copy date info from source'
           TabOrder = 7
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
         end
-        object DontTrimBtn: TsCheckBox
+        object DontTrimBtn: TCheckBox
           Left = 12
           Top = 145
           Width = 121
@@ -732,31 +623,20 @@ object SettingsForm: TSettingsForm
           State = cbChecked
           TabOrder = 8
           OnClick = DontTrimBtnClick
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
         end
-        object PlaySoundBtn: TsCheckBox
+        object PlaySoundBtn: TCheckBox
           Left = 271
           Top = 97
           Width = 160
           Height = 19
           Caption = 'Play a sound after encoding'
           TabOrder = 9
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
         end
-        object OverwriteList: TsComboBox
+        object OverwriteList: TComboBox
           Left = 355
           Top = 144
           Width = 75
           Height = 21
-          Alignment = taLeftJustify
-          BoundLabel.Active = True
-          BoundLabel.Caption = 'If output file already exists:'
-          SkinData.SkinSection = 'COMBOBOX'
-          VerticalAlignment = taAlignTop
           Style = csDropDownList
           Color = clWhite
           Font.Charset = DEFAULT_CHARSET
@@ -764,154 +644,21 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
-          ItemIndex = 0
           ParentFont = False
           TabOrder = 10
-          Text = 'Add index'
           Items.Strings = (
             'Add index'
             'Skip')
         end
       end
     end
-    object sTabSheet4: TsTabSheet
-      Caption = 'Skin'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      ExplicitHeight = 192
-      object SkinPanel: TsPanel
-        Left = 0
-        Top = 0
-        Width = 441
-        Height = 315
-        Align = alClient
-        BevelOuter = bvNone
-        TabOrder = 0
-        SkinData.SkinSection = 'CHECKBOX'
-        ExplicitHeight = 192
-        object Label1: TLabel
-          Left = 12
-          Top = 49
-          Width = 54
-          Height = 13
-          Caption = 'Saturation:'
-        end
-        object SaturationLabel: TLabel
-          Left = 311
-          Top = 49
-          Width = 6
-          Height = 13
-          Caption = '0'
-        end
-        object sLabel3: TsLabel
-          Left = 43
-          Top = 76
-          Width = 23
-          Height = 13
-          Caption = 'Hue:'
-          ParentFont = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-        end
-        object HueLabel: TsLabel
-          Left = 311
-          Top = 76
-          Width = 6
-          Height = 13
-          Caption = '0'
-          ParentFont = False
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-        end
-        object SaturationBar: TsTrackBar
-          Left = 72
-          Top = 41
-          Width = 233
-          Height = 23
-          DoubleBuffered = False
-          Max = 100
-          Min = -100
-          ParentDoubleBuffered = False
-          Position = -100
-          ShowSelRange = False
-          TabOrder = 0
-          TickMarks = tmBoth
-          TickStyle = tsNone
-          OnChange = SaturationBarChange
-          SkinData.SkinSection = 'TRACKBAR'
-          BarOffsetV = 0
-          BarOffsetH = 0
-        end
-        object SkinList: TsComboBox
-          Left = 72
-          Top = 15
-          Width = 193
-          Height = 21
-          Alignment = taLeftJustify
-          BoundLabel.Active = True
-          BoundLabel.Caption = 'Skins:'
-          BoundLabel.Font.Charset = DEFAULT_CHARSET
-          BoundLabel.Font.Color = clBlack
-          BoundLabel.Font.Height = -11
-          BoundLabel.Font.Name = 'Tahoma'
-          BoundLabel.Font.Style = []
-          SkinData.SkinSection = 'COMBOBOX'
-          VerticalAlignment = taAlignTop
-          Style = csDropDownList
-          Color = clWhite
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlack
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ItemIndex = -1
-          ParentFont = False
-          TabOrder = 1
-          OnChange = SkinListChange
-        end
-        object HueTrackBar: TsTrackBar
-          Left = 72
-          Top = 70
-          Width = 233
-          Height = 23
-          DoubleBuffered = False
-          Max = 360
-          ParentDoubleBuffered = False
-          ShowSelRange = False
-          TabOrder = 2
-          TickMarks = tmBoth
-          TickStyle = tsNone
-          OnChange = HueTrackBarChange
-          SkinData.SkinSection = 'TRACKBAR'
-          BarOffsetV = 0
-          BarOffsetH = 0
-        end
-        object SkinEnableBtn: TsCheckBox
-          Left = 271
-          Top = 16
-          Width = 101
-          Height = 19
-          Caption = 'Disable skinning'
-          TabOrder = 3
-          OnClick = SkinEnableBtnClick
-          SkinData.SkinSection = 'CHECKBOX'
-          ImgChecked = 0
-          ImgUnchecked = 0
-        end
-      end
-    end
-    object sTabSheet3: TsTabSheet
+    object sTabSheet3: TTabSheet
       Caption = 'Video Downloader'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      ExplicitHeight = 192
-      object PreferedFormatEdit: TsEdit
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object PreferedFormatEdit: TEdit
         Left = 100
         Top = 3
         Width = 338
@@ -925,11 +672,8 @@ object SettingsForm: TSettingsForm
         ParentFont = False
         TabOrder = 0
         Text = 'mp4, 1080p, DASH, video'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Preferred format:'
       end
-      object DashVideoBtn: TsCheckBox
+      object DashVideoBtn: TCheckBox
         Left = 3
         Top = 30
         Width = 280
@@ -938,11 +682,8 @@ object SettingsForm: TSettingsForm
         Checked = True
         State = cbChecked
         TabOrder = 1
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object ProcessCountEdit: TsEdit
+      object ProcessCountEdit: TEdit
         Left = 121
         Top = 55
         Width = 49
@@ -958,11 +699,8 @@ object SettingsForm: TSettingsForm
         ReadOnly = True
         TabOrder = 2
         Text = '4'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Parallel download count:'
       end
-      object ProcessCountBar: TsTrackBar
+      object ProcessCountBar: TTrackBar
         Left = 176
         Top = 56
         Width = 114
@@ -977,11 +715,8 @@ object SettingsForm: TSettingsForm
         TickMarks = tmBoth
         TickStyle = tsNone
         OnChange = ProcessCountBarChange
-        SkinData.SkinSection = 'TRACKBAR'
-        BarOffsetV = 0
-        BarOffsetH = 0
       end
-      object DontDoubleDownloadBtn: TsCheckBox
+      object DontDoubleDownloadBtn: TCheckBox
         Left = 3
         Top = 85
         Width = 254
@@ -990,62 +725,42 @@ object SettingsForm: TSettingsForm
         Checked = True
         State = cbChecked
         TabOrder = 4
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object DontPreviewImgBtn: TsCheckBox
+      object DontPreviewImgBtn: TCheckBox
         Left = 3
         Top = 110
         Width = 112
         Height = 19
         Caption = 'Don'#39't load thumbs'
         TabOrder = 5
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object CheckYoutubeDlUpdateBtn: TsCheckBox
+      object CheckYoutubeDlUpdateBtn: TCheckBox
         Left = 3
         Top = 135
         Width = 234
         Height = 19
         Caption = 'Check download engine updates on startup'
         TabOrder = 6
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object DownloaderSpeedLimitEdit: TsSpinEdit
+      object DownloaderSpeedLimitEdit: TJvSpinEdit
         Left = 228
         Top = 160
         Width = 121
-        Height = 21
-        Alignment = taCenter
+        Height = 22
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        NumbersOnly = True
         ParentFont = False
         TabOrder = 7
-        Text = '0'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Downloader speed limit in KB (0 = no limits):'
-        MaxValue = 0
-        MinValue = 0
-        Value = 0
       end
-      object SubLangList: TsComboBox
+      object SubLangList: TComboBox
         Left = 152
         Top = 187
         Width = 270
         Height = 21
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Preferred subtitle language:'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = 16249576
         Font.Charset = DEFAULT_CHARSET
@@ -1053,10 +768,8 @@ object SettingsForm: TSettingsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 39
         ParentFont = False
         TabOrder = 8
-        Text = 'en - English - English'
         Items.Strings = (
           'ab - Abkhaz - '#1072#1191#1089#1091#1072
           'aa - Afar - Afaraf'
@@ -1245,19 +958,6 @@ object SettingsForm: TSettingsForm
           'za - Zhuang, Chuang - Sa'#623' cue'#331#389', Saw cuengh"}')
       end
     end
-  end
-  object sSkinProvider1: TsSkinProvider
-    UseGlobalColor = False
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 352
-    Top = 112
   end
   object FontDialog1: TFontDialog
     Font.Charset = DEFAULT_CHARSET

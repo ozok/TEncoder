@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -23,26 +23,25 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, JvExComCtrls, JvComCtrls, sSkinProvider, ExtCtrls, sPanel,
-  StdCtrls, Buttons, sBitBtn, JvComponentBase, JvCreateProcess, sEdit, sGauge,
-  acPNG, JvExStdCtrls, JvListBox, Menus, IniFiles, UnitPlayer;
+  Dialogs, ComCtrls, JvExComCtrls, JvComCtrls, ExtCtrls, StdCtrls, Buttons,
+  JvComponentBase, JvCreateProcess, JvExStdCtrls, JvListBox, Menus,
+  IniFiles, UnitPlayer, Vcl.Samples.Gauges;
 
 type
   TPreviewForm = class(TForm)
-    DisplayPanel: TsPanel;
-    sSkinProvider1: TsSkinProvider;
-    PlayBtn: TsBitBtn;
-    PauseBtn: TsBitBtn;
-    StopBtn: TsBitBtn;
-    BackBtn: TsBitBtn;
-    ForwardBtn: TsBitBtn;
+    DisplayPanel: TPanel;
+    PlayBtn: TBitBtn;
+    PauseBtn: TBitBtn;
+    StopBtn: TBitBtn;
+    BackBtn: TBitBtn;
+    ForwardBtn: TBitBtn;
     PositionTimer: TTimer;
-    PositionBar: TsGauge;
-    VolumeBar: TsGauge;
+    PositionBar: TGauge;
+    VolumeBar: TGauge;
     Image1: TImage;
-    FullscreenBtn: TsBitBtn;
-    VolumeDownBtn: TsBitBtn;
-    VolumeUpBtn: TsBitBtn;
+    FullscreenBtn: TBitBtn;
+    VolumeDownBtn: TBitBtn;
+    VolumeUpBtn: TBitBtn;
     DisplayMenu: TPopupMenu;
     PausePlay1: TMenuItem;
     Stop1: TMenuItem;
@@ -51,14 +50,14 @@ type
     N10secBackward1: TMenuItem;
     Close1: TMenuItem;
     HideCursorTimer: TTimer;
-    SubDelayUpBtn: TsBitBtn;
-    SubDelayDownBtn: TsBitBtn;
-    PositionEdit: TsEdit;
-    AudioDelayDownBtn: TsBitBtn;
-    AudioDelayUpBtn: TsBitBtn;
-    SaveDelaysBtn: TsBitBtn;
-    DelaysEdit: TsEdit;
-    ResetBtn: TsBitBtn;
+    SubDelayUpBtn: TBitBtn;
+    SubDelayDownBtn: TBitBtn;
+    PositionEdit: TEdit;
+    AudioDelayDownBtn: TBitBtn;
+    AudioDelayUpBtn: TBitBtn;
+    SaveDelaysBtn: TBitBtn;
+    DelaysEdit: TEdit;
+    ResetBtn: TBitBtn;
     MusicImage: TImage;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure CloseBtnClick(Sender: TObject);
@@ -71,7 +70,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure PositionTimerTimer(Sender: TObject);
-
     procedure VolumeBarMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure FormMouseWheelUp(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
     procedure FormMouseWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
@@ -125,7 +123,8 @@ var
 
 implementation
 
-uses UnitMain, UnitEffects, UnitSettings, UnitLogs, UnitAdvancedOptions;
+uses
+  UnitMain, UnitEffects, UnitSettings, UnitLogs, UnitAdvancedOptions;
 
 {$R *.dfm}
 
@@ -474,7 +473,6 @@ begin
 end;
 
 procedure TPreviewForm.ForwardBtnClick(Sender: TObject);
-
 begin
 
   Player.SeekForward(10);
@@ -541,7 +539,8 @@ begin
       DeintMethodIndex := EffectForm.DeintMethodList.ItemIndex;
       AudioDelay := MainForm.FMasterFileInfoList[VideoIndex].AudioDelay;
       StartTime := MainForm.FMasterFileInfoList[VideoIndex].StartPosition;
-      EndTime := MainForm.FMasterFileInfoList[VideoIndex].EndPosition;;
+      EndTime := MainForm.FMasterFileInfoList[VideoIndex].EndPosition;
+      ;
       Crop := EffectForm.CropEnable.Checked;
       CropW := EffectForm.CropWidthEdit.Text;
       CropH := EffectForm.CropHeightEdit.Text;
@@ -859,3 +858,4 @@ begin
 end;
 
 end.
+

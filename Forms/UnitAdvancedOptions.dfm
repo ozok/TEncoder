@@ -22,7 +22,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     537)
   PixelsPerInch = 96
   TextHeight = 13
-  object CloseBtn: TsBitBtn
+  object CloseBtn: TBitBtn
     Left = 369
     Top = 504
     Width = 125
@@ -95,9 +95,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       00000000000000000000}
     TabOrder = 0
     OnClick = CloseBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object OptionPages: TsPageControl
+  object OptionPages: TPageControl
     Left = 8
     Top = 367
     Width = 486
@@ -105,16 +104,9 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     ActivePage = sTabSheet3
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
-    SkinData.SkinSection = 'PAGECONTROL'
-    object sTabSheet3: TsTabSheet
+    object sTabSheet3: TTabSheet
       Caption = 'General'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
-      object MPEGAudioIDBtn: TsCheckBox
+      object MPEGAudioIDBtn: TCheckBox
         Left = 8
         Top = 8
         Width = 447
@@ -125,20 +117,15 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Checked = True
         State = cbChecked
         TabOrder = 0
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
     end
-    object sTabSheet1: TsTabSheet
+    object sTabSheet1: TTabSheet
       Caption = 'x264'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
       ExplicitLeft = 0
       ExplicitTop = 0
       ExplicitWidth = 0
       ExplicitHeight = 0
-      object x264Btn: TsCheckBox
+      object x264Btn: TCheckBox
         Left = 8
         Top = 8
         Width = 159
@@ -146,26 +133,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Caption = 'Use advanced x264 options'
         TabOrder = 0
         OnClick = x264BtnClick
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object x264LevelList: TsComboBox
+      object x264LevelList: TComboBox
         Left = 114
         Top = 41
         Width = 100
         Height = 21
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Level:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclTopLeft
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Enabled = False
@@ -174,10 +147,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
-        Text = 'Auto'
         Items.Strings = (
           'Auto'
           '1'
@@ -197,22 +168,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           '5'
           '5.1')
       end
-      object x264PresetList: TsComboBox
+      object x264PresetList: TComboBox
         Left = 220
         Top = 41
         Width = 100
         Height = 21
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Preset:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclTopLeft
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Enabled = False
@@ -221,10 +181,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 2
-        Text = 'Auto'
         Items.Strings = (
           'Auto'
           'Ultrafast'
@@ -238,22 +196,11 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           'Veryslow'
           'Placebo')
       end
-      object x264ProfileList: TsComboBox
+      object x264ProfileList: TComboBox
         Left = 8
         Top = 41
         Width = 100
         Height = 21
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Profile:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclTopLeft
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Enabled = False
@@ -262,32 +209,19 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 3
-        Text = 'Auto'
         Items.Strings = (
           'Auto'
           'Baseline'
           'Main'
           'High')
       end
-      object x264TuneList: TsComboBox
+      object x264TuneList: TComboBox
         Left = 326
         Top = 41
         Width = 100
         Height = 21
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Tune:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclTopLeft
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Enabled = False
@@ -296,10 +230,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 4
-        Text = 'Auto'
         Items.Strings = (
           'Auto'
           'Film'
@@ -311,7 +243,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           'Fastdecode'
           'Zerolatency')
       end
-      object x264CRFBtn: TsCheckBox
+      object x264CRFBtn: TCheckBox
         Left = 8
         Top = 68
         Width = 153
@@ -319,16 +251,14 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Caption = 'Use CRF instead of bitrate'
         TabOrder = 5
         OnClick = x264CRFBtnClick
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object x264CRFEdit: TsSpinEdit
+      object x264CRFEdit: TJvSpinEdit
         Left = 167
         Top = 68
         Width = 50
-        Height = 21
-        Alignment = taCenter
+        Height = 22
+        MaxValue = 51.000000000000000000
+        Value = 23.000000000000000000
         Color = clWhite
         Enabled = False
         Font.Charset = DEFAULT_CHARSET
@@ -336,65 +266,47 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        NumbersOnly = True
         ParentFont = False
         TabOrder = 6
-        Text = '23'
-        SkinData.SkinSection = 'EDIT'
-        MaxValue = 51
-        MinValue = 0
-        Value = 23
       end
     end
-    object sTabSheet2: TsTabSheet
+    object sTabSheet2: TTabSheet
       Caption = 'ProRes'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
       ExplicitLeft = 0
       ExplicitTop = 0
       ExplicitWidth = 0
       ExplicitHeight = 0
-      object sLabel1: TsLabel
+      object sLabel1: TLabel
         Left = 3
         Top = 44
         Width = 73
         Height = 13
         Caption = '0 (Best quality)'
-        ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
       end
-      object sLabel2: TsLabel
+      object sLabel2: TLabel
         Left = 342
         Top = 44
         Width = 87
         Height = 13
         Caption = '32 (Worst quality)'
-        ParentFont = False
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ParentFont = False
       end
-      object ProresProfileList: TsComboBox
+      object ProresProfileList: TComboBox
         Left = 40
         Top = 8
         Width = 145
         Height = 21
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Profile:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
@@ -402,17 +314,15 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 0
-        Text = 'Proxy'
         Items.Strings = (
           'Proxy'
           'LT'
           'Normal'
           'HQ')
       end
-      object ProresQualityBar: TsTrackBar
+      object ProresQualityBar: TTrackBar
         Left = 3
         Top = 63
         Width = 386
@@ -421,11 +331,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         TabOrder = 1
         TickMarks = tmTopLeft
         OnChange = ProresQualityBarChange
-        SkinData.SkinSection = 'TRACKBAR'
-        BarOffsetV = 0
-        BarOffsetH = 0
       end
-      object ProresQualityEdit: TsEdit
+      object ProresQualityEdit: TEdit
         Left = 395
         Top = 63
         Width = 75
@@ -441,18 +348,15 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         ReadOnly = True
         TabOrder = 2
         Text = '0'
-        SkinData.SkinSection = 'EDIT'
       end
     end
-    object sTabSheet4: TsTabSheet
+    object sTabSheet4: TTabSheet
       Caption = 'FLAC'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
       ExplicitLeft = 0
       ExplicitTop = 0
       ExplicitWidth = 0
       ExplicitHeight = 0
-      object FlacCompBar: TsTrackBar
+      object FlacCompBar: TTrackBar
         Left = 166
         Top = 4
         Width = 283
@@ -461,11 +365,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Position = 12
         TabOrder = 0
         OnChange = FlacCompBarChange
-        SkinData.SkinSection = 'TRACKBAR'
-        BarOffsetV = 0
-        BarOffsetH = 0
       end
-      object FlacCompEdit: TsEdit
+      object FlacCompEdit: TEdit
         Left = 110
         Top = 8
         Width = 50
@@ -481,20 +382,15 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         ReadOnly = True
         TabOrder = 1
         Text = '12'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Compression level:'
       end
     end
-    object sTabSheet5: TsTabSheet
+    object sTabSheet5: TTabSheet
       Caption = 'x265'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
       ExplicitLeft = 0
       ExplicitTop = 0
       ExplicitWidth = 0
       ExplicitHeight = 0
-      object x265Btn: TsCheckBox
+      object x265Btn: TCheckBox
         Left = 8
         Top = 8
         Width = 159
@@ -502,26 +398,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Caption = 'Use advanced x265 options'
         TabOrder = 0
         OnClick = x265BtnClick
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object x265PresetsList: TsComboBox
+      object x265PresetsList: TComboBox
         Left = 8
         Top = 41
         Width = 100
         Height = 21
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Preset:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        BoundLabel.Layout = sclTopLeft
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Enabled = False
@@ -530,10 +412,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
-        Text = 'Auto'
         Items.Strings = (
           'Auto'
           'Ultrafast'
@@ -549,16 +429,14 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       end
     end
   end
-  object GroupBox1: TsGroupBox
+  object GroupBox1: TGroupBox
     Left = 8
     Top = 8
     Width = 249
     Height = 153
     Caption = 'Video Options'
     TabOrder = 2
-    SkinData.SkinSection = 'GROUPBOX'
-    Checked = False
-    object VideoSettingsPanel: TsPanel
+    object VideoSettingsPanel: TPanel
       Left = 2
       Top = 15
       Width = 245
@@ -566,8 +444,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      SkinData.SkinSection = 'CHECKBOX'
-      object ForceASRBtn: TsCheckBox
+      object ForceASRBtn: TCheckBox
         Left = 160
         Top = 108
         Width = 53
@@ -577,26 +454,13 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           'spect to height'
         Caption = 'Force'
         TabOrder = 0
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object VideoAspectRatioList: TsComboBox
+      object VideoAspectRatioList: TComboBox
         Left = 82
         Top = 108
         Width = 73
         Height = 21
         Hint = 'Aspect ratio of video'
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Aspect Ratio:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
@@ -604,10 +468,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
-        Text = 'Keep'
         Items.Strings = (
           'Keep'
           '4/3'
@@ -617,29 +479,18 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           '1.3333'
           '1.7777')
       end
-      object VideobitrateList: TsComboBox
+      object VideobitrateList: TComboBox
         Left = 82
         Top = 0
         Width = 80
         Height = 21
         Hint = 'Video bitrate'
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Video Bitrate:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 6
         ParentFont = False
         TabOrder = 2
         Text = '512'
@@ -659,7 +510,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           '10000'
           '12000')
       end
-      object VideoCBrBtn: TsCheckBox
+      object VideoCBrBtn: TCheckBox
         Left = 168
         Top = 2
         Width = 46
@@ -669,26 +520,13 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Color = clBtnFace
         ParentColor = False
         TabOrder = 3
-        SkinData.SkinSection = 'CHECKBOX'
-        ImgChecked = 0
-        ImgUnchecked = 0
       end
-      object VideoFPSList: TsComboBox
+      object VideoFPSList: TComboBox
         Left = 82
         Top = 81
         Width = 128
         Height = 21
         Hint = 'Frames per second'
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'FPS:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
@@ -696,10 +534,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 4
-        Text = 'Same as source'
         Items.Strings = (
           'Same as source'
           '8'
@@ -715,22 +551,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           '59.94'
           '60')
       end
-      object VideoSizeList: TsComboBox
+      object VideoSizeList: TComboBox
         Left = 82
         Top = 27
         Width = 128
         Height = 21
         Hint = 'Video size'
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Common sizes:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
@@ -738,10 +564,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 6
         ParentFont = False
         TabOrder = 5
-        Text = '352x288'
         OnChange = VideoSizeListChange
         Items.Strings = (
           'Original'
@@ -769,72 +593,46 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           '1440x1080'
           '1920x1080')
       end
-      object WidthEdit: TsSpinEdit
+      object WidthEdit: TJvSpinEdit
         Left = 82
         Top = 54
         Width = 55
         Height = 21
+        Value = 352.000000000000000000
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        NumbersOnly = True
         ParentFont = False
         TabOrder = 6
-        Text = '352'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Size:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        MaxValue = 0
-        MinValue = 0
-        Value = 352
       end
-      object HeightEdit: TsSpinEdit
+      object HeightEdit: TJvSpinEdit
         Left = 155
         Top = 54
         Width = 55
         Height = 21
+        Value = 288.000000000000000000
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        NumbersOnly = True
         ParentFont = False
         TabOrder = 7
-        Text = '288'
-        SkinData.SkinSection = 'EDIT'
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'X'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = 2171169
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        MaxValue = 0
-        MinValue = 0
-        Value = 288
       end
     end
   end
-  object sGroupBox1: TsGroupBox
+  object sGroupBox1: TGroupBox
     Left = 263
     Top = 8
     Width = 231
     Height = 153
     Caption = 'Audio Options'
     TabOrder = 3
-    SkinData.SkinSection = 'GROUPBOX'
-    Checked = False
-    object AudioSettingsPanel: TsPanel
+    object AudioSettingsPanel: TPanel
       Left = 2
       Top = 15
       Width = 227
@@ -842,30 +640,18 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      SkinData.SkinSection = 'CHECKBOX'
-      object AudioBitrateList: TsComboBox
+      object AudioBitrateList: TComboBox
         Left = 82
         Top = 0
         Width = 80
         Height = 21
         Hint = 'Audio bitrate'
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Audio Bitrate:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clBlack
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 7
         ParentFont = False
         TabOrder = 0
         Text = '128'
@@ -885,22 +671,12 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
           '320'
           '620')
       end
-      object AudioChannelsList: TsComboBox
+      object AudioChannelsList: TComboBox
         Left = 82
         Top = 27
         Width = 128
         Height = 21
         Hint = 'Number of audio channels'
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'Channels:'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clBlack
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
@@ -908,32 +684,20 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 3
         ParentFont = False
         TabOrder = 1
-        Text = 'Same as source'
         Items.Strings = (
           '1'
           '2'
           '5.1'
           'Same as source')
       end
-      object AudioSampleRateList: TsComboBox
+      object AudioSampleRateList: TComboBox
         Left = 82
         Top = 54
         Width = 128
         Height = 21
         Hint = 'Audio sample rate'
-        Alignment = taLeftJustify
-        BoundLabel.Active = True
-        BoundLabel.Caption = 'S. Rate (Hz):'
-        BoundLabel.Font.Charset = DEFAULT_CHARSET
-        BoundLabel.Font.Color = clBlack
-        BoundLabel.Font.Height = -11
-        BoundLabel.Font.Name = 'Tahoma'
-        BoundLabel.Font.Style = []
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
@@ -941,10 +705,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 7
         ParentFont = False
         TabOrder = 2
-        Text = 'Same as source'
         Items.Strings = (
           '8000'
           '11025'
@@ -957,7 +719,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       end
     end
   end
-  object sGroupBox2: TsGroupBox
+  object sGroupBox2: TGroupBox
     Left = 8
     Top = 165
     Width = 486
@@ -965,12 +727,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     Anchors = [akLeft, akTop, akRight]
     Caption = 'Custom Options'
     TabOrder = 4
-    SkinData.SkinSection = 'GROUPBOX'
-    Checked = False
     DesignSize = (
       486
       196)
-    object sLabelFX1: TsLabel
+    object sLabelFX1: TLabel
       Left = 3
       Top = 180
       Width = 263
@@ -980,7 +740,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'Please note that arguments above will not be checked!'
       ExplicitTop = 245
     end
-    object CustomFFmpegVideoBtn: TsCheckBox
+    object CustomFFmpegVideoBtn: TCheckBox
       Left = 8
       Top = 17
       Width = 172
@@ -988,11 +748,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'FFmpeg custom video options:'
       TabOrder = 0
       OnClick = CustomFFmpegVideoBtnClick
-      SkinData.SkinSection = 'CHECKBOX'
-      ImgChecked = 0
-      ImgUnchecked = 0
     end
-    object CustomFFmpegAudioBtn: TsCheckBox
+    object CustomFFmpegAudioBtn: TCheckBox
       Left = 8
       Top = 44
       Width = 168
@@ -1000,11 +757,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'FFmpeg custom audio options'
       TabOrder = 1
       OnClick = CustomFFmpegAudioBtnClick
-      SkinData.SkinSection = 'CHECKBOX'
-      ImgChecked = 0
-      ImgUnchecked = 0
     end
-    object CustomFFMpegVideoEdit: TsEdit
+    object CustomFFMpegVideoEdit: TEdit
       Left = 186
       Top = 16
       Width = 290
@@ -1019,9 +773,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Font.Style = []
       ParentFont = False
       TabOrder = 2
-      SkinData.SkinSection = 'EDIT'
     end
-    object CustomFFMpegAudioEdit: TsEdit
+    object CustomFFMpegAudioEdit: TEdit
       Left = 186
       Top = 43
       Width = 290
@@ -1036,9 +789,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Font.Style = []
       ParentFont = False
       TabOrder = 3
-      SkinData.SkinSection = 'EDIT'
     end
-    object CustomMEncoderAudioEdit: TsEdit
+    object CustomMEncoderAudioEdit: TEdit
       Left = 186
       Top = 97
       Width = 290
@@ -1052,9 +804,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Font.Style = []
       ParentFont = False
       TabOrder = 4
-      SkinData.SkinSection = 'EDIT'
     end
-    object CustomMEncoderVideoEdit: TsEdit
+    object CustomMEncoderVideoEdit: TEdit
       Left = 186
       Top = 70
       Width = 290
@@ -1068,9 +819,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Font.Style = []
       ParentFont = False
       TabOrder = 5
-      SkinData.SkinSection = 'EDIT'
     end
-    object CustomMEncoderAudioBtn: TsCheckBox
+    object CustomMEncoderAudioBtn: TCheckBox
       Left = 8
       Top = 98
       Width = 181
@@ -1078,11 +828,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'MEncoder custom audio options:'
       TabOrder = 6
       OnClick = CustomMEncoderAudioBtnClick
-      SkinData.SkinSection = 'CHECKBOX'
-      ImgChecked = 0
-      ImgUnchecked = 0
     end
-    object CustomMEncoderVideoBtn: TsCheckBox
+    object CustomMEncoderVideoBtn: TCheckBox
       Left = 8
       Top = 71
       Width = 181
@@ -1090,11 +837,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'MEncoder custom video options:'
       TabOrder = 7
       OnClick = CustomMEncoderVideoBtnClick
-      SkinData.SkinSection = 'CHECKBOX'
-      ImgChecked = 0
-      ImgUnchecked = 0
     end
-    object CustomFFmpegEdit: TsEdit
+    object CustomFFmpegEdit: TEdit
       Left = 66
       Top = 124
       Width = 410
@@ -1107,11 +851,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Font.Style = []
       ParentFont = False
       TabOrder = 8
-      SkinData.SkinSection = 'EDIT'
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'FFMpeg:'
     end
-    object CustomMencoderEdit: TsEdit
+    object CustomMencoderEdit: TEdit
       Left = 66
       Top = 151
       Width = 410
@@ -1124,21 +865,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Font.Style = []
       ParentFont = False
       TabOrder = 9
-      SkinData.SkinSection = 'EDIT'
-      BoundLabel.Active = True
-      BoundLabel.Caption = 'MEncoder:'
     end
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 368
-    Top = 344
   end
 end

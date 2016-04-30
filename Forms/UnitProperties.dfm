@@ -23,7 +23,7 @@ object InfoForm: TInfoForm
     320)
   PixelsPerInch = 96
   TextHeight = 13
-  object OkBtn: TsBitBtn
+  object OkBtn: TBitBtn
     Left = 496
     Top = 287
     Width = 100
@@ -96,14 +96,12 @@ object InfoForm: TInfoForm
       00000000000000000000}
     TabOrder = 0
     OnClick = OkBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object Infos: TsListView
+  object Infos: TListView
     Left = 8
     Top = 8
     Width = 588
     Height = 273
-    SkinData.SkinSection = 'EDIT'
     Anchors = [akLeft, akTop, akRight, akBottom]
     Columns = <
       item
@@ -126,7 +124,7 @@ object InfoForm: TInfoForm
     TabOrder = 1
     ViewStyle = vsReport
   end
-  object SaveBtn: TsBitBtn
+  object SaveBtn: TBitBtn
     Left = 8
     Top = 287
     Width = 100
@@ -199,19 +197,6 @@ object InfoForm: TInfoForm
       00000000000000000000}
     TabOrder = 2
     OnClick = SaveBtnClick
-    SkinData.SkinSection = 'BUTTON'
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 104
-    Top = 208
   end
   object SaveDialog1: TSaveDialog
     FileName = 'TEncoderFileInfo.txt'

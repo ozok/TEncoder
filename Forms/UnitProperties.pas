@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,16 +22,15 @@ unit UnitProperties;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, sEdit, sSkinProvider, Buttons, sBitBtn, sListBox,
-  Vcl.ComCtrls, sListView;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Dialogs, StdCtrls, Buttons, Vcl.ComCtrls;
 
 type
   TInfoForm = class(TForm)
-    sSkinProvider1: TsSkinProvider;
-    OkBtn: TsBitBtn;
-    Infos: TsListView;
-    SaveBtn: TsBitBtn;
+                                   
+    OkBtn: TBitBtn;
+    Infos: TListView;
+    SaveBtn: TBitBtn;
     SaveDialog1: TSaveDialog;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure OkBtnClick(Sender: TObject);
@@ -100,4 +99,4 @@ begin
 
 end;
 
-end.
+end.

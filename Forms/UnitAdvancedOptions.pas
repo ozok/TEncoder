@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,67 +22,64 @@ unit UnitAdvancedOptions;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, sComboBox, sLabel,
-  sSkinProvider, sCheckBox, IniFiles, Vcl.Buttons, sBitBtn, Vcl.ComCtrls,
-  sPageControl, sEdit, sTrackBar, sSpinEdit, Vcl.ExtCtrls, sPanel, StrUtils,
-  sGroupBox;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, IniFiles,
+  Vcl.Buttons, Vcl.ComCtrls, Vcl.ExtCtrls, StrUtils, Vcl.Samples.Spin, Vcl.Mask,
+  JvExMask, JvSpin;
 
 type
   TAdvancedOptionsForm = class(TForm)
-    sSkinProvider1: TsSkinProvider;
-    x264ProfileList: TsComboBox;
-    x264PresetList: TsComboBox;
-    x264LevelList: TsComboBox;
-    x264TuneList: TsComboBox;
-    x264Btn: TsCheckBox;
-    CloseBtn: TsBitBtn;
-    OptionPages: TsPageControl;
-    sTabSheet1: TsTabSheet;
-    sTabSheet2: TsTabSheet;
-    ProresProfileList: TsComboBox;
-    ProresQualityBar: TsTrackBar;
-    ProresQualityEdit: TsEdit;
-    sLabel1: TsLabel;
-    sLabel2: TsLabel;
-    x264CRFBtn: TsCheckBox;
-    x264CRFEdit: TsSpinEdit;
-    sTabSheet3: TsTabSheet;
-    MPEGAudioIDBtn: TsCheckBox;
-    VideoSettingsPanel: TsPanel;
-    ForceASRBtn: TsCheckBox;
-    VideoAspectRatioList: TsComboBox;
-    VideobitrateList: TsComboBox;
-    VideoCBrBtn: TsCheckBox;
-    VideoFPSList: TsComboBox;
-    VideoSizeList: TsComboBox;
-    WidthEdit: TsSpinEdit;
-    HeightEdit: TsSpinEdit;
-    AudioSettingsPanel: TsPanel;
-    AudioBitrateList: TsComboBox;
-    AudioChannelsList: TsComboBox;
-    AudioSampleRateList: TsComboBox;
-    GroupBox1: TsGroupBox;
-    sGroupBox1: TsGroupBox;
-    sGroupBox2: TsGroupBox;
-    sLabelFX1: TsLabel;
-    CustomFFmpegVideoBtn: TsCheckBox;
-    CustomFFmpegAudioBtn: TsCheckBox;
-    CustomFFMpegVideoEdit: TsEdit;
-    CustomFFMpegAudioEdit: TsEdit;
-    CustomMEncoderAudioEdit: TsEdit;
-    CustomMEncoderVideoEdit: TsEdit;
-    CustomMEncoderAudioBtn: TsCheckBox;
-    CustomMEncoderVideoBtn: TsCheckBox;
-    CustomFFmpegEdit: TsEdit;
-    CustomMencoderEdit: TsEdit;
-    sTabSheet4: TsTabSheet;
-    FlacCompBar: TsTrackBar;
-    FlacCompEdit: TsEdit;
-    sTabSheet5: TsTabSheet;
-    x265Btn: TsCheckBox;
-    x265PresetsList: TsComboBox;
+    x264ProfileList: TComboBox;
+    x264PresetList: TComboBox;
+    x264LevelList: TComboBox;
+    x264TuneList: TComboBox;
+    x264Btn: TCheckBox;
+    CloseBtn: TBitBtn;
+    OptionPages: TPageControl;
+    sTabSheet1: TTabSheet;
+    sTabSheet2: TTabSheet;
+    ProresProfileList: TComboBox;
+    ProresQualityBar: TTrackBar;
+    ProresQualityEdit: TEdit;
+    sLabel1: TLabel;
+    sLabel2: TLabel;
+    x264CRFBtn: TCheckBox;
+    x264CRFEdit: TJvSpinEdit;
+    sTabSheet3: TTabSheet;
+    MPEGAudioIDBtn: TCheckBox;
+    VideoSettingsPanel: TPanel;
+    ForceASRBtn: TCheckBox;
+    VideoAspectRatioList: TComboBox;
+    VideobitrateList: TComboBox;
+    VideoCBrBtn: TCheckBox;
+    VideoFPSList: TComboBox;
+    VideoSizeList: TComboBox;
+    WidthEdit: TJvSpinEdit;
+    HeightEdit: TJvSpinEdit;
+    AudioSettingsPanel: TPanel;
+    AudioBitrateList: TComboBox;
+    AudioChannelsList: TComboBox;
+    AudioSampleRateList: TComboBox;
+    GroupBox1: TGroupBox;
+    sGroupBox1: TGroupBox;
+    sGroupBox2: TGroupBox;
+    sLabelFX1: TLabel;
+    CustomFFmpegVideoBtn: TCheckBox;
+    CustomFFmpegAudioBtn: TCheckBox;
+    CustomFFMpegVideoEdit: TEdit;
+    CustomFFMpegAudioEdit: TEdit;
+    CustomMEncoderAudioEdit: TEdit;
+    CustomMEncoderVideoEdit: TEdit;
+    CustomMEncoderAudioBtn: TCheckBox;
+    CustomMEncoderVideoBtn: TCheckBox;
+    CustomFFmpegEdit: TEdit;
+    CustomMencoderEdit: TEdit;
+    sTabSheet4: TTabSheet;
+    FlacCompBar: TTrackBar;
+    FlacCompEdit: TEdit;
+    sTabSheet5: TTabSheet;
+    x265Btn: TCheckBox;
+    x265PresetsList: TComboBox;
     procedure x264BtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -113,7 +110,8 @@ implementation
 
 {$R *.dfm}
 
-uses UnitMain, UnitProfileEditor;
+uses
+  UnitMain, UnitProfileEditor;
 
 procedure TAdvancedOptionsForm.CloseBtnClick(Sender: TObject);
 begin
@@ -539,3 +537,4 @@ begin
 end;
 
 end.
+

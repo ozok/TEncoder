@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -23,44 +23,39 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, JvComponentBase, JvCreateProcess, sSkinProvider, StdCtrls, Buttons,
-  sBitBtn, ComCtrls, JvExComCtrls, JvComCtrls, ExtCtrls, sPanel, sEdit, sGauge,
-  UnitPlayer,
-  acPNG, ImgList, acAlphaImageList, System.ImageList;
+  Dialogs, JvComponentBase, JvCreateProcess, StdCtrls, Buttons, ComCtrls,
+  JvExComCtrls, JvComCtrls, ExtCtrls, UnitPlayer, ImgList, System.ImageList, Vcl.Samples.Gauges;
 
 type
   TRangeEditorForm = class(TForm)
-    sSkinProvider1: TsSkinProvider;
-    DisplayPanel: TsPanel;
-    PlayBtn: TsBitBtn;
-    StartBtn: TsBitBtn;
-    EndBtn: TsBitBtn;
-    ClearBtn: TsBitBtn;
-    SaveBtn: TsBitBtn;
-    StartBar: TsGauge;
-    EndBar: TsGauge;
+    DisplayPanel: TPanel;
+    PlayBtn: TBitBtn;
+    StartBtn: TBitBtn;
+    EndBtn: TBitBtn;
+    ClearBtn: TBitBtn;
+    SaveBtn: TBitBtn;
+    StartBar: TGauge;
+    EndBar: TGauge;
     Label1: TLabel;
     Label2: TLabel;
-    StartEdit: TsEdit;
-    EndEdit: TsEdit;
-    StartForwardBtn: TsBitBtn;
-    EndForwardBtn: TsBitBtn;
-    EndBackBtn: TsBitBtn;
-    StartBackBtn: TsBitBtn;
-    PositionBar: TsGauge;
-    PositionEdit: TsEdit;
-    VolumeBar: TsGauge;
+    StartEdit: TEdit;
+    EndEdit: TEdit;
+    StartForwardBtn: TBitBtn;
+    EndForwardBtn: TBitBtn;
+    EndBackBtn: TBitBtn;
+    StartBackBtn: TBitBtn;
+    PositionBar: TGauge;
+    PositionEdit: TEdit;
+    VolumeBar: TGauge;
     Image1: TImage;
     PositionTimer: TTimer;
-    StepSecondBackBtn: TsBitBtn;
-    StepSecondForwardBtn: TsBitBtn;
-    ImageList: TsAlphaImageList;
-    VolumeUpBtn: TsBitBtn;
-    VolumeDownBtn: TsBitBtn;
+    StepSecondBackBtn: TBitBtn;
+    StepSecondForwardBtn: TBitBtn;
+    VolumeUpBtn: TBitBtn;
+    VolumeDownBtn: TBitBtn;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure PlayBtnClick(Sender: TObject);
-
     procedure CloseBtnClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -102,7 +97,8 @@ var
 
 implementation
 
-uses UnitMain, UnitEffects, UnitSettings, UnitLogs, UnitAdvancedOptions;
+uses
+  UnitMain, UnitEffects, UnitSettings, UnitLogs, UnitAdvancedOptions;
 
 {$R *.dfm}
 
@@ -201,7 +197,8 @@ end;
 
 procedure TRangeEditorForm.FormCreate(Sender: TObject);
 begin
-  Player := TPlayer.Create(DisplayPanel.Handle, MainForm.FMPlayerPath);;
+  Player := TPlayer.Create(DisplayPanel.Handle, MainForm.FMPlayerPath);
+  ;
 end;
 
 procedure TRangeEditorForm.FormDestroy(Sender: TObject);
@@ -269,12 +266,10 @@ begin
     Player.StartPlaying();
 
     PositionTimer.Enabled := True;
-    ImageList.GetBitmap32(0, PlayBtn.Glyph);
   end
   else
   begin
     Player.Pause();
-    ImageList.GetBitmap32(1, PlayBtn.Glyph);
   end;
 
 end;
@@ -320,17 +315,17 @@ begin
     PositionEdit.Text := '00:00:00/00:00:00';
 
     PositionTimer.Enabled := False;
-    ImageList.GetBitmap32(1, PlayBtn.Glyph);
+//    ImageList.GetBitmap32(1, PlayBtn.Glyph);
   end;
 
-  if Player.MplayerStatus = psPlaying then
-  begin
-    ImageList.GetBitmap32(0, PlayBtn.Glyph);
-  end
-  else if Player.MplayerStatus = psPaused then
-  begin
-    ImageList.GetBitmap32(1, PlayBtn.Glyph);
-  end;
+//  if Player.MplayerStatus = psPlaying then
+//  begin
+//    ImageList.GetBitmap32(0, PlayBtn.Glyph);
+//  end
+//  else if Player.MplayerStatus = psPaused then
+//  begin
+//    ImageList.GetBitmap32(1, PlayBtn.Glyph);
+//  end;
 
 end;
 
@@ -486,3 +481,4 @@ begin
 end;
 
 end.
+

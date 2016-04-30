@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -25,21 +25,17 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Gauges, JvComponentBase, Mask, ComCtrls, JvComputerInfoEx,
   JvThreadTimer, ShellAPI, IniFiles, JvBaseDlg, JvBrowseFolder, JvSearchFiles,
-  Menus, MediaInfoDll, Buttons, sBitBtn, sListBox, sComboBox, sEdit, sButton,
-  sCheckBox, sLabel, AppEvnts, ExtCtrls, sPanel, windows7taskbar, acPNG, sGauge,
-  JvDragDrop, sSkinProvider, sSkinManager, JvFormPlacement, JvAppStorage,
-  JvAppIniStorage, JvSpin, StrUtils, UnitFFmpegCommandLineCreator,
-  UnitMencoderCommandLineCreator, JvTimer, acTitleBar, JvTrayIcon, JvSimScope,
-  UnitEncoder, sTreeView, sSpinEdit, sPageControl, Vcl.XPMan, Vcl.ToolWin,
-  sToolBar, sListView, Vcl.ImgList, acAlphaImageList, acProgressBar, Generics.Collections,
-  DateUtils, System.Zip, System.Types, sScrollBox, UnitYouTubeVideoInfoExtractor,
-  UnitCommonTypes, acImage, UnitFileNameExtractor, Jpeg, Winapi.MMSystem,
-  sMaskEdit, sCustomComboEdit, sToolEdit, sGroupBox, UnitDVDReader,
-  JvUrlListGrabber, JvUrlGrabbers, JvThread, sStatusBar, UnitDownloadProcess,
-  UnitDVDRipperProcess, UnitFileInfoExtractor, sDialogs, UnitDVDJob,
+  Menus, MediaInfoDll, Buttons, AppEvnts, ExtCtrls, windows7taskbar, JvDragDrop,
+  JvFormPlacement, JvAppStorage, JvAppIniStorage, JvSpin, StrUtils,
+  UnitFFmpegCommandLineCreator, UnitMencoderCommandLineCreator, JvTimer,
+  JvTrayIcon, JvSimScope, UnitEncoder, Vcl.XPMan, Vcl.ToolWin, Vcl.ImgList,
+  Generics.Collections, DateUtils, System.Zip, System.Types,
+  UnitYouTubeVideoInfoExtractor, UnitCommonTypes, UnitFileNameExtractor, Jpeg,
+  Winapi.MMSystem, UnitDVDReader, JvUrlListGrabber, JvUrlGrabbers, JvThread,
+  UnitDownloadProcess, UnitDVDRipperProcess, UnitFileInfoExtractor, UnitDVDJob,
   DownloadItemFrame, System.ImageList, UnitYoutubedlUpdateChecker,
   UnitYouTubeDlVersionReader, UnitFileInfoItem, UnitFFmpegMergeCMDCreator,
-  UnitSubtitleTypes;
+  UnitSubtitleTypes, JvExMask, JvToolEdit;
 
 type
   TFileInfoForAdding = packed record
@@ -78,13 +74,13 @@ type
     Down1: TMenuItem;
     OpenDirectory1: TMenuItem;
     Properties1: TMenuItem;
-    DirectoryEdit: TsEdit;
-    SelectBtn: TsBitBtn;
-    EncoderList: TsComboBox;
+    DirectoryEdit: TEdit;
+    SelectBtn: TBitBtn;
+    EncoderList: TComboBox;
     Preview1: TMenuItem;
-    ProfileList: TsComboBox;
-    ApplyProfileBtn: TsBitBtn;
-    NewProfileBtn: TsBitBtn;
+    ProfileList: TComboBox;
+    ApplyProfileBtn: TBitBtn;
+    NewProfileBtn: TBitBtn;
     MainMenu1: TMainMenu;
     File1: TMenuItem;
     AddFile1: TMenuItem;
@@ -110,40 +106,37 @@ type
     AddFolder3: TMenuItem;
     AddFolderTree3: TMenuItem;
     ApplicationEvents: TApplicationEvents;
-    ContainerList: TsComboBox;
-    OpenOutDirBtn: TsBitBtn;
-    sSkinManager1: TsSkinManager;
-    sSkinProvider1: TsSkinProvider;
+    ContainerList: TComboBox;
+    OpenOutDirBtn: TBitBtn;
     AppIniFileStorage: TJvAppIniFileStorage;
     FormStorage: TJvFormStorage;
-    DoTwoPassBtn: TsCheckBox;
-    EnableSubBtn: TsCheckBox;
-    ExportScriptBtn: TsCheckBox;
-    ConvertingPanel: TsPanel;
-    TotalProgress: TsProgressBar;
+    DoTwoPassBtn: TCheckBox;
+    EnableSubBtn: TCheckBox;
+    ExportScriptBtn: TCheckBox;
+    ConvertingPanel: TPanel;
+    TotalProgress: TProgressBar;
     DragDrop: TJvDragDrop;
-    UseSourceChkBtn: TsCheckBox;
+    UseSourceChkBtn: TCheckBox;
     PositionTimer: TTimer;
-    NormalPanel: TsPanel;
+    NormalPanel: TPanel;
     Timer: TTimer;
     TrayIcon: TJvTrayIcon;
     SeeChangeLog1: TMenuItem;
-    SummaryView: TsTreeView;
+    SummaryView: TTreeView;
     V1: TMenuItem;
     XPManifest1: TXPManifest;
     S1: TMenuItem;
     M1: TMenuItem;
-    VideoEncoderList: TsComboBox;
-    VideoSettingsBtn: TsBitBtn;
-    AudioEncoderList: TsComboBox;
+    VideoEncoderList: TComboBox;
+    VideoSettingsBtn: TBitBtn;
+    AudioEncoderList: TComboBox;
     T1: TMenuItem;
     F1: TMenuItem;
     T2: TMenuItem;
     D1: TMenuItem;
     E1: TMenuItem;
     C1: TMenuItem;
-    ProgressList: TsListView;
-    ProgressImages: TsAlphaImageList;
+    ProgressList: TListView;
     S2: TMenuItem;
     ToolsMenu: TPopupMenu;
     Scriptsfolder1: TMenuItem;
@@ -151,128 +144,126 @@ type
     Delays1: TMenuItem;
     rim1: TMenuItem;
     FileInfo1: TMenuItem;
-    SubOptionsBtn: TsButton;
-    MainSummaryList: TsTreeView;
-    ProgressLabel: TsLabel;
+    SubOptionsBtn: TButton;
+    MainSummaryList: TTreeView;
+    ProgressLabel: TLabel;
     I1: TMenuItem;
     ImageandAudiotoVideo1: TMenuItem;
-    DummyList: TsAlphaImageList;
     D2: TMenuItem;
     R1: TMenuItem;
     M2: TMenuItem;
     G1: TMenuItem;
     V2: TMenuItem;
-    FuncPages: TsPageControl;
-    sTabSheet1: TsTabSheet;
-    sTabSheet2: TsTabSheet;
-    FileList: TsListView;
-    SubtitleTracksList: TsComboBox;
-    AudioTracksList: TsComboBox;
-    sToolBar1: TsPanel;
-    AddFileBtn: TsBitBtn;
-    UpBtn: TsBitBtn;
-    DownBtn: TsBitBtn;
-    RemoveBtn: TsBitBtn;
-    RemoveAllBtn: TsBitBtn;
-    ToolsBtn: TsBitBtn;
-    PreviewBtn: TsBitBtn;
-    StartBtn: TsBitBtn;
-    DonateBtn: TsBitBtn;
-    SettingsBtn: TsBitBtn;
-    LogsBtn: TsBitBtn;
-    VideoDownloadToolBarPanel: TsPanel;
-    AddLinkBtn: TsBitBtn;
-    ClearLinksBtn: TsBitBtn;
-    DownloadSettingsBtn: TsBitBtn;
-    StartDownloadBtn: TsBitBtn;
-    StopDownloadBtn: TsBitBtn;
-    PageImgs: TsAlphaImageList;
-    VideoDownloaderList: TsScrollBox;
+    FuncPages: TPageControl;
+    sTabSheet1: TTabSheet;
+    sTabSheet2: TTabSheet;
+    FileList: TListView;
+    SubtitleTracksList: TComboBox;
+    AudioTracksList: TComboBox;
+    sToolBar1: TPanel;
+    AddFileBtn: TBitBtn;
+    UpBtn: TBitBtn;
+    DownBtn: TBitBtn;
+    RemoveBtn: TBitBtn;
+    RemoveAllBtn: TBitBtn;
+    ToolsBtn: TBitBtn;
+    PreviewBtn: TBitBtn;
+    StartBtn: TBitBtn;
+    DonateBtn: TBitBtn;
+    SettingsBtn: TBitBtn;
+    LogsBtn: TBitBtn;
+    VideoDownloadToolBarPanel: TPanel;
+    AddLinkBtn: TBitBtn;
+    ClearLinksBtn: TBitBtn;
+    DownloadSettingsBtn: TBitBtn;
+    StartDownloadBtn: TBitBtn;
+    StopDownloadBtn: TBitBtn;
+    VideoDownloaderList: TScrollBox;
     AddLinkMenu: TPopupMenu;
     A3: TMenuItem;
     Batchaddlinks1: TMenuItem;
     A2: TMenuItem;
     Batchaddplaylists1: TMenuItem;
-    TotalBar: TsProgressBar;
+    TotalBar: TProgressBar;
     VideoDownloaderPosTimer: TTimer;
-    ConvertDownloadedBtn: TsCheckBox;
+    ConvertDownloadedBtn: TCheckBox;
     U1: TMenuItem;
-    sTabSheet3: TsTabSheet;
-    sGroupBox1: TsGroupBox;
-    DVDFolderEdit: TsDirectoryEdit;
-    ReadDVDBtn: TsBitBtn;
-    OutputFileNameEdit: TsEdit;
-    sGroupBox2: TsGroupBox;
-    DVDAudioTracksList: TsComboBox;
-    DisableAudioBtn: TsCheckBox;
-    DisableSubBtn: TsCheckBox;
-    DVDSubtitleTracksList: TsComboBox;
-    TitlesList: TsComboBox;
-    StartChaperList: TsComboBox;
-    EndChapterList: TsComboBox;
-    DVDLoadPnl: TsPanel;
-    ProgressBar1: TsProgressBar;
-    sPanel1: TsPanel;
-    OpenDVDBtn: TsBitBtn;
-    DVDConsoleEdit: TsEdit;
-    DVDProgressBar: TsProgressBar;
-    sImage1: TsImage;
+    sTabSheet3: TTabSheet;
+    sGroupBox1: TGroupBox;
+    ReadDVDBtn: TBitBtn;
+    OutputFileNameEdit: TEdit;
+    sGroupBox2: TGroupBox;
+    DVDAudioTracksList: TComboBox;
+    DisableAudioBtn: TCheckBox;
+    DisableSubBtn: TCheckBox;
+    DVDSubtitleTracksList: TComboBox;
+    TitlesList: TComboBox;
+    StartChaperList: TComboBox;
+    EndChapterList: TComboBox;
+    DVDLoadPnl: TPanel;
+    ProgressBar1: TProgressBar;
+    sPanel1: TPanel;
+    OpenDVDBtn: TBitBtn;
+    DVDConsoleEdit: TEdit;
+    DVDProgressBar: TProgressBar;
+    sImage1: TImage;
     DVDPosTimer: TTimer;
-    DVDStopBtn: TsBitBtn;
-    VideoDownloaderProgressLabel: TsLabel;
+    DVDStopBtn: TBitBtn;
+    VideoDownloaderProgressLabel: TLabel;
     S3: TMenuItem;
     CheckUpdateThread: TJvThread;
     UpdateChecker: TJvHttpUrlGrabber;
     W1: TMenuItem;
-    sPanel2: TsPanel;
-    sPanel3: TsPanel;
-    PostEncodeList2: TsComboBox;
-    sPanel4: TsPanel;
-    StopBtn: TsBitBtn;
-    OpenOutDirBtn2: TsBitBtn;
-    Log2Btn: TsBitBtn;
-    PostEncodeList: TsComboBox;
-    sBitBtn1: TsBitBtn;
-    RightPnl: TsPanel;
-    BottomPnl: TsPanel;
-    sPanel5: TsPanel;
-    PassBtn: TsBitBtn;
-    PassPnl: TsPanel;
-    UserEdit: TsEdit;
-    PassEdit: TsEdit;
-    sLabel1: TsLabel;
-    sPanel6: TsPanel;
-    sLabelFX1: TsLabel;
-    sLabelFX2: TsLabel;
-    sLabelFX3: TsLabel;
-    TimeLabel: TsLabel;
-    sStatusBar1: TsStatusBar;
-    FBImg: TsImage;
-    TrayBtn: TsBitBtn;
-    DVDInfoLabel: TsLabel;
-    DVDTotalProgressBar: TsProgressBar;
-    PostEncodeList3: TsComboBox;
-    DVDFilterBtn: TsBitBtn;
-    SubtitleTypesList: TsComboBox;
-    DVDPages: TsPageControl;
-    sTabSheet4: TsTabSheet;
-    sTabSheet5: TsTabSheet;
-    DVDAddtoBatchBtn: TsBitBtn;
-    sPanel7: TsPanel;
-    DVDBatchRemoveBtn: TsBitBtn;
-    DVDBatchStartBtn: TsBitBtn;
-    DVDBatchStopBtn: TsBitBtn;
-    DVDBatchClearBtn: TsBitBtn;
-    DVDJobList: TsListView;
-    DVDPreTitleBtn: TsButton;
-    DVDNextTitleBtn: TsButton;
-    sPanel8: TsPanel;
-    LinkEdit: TsEdit;
-    LinkTypeList: TsComboBox;
-    AddSingleLinkBtn: TsBitBtn;
-    StartDVDBatchBtn: TsBitBtn;
-    UpdateYoutubeDlBtn: TsBitBtn;
-    MergeBtn: TsCheckBox;
+    sPanel2: TPanel;
+    sPanel3: TPanel;
+    PostEncodeList2: TComboBox;
+    sPanel4: TPanel;
+    StopBtn: TBitBtn;
+    OpenOutDirBtn2: TBitBtn;
+    Log2Btn: TBitBtn;
+    PostEncodeList: TComboBox;
+    sBitBtn1: TBitBtn;
+    RightPnl: TPanel;
+    BottomPnl: TPanel;
+    sPanel5: TPanel;
+    PassBtn: TBitBtn;
+    PassPnl: TPanel;
+    UserEdit: TEdit;
+    PassEdit: TEdit;
+    sLabel1: TLabel;
+    sPanel6: TPanel;
+    sLabelFX1: TLabel;
+    sLabelFX2: TLabel;
+    sLabelFX3: TLabel;
+    TimeLabel: TLabel;
+    sStatusBar1: TStatusBar;
+    FBImg: TImage;
+    TrayBtn: TBitBtn;
+    DVDInfoLabel: TLabel;
+    DVDTotalProgressBar: TProgressBar;
+    PostEncodeList3: TComboBox;
+    DVDFilterBtn: TBitBtn;
+    SubtitleTypesList: TComboBox;
+    DVDPages: TPageControl;
+    sTabSheet4: TTabSheet;
+    sTabSheet5: TTabSheet;
+    DVDAddtoBatchBtn: TBitBtn;
+    sPanel7: TPanel;
+    DVDBatchRemoveBtn: TBitBtn;
+    DVDBatchStartBtn: TBitBtn;
+    DVDBatchStopBtn: TBitBtn;
+    DVDBatchClearBtn: TBitBtn;
+    DVDJobList: TListView;
+    DVDPreTitleBtn: TButton;
+    DVDNextTitleBtn: TButton;
+    sPanel8: TPanel;
+    LinkEdit: TEdit;
+    LinkTypeList: TComboBox;
+    AddSingleLinkBtn: TBitBtn;
+    StartDVDBatchBtn: TBitBtn;
+    UpdateYoutubeDlBtn: TBitBtn;
+    MergeBtn: TCheckBox;
+    DVDFolderEdit: TJvDirectoryEdit;
     procedure RemoveBtnClick(Sender: TObject);
     procedure RemoveAllBtnClick(Sender: TObject);
     procedure UpBtnClick(Sender: TObject);
@@ -447,7 +438,6 @@ type
     // removes all .log files from appdata folder
     procedure RemoveLogs();
     procedure ApplyProfile(ProfileName: string);
-    procedure LoadSkin();
     // adds a file to the list and convertitems
     // also gets related information
     procedure AddFile(const FileName: string);
@@ -472,7 +462,7 @@ type
     function GetModifiedDate(const FileName: string): TDateTime;
     procedure SetFileCreationTime(const FileName: string; const DateTime: TFileDatePair);
     // listview item up/down
-    procedure ExchangeItems(lv: TsListView; const i, j: Integer);
+    procedure ExchangeItems(lv: TListView; const i, j: Integer);
     // adds command line to TEncoder object
     procedure CreateEncodingCommands(FileIndex: Integer; const EncoderIndex: integer);
     // generates merge command line
@@ -535,7 +525,7 @@ type
     FTimePassed: Integer;
     // list that holds all the informaiton about files to be converted
     FMasterFileInfoList: TFileInfoList;
-    procedure LoadProfiles(ProfilesList: TsComboBox);
+    procedure LoadProfiles(ProfilesList: TComboBox);
     // removes two pass information from appdata folder
     procedure ClearTempFolder();
     // converts integer to hh:mm:ss
@@ -1248,10 +1238,10 @@ end;
 
 procedure TMainForm.AddFile2Click(Sender: TObject);
 var
-  OpenVideo: TsOpenDialog;
+  OpenVideo: TOpenDialog;
   i: Integer;
 begin
-  OpenVideo := TsOpenDialog.Create(MainForm);
+  OpenVideo := TOpenDialog.Create(MainForm);
   try
     if DirectoryExists(FLastOpenedDir) then
     begin
@@ -3299,7 +3289,7 @@ begin
     begin
       FPassStr := Mencoder1stPass
     end;
-    Result.FirstPassCMD := ' -mc 0 -priority idle '  + LChapterCMD + ' ' + VCodecPart1 + FPassStr + VCodecPart2 + Container + ' -passlogfile "' + PassFile + '" -nosound -o NUL dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
+    Result.FirstPassCMD := ' -mc 0 -priority idle ' + LChapterCMD + ' ' + VCodecPart1 + FPassStr + VCodecPart2 + Container + ' -passlogfile "' + PassFile + '" -nosound -o NUL dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
 
     // second pass
     OutName := CreateDVDFileName(ExcludeTrailingPathDelimiter(DirectoryEdit.Text) + '\' + OutputFileNameEdit.Text, OutExtension);
@@ -3364,7 +3354,7 @@ begin
       FPassStr := Mencoder2ndPass
     end;
 
-    Result.SeconPassCMD := ' -mc 0 -priority idle '  + LChapterCMD + ' ' + AudioCMD + VCodecPart1 + FPassStr + VCodecPart2 + Container + ACodec + SubtitleCMD + ' -passlogfile "' + PassFile + '" -o "' + OutName + '" dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
+    Result.SeconPassCMD := ' -mc 0 -priority idle ' + LChapterCMD + ' ' + AudioCMD + VCodecPart1 + FPassStr + VCodecPart2 + Container + ACodec + SubtitleCMD + ' -passlogfile "' + PassFile + '" -o "' + OutName + '" dvd://' + FloatToStr(TitlesList.ItemIndex + 1) + ' -dvd-device "' + DVDFolderEdit.Text + '"';
 
   end
   else
@@ -3552,7 +3542,7 @@ procedure TMainForm.DeleteBtnClick(Sender: TObject);
 var
   LItemIndex, i: integer;
 begin
-  LItemIndex := (Sender as TsButton).Tag;
+  LItemIndex := (Sender as TButton).Tag;
   if LItemIndex < FVideoDownloadListItems.Count then
   begin
     FVideoDownloadListItems[LItemIndex].Visible := False;
@@ -3723,17 +3713,17 @@ begin
   begin
     for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
-      if (FVideoDownloadListItems[i].Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Controls[j] is TsButton) then
+      if (FVideoDownloadListItems[i].Controls[j] is TComboBox) or (FVideoDownloadListItems[i].Controls[j] is TButton) then
         FVideoDownloadListItems[i].Controls[j].Enabled := True;
     end;
     for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
-      if (FVideoDownloadListItems[i].Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Controls[j] is TsButton) then
+      if (FVideoDownloadListItems[i].Controls[j] is TComboBox) or (FVideoDownloadListItems[i].Controls[j] is TButton) then
         FVideoDownloadListItems[i].Controls[j].Enabled := True;
     end;
     for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
-      if (FVideoDownloadListItems[i].Controls[j] is TsComboBox) or (FVideoDownloadListItems[i].Controls[j] is TsButton) then
+      if (FVideoDownloadListItems[i].Controls[j] is TComboBox) or (FVideoDownloadListItems[i].Controls[j] is TButton) then
         FVideoDownloadListItems[i].Controls[j].Enabled := True;
     end;
   end;
@@ -3746,9 +3736,9 @@ begin
     for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
       FVideoDownloadListItems[i].Controls[j].Enabled := True;
-      if FVideoDownloadListItems[i].Controls[j] is TsProgressBar then
+      if FVideoDownloadListItems[i].Controls[j] is TProgressBar then
       begin
-        TsProgressBar(FVideoDownloadListItems[i].Controls[j]).Position := 0;
+        TProgressBar(FVideoDownloadListItems[i].Controls[j]).Position := 0;
       end;
       FVideoDownloadListItems[i].ResetProgressLabel;
     end;
@@ -3813,10 +3803,7 @@ begin
   begin
     PassPnl.Visible := False;
   end;
-  if PassBtn.Down then
-  begin
-    PassBtn.Down := False;
-  end;
+
   for I := 0 to FVideoDownloadListItems.Count - 1 do
   begin
     for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
@@ -4425,9 +4412,9 @@ begin
     for j := 0 to FVideoDownloadListItems[i].ControlCount - 1 do
     begin
       FVideoDownloadListItems[i].Controls[j].Enabled := True;
-      if FVideoDownloadListItems[i].Controls[j] is TsProgressBar then
+      if FVideoDownloadListItems[i].Controls[j] is TProgressBar then
       begin
-        TsProgressBar(FVideoDownloadListItems[i].Controls[j]).Position := 0;
+        TProgressBar(FVideoDownloadListItems[i].Controls[j]).Position := 0;
       end;
       FVideoDownloadListItems[i].ResetProgressLabel;
     end;
@@ -5044,7 +5031,7 @@ begin
   OutputFileNameEdit.Text := ExtractFileName(ChangeFileExt(DVDFolderEdit.Text, '')) + '_title' + FloatToStr(TitlesList.ItemIndex + 1) + '_chapters' + FloatToStr(StartChaperList.ItemIndex + 1) + '-' + FloatToStr(EndChapterList.ItemIndex + 1);
 end;
 
-procedure TMainForm.ExchangeItems(lv: TsListView; const i, j: Integer);
+procedure TMainForm.ExchangeItems(lv: TListView; const i, j: Integer);
 var
   tempLI: TListItem;
 begin
@@ -5275,9 +5262,9 @@ var
   LItemIndex: Integer;
   LTmp: TDownloadItem;
 begin
-  LItemIndex := (Sender as TsComboBox).Tag;
+  LItemIndex := (Sender as TComboBox).Tag;
   LTmp := FDownloadItems[LItemIndex];
-  LTmp.FormatIndex := (Sender as TsComboBox).ItemIndex;
+  LTmp.FormatIndex := (Sender as TComboBox).ItemIndex;
   FDownloadItems[LItemIndex] := LTmp;
 end;
 
@@ -5597,9 +5584,6 @@ begin
   ClearDownloadImages;
 
   UseSourceChkBtn.OnClick(Self);
-
-  // load skin
-  LoadSkin();
 
   // disable/enable
   if (VideoEncoderList.ItemIndex = 10) or (VideoEncoderList.ItemIndex = 11) then
@@ -6407,7 +6391,7 @@ end;
 
 procedure TMainForm.LabelClick(Sender: TObject);
 begin
-  ShellExecute(Handle, 'open', PWideChar(TsLabel(Sender).Caption), nil, nil, SW_SHOWNORMAL);
+  ShellExecute(Handle, 'open', PWideChar(TLabel(Sender).Caption), nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TMainForm.LinkEditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -6483,7 +6467,7 @@ begin
   end;
 end;
 
-procedure TMainForm.LoadProfiles(ProfilesList: TsComboBox);
+procedure TMainForm.LoadProfiles(ProfilesList: TComboBox);
 var
   lSearchRec: TSearchRec;
 begin
@@ -6517,58 +6501,6 @@ begin
   else
   begin
     Application.MessageBox('Cannot load profiles!', 'Error', MB_ICONERROR);
-  end;
-
-end;
-
-procedure TMainForm.LoadSkin;
-var
-  IniFile: TIniFile;
-  SkinIndex: Integer;
-  SkinName: string;
-  Saturation: Integer;
-  Hue: Integer;
-  i: integer;
-begin
-
-  { Load skin using info from settings file }
-  if not SettingsForm.SkinEnableBtn.Checked then
-  begin
-
-    IniFile := TIniFile.Create(FAppDataFolder + 'Settings.ini');
-    try
-      SkinIndex := IniFile.ReadInteger('Options', 'Skins2', 92);
-      Saturation := IniFile.ReadInteger('Options', 'Sat', 0);
-      Hue := IniFile.ReadInteger('Options', 'Hue', 0);
-
-      if (SkinIndex > sSkinManager1.InternalSkins.Count) or (SkinIndex < 0) then
-      begin
-        SkinIndex := 16;
-      end;
-
-      SkinName := sSkinManager1.InternalSkins.Items[SkinIndex].Name;
-
-      sSkinManager1.SkinName := SkinName;
-      // sSkinManager1.RepaintForms(True);
-      sSkinManager1.Saturation := Saturation;
-      sSkinManager1.HueOffset := Hue;
-
-    finally
-      IniFile.Free;
-    end;
-
-    for I := 0 to Self.ComponentCount - 1 do
-    begin
-      if Self.Components[i] is TJvSpinEdit then
-      begin
-        (Self.Components[i] as TJvSpinEdit).Color := DirectoryEdit.Color;
-        (Self.Components[i] as TJvSpinEdit).Font := DirectoryEdit.Font;
-      end;
-    end;
-  end
-  else
-  begin
-    sSkinManager1.Active := False;
   end;
 
 end;
@@ -6656,13 +6588,11 @@ begin
   begin
     // hide
     PassPnl.Visible := False;
-    PassBtn.Down := False;
   end
   else
   begin
     // show
     PassPnl.Visible := True;
-    PassBtn.Down := True;
   end;
 end;
 
@@ -7614,22 +7544,22 @@ begin
 
       // reset
 {$REGION 'reset region'}
-        TotalProgress.Position := 0;
-        TrayIcon.Active := False;
-        DeleteTempFiles;
-        FTempFilesToDelete.Clear;
-        ProgressList.Items.Clear;
-        for i := low(FProgressStrs) to High(FProgressStrs) do
-        begin
-          FProgressStrs[i] := '';
-        end;
-        FFileAddingStoppedByUser := False;
-        for I := Low(FEncoders) to High(FEncoders) do
-        begin
-          FEncoders[i].ResetValues;
-        end;
-        FTimePassed := 0;
-        FFilesToCheck.Clear;
+      TotalProgress.Position := 0;
+      TrayIcon.Active := False;
+      DeleteTempFiles;
+      FTempFilesToDelete.Clear;
+      ProgressList.Items.Clear;
+      for i := low(FProgressStrs) to High(FProgressStrs) do
+      begin
+        FProgressStrs[i] := '';
+      end;
+      FFileAddingStoppedByUser := False;
+      for I := Low(FEncoders) to High(FEncoders) do
+      begin
+        FEncoders[i].ResetValues;
+      end;
+      FTimePassed := 0;
+      FFilesToCheck.Clear;
 {$ENDREGION}
 
       // decide number of processes
@@ -8136,9 +8066,9 @@ var
   LItemIndex: Integer;
   LTmp: TDownloadItem;
 begin
-  LItemIndex := (Sender as TsComboBox).Tag;
+  LItemIndex := (Sender as TComboBox).Tag;
   LTmp := FDownloadItems[LItemIndex];
-  LTmp.SubIndex := (Sender as TsComboBox).ItemIndex;
+  LTmp.SubIndex := (Sender as TComboBox).ItemIndex;
   FDownloadItems[LItemIndex] := LTmp;
 end;
 

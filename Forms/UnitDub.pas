@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,21 +22,20 @@ unit UnitDub;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, sBitBtn, sComboBox, sLabel, Vcl.ComCtrls, acProgressBar, sEdit, Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit, sSkinProvider,
-  UnitEncoder, Vcl.ExtCtrls;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons,
+  Vcl.ComCtrls, Vcl.Mask, UnitEncoder, Vcl.ExtCtrls, JvExMask, JvToolEdit;
 
 type
   TDubForm = class(TForm)
-    sSkinProvider1: TsSkinProvider;
-    AudioEdit: TsFilenameEdit;
-    VideoEdit: TsFilenameEdit;
-    OutputEdit: TsEdit;
-    ProgressLabel: TsLabel;
-    ContainerList: TsComboBox;
-    StopBtn: TsBitBtn;
-    StartBtn: TsBitBtn;
+    OutputEdit: TEdit;
+    ProgressLabel: TLabel;
+    ContainerList: TComboBox;
+    StopBtn: TBitBtn;
+    StartBtn: TBitBtn;
     PosTimer: TTimer;
+    VideoEdit: TJvFilenameEdit;
+    AudioEdit: TJvFilenameEdit;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -49,10 +48,8 @@ type
     FEncoder: TEncodingProcess;
     FDuration: string;
     FOutputFile: string;
-
     procedure EncodingState;
     procedure NormalState;
-
     function CreateCMD: string;
     procedure DeleteTempFile;
   public
@@ -66,7 +63,8 @@ implementation
 
 {$R *.dfm}
 
-uses UnitLogs, UnitMain, UnitImageAudioMerger;
+uses
+  UnitLogs, UnitMain, UnitImageAudioMerger;
 
 function TDubForm.CreateCMD: string;
 var
@@ -304,3 +302,4 @@ begin
 end;
 
 end.
+

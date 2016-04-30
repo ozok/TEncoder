@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,15 +22,14 @@ unit UnitAdd;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, StdCtrls, ExtCtrls, sSkinProvider, Buttons,
-  sBitBtn;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Dialogs, ComCtrls, StdCtrls, ExtCtrls, Buttons;
 
 type
   TAddForm = class(TForm)
     StatusLabel: TLabel;
-    sSkinProvider1: TsSkinProvider;
-    AbortBtn: TsBitBtn;
+                                   
+    AbortBtn: TBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure AbortBtnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -80,4 +79,4 @@ begin
 
 end;
 
-end.
+end.

@@ -16,44 +16,29 @@ object VideoAddingForm: TVideoAddingForm
   OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
-  object InfoLabel: TsLabel
+  object InfoLabel: TLabel
     Left = 8
     Top = 15
     Width = 66
     Height = 13
     Caption = 'Please wait...'
   end
-  object VideoAddBar: TsProgressBar
-    Left = 0
-    Top = 47
-    Width = 651
-    Height = 10
-    Align = alBottom
-    DoubleBuffered = False
-    ParentDoubleBuffered = False
-    TabOrder = 0
-    SkinData.SkinSection = 'GAUGE'
-  end
-  object AbortVideoAddBtn: TsButton
+  object AbortVideoAddBtn: TButton
     Left = 543
     Top = 8
     Width = 100
     Height = 30
     Caption = 'Abort'
-    TabOrder = 1
+    TabOrder = 0
     OnClick = AbortVideoAddBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 376
-    Top = 65528
+  object VideoAddBar: TProgressBar
+    Left = 0
+    Top = 47
+    Width = 651
+    Height = 10
+    Align = alBottom
+    TabOrder = 1
+    ExplicitTop = 40
   end
 end

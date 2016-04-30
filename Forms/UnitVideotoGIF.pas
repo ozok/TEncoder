@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,35 +22,33 @@ unit UnitVideotoGIF;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, sEdit, sSpinEdit,
-  Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit, sSkinProvider, Vcl.ComCtrls,
-  sTrackBar, sCheckBox, sButton, acProgressBar, MediaInfoDll, UnitEncoder,
-  Vcl.ExtCtrls, IniFiles;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask,
+  Vcl.ComCtrls, MediaInfoDll, UnitEncoder, Vcl.ExtCtrls, IniFiles, Vcl.Samples.Spin,
+  JvSpin, JvExMask, JvToolEdit;
 
 type
   TVideoToGIFForm = class(TForm)
-    sSkinProvider1: TsSkinProvider;
-    SourceEdit: TsFilenameEdit;
-    DestEdit: TsFilenameEdit;
-    WidthEdit: TsSpinEdit;
-    HeightEdit: TsSpinEdit;
-    KeepAspectBtn: TsCheckBox;
-    DelayEdit: TsSpinEdit;
-    StartBar: TsTrackBar;
-    EndBar: TsTrackBar;
-    StartEdit: TsEdit;
-    EndEdit: TsEdit;
-    StartBtn: TsButton;
-    StopBtn: TsButton;
-    ResetBtn: TsButton;
-    DurationEdit: TsEdit;
+    WidthEdit: TJvSpinEdit;
+    HeightEdit: TJvSpinEdit;
+    KeepAspectBtn: TCheckBox;
+    DelayEdit: TJvSpinEdit;
+    StartBar: TTrackBar;
+    EndBar: TTrackBar;
+    StartEdit: TEdit;
+    EndEdit: TEdit;
+    StartBtn: TButton;
+    StopBtn: TButton;
+    ResetBtn: TButton;
+    DurationEdit: TEdit;
     PosTimer: TTimer;
-    ConsoleEdit: TsEdit;
-    InfoEdit: TsEdit;
-    ProgressBar1: TsProgressBar;
-    MemoryEdit: TsSpinEdit;
-    FPSEdit: TsSpinEdit;
+    ConsoleEdit: TEdit;
+    InfoEdit: TEdit;
+    MemoryEdit: TJvSpinEdit;
+    FPSEdit: TJvSpinEdit;
+    SourceEdit: TJvFilenameEdit;
+    DestEdit: TJvFilenameEdit;
+    ProgressBar1: TProgressBar;
     procedure SourceEditAfterDialog(Sender: TObject; var Name: string; var Action: Boolean);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure StartBarChange(Sender: TObject);
@@ -69,15 +67,11 @@ type
     FStart: Integer;
     FEnd: Integer;
     FConverter: TEncodingProcess;
-
     function GetDuration(const FileName: string): integer;
     function TimetoStrEx(const Time: Integer): string;
-
     procedure RemovePNGS;
-
     procedure ConvertState;
     procedure NormalState;
-
     procedure LoadSettings;
     procedure SaveSettings;
   public
@@ -93,7 +87,8 @@ implementation
 
 {$R *.dfm}
 
-uses UnitMain, UnitLogs;
+uses
+  UnitMain, UnitLogs;
 
 { TFormVideoToGIF }
 
@@ -141,8 +136,7 @@ begin
   MainForm.BringToFront;
 end;
 
-procedure TVideoToGIFForm.FormCloseQuery(Sender: TObject;
-  var CanClose: Boolean);
+procedure TVideoToGIFForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   CanClose := not PosTimer.Enabled;
 end;
@@ -281,7 +275,7 @@ begin
     NormalState;
     LogForm.OtherLog.Lines.Add('Video to GIF:');
     LogForm.OtherLog.Lines.AddStrings(FConverter.GetConsoleOutput);
-    for I := 0 to FConverter.EncodeJobs.Count-1 do
+    for I := 0 to FConverter.EncodeJobs.Count - 1 do
     begin
       LogForm.OtherLog.Lines.Add(FConverter.EncodeJobs[i].CommandLine);
     end;
@@ -292,16 +286,16 @@ end;
 
 procedure TVideoToGIFForm.RemovePNGS;
 var
-  lSearchRec:TSearchRec;
-  lFind:integer;
-  lPath:string;
+  lSearchRec: TSearchRec;
+  lFind: integer;
+  lPath: string;
 begin
   lPath := IncludeTrailingPathDelimiter(MainForm.Info.Folders.Temp + '\TEncoder\');
 
-  lFind := FindFirst(lPath+'*.png.',faAnyFile,lSearchRec);
+  lFind := FindFirst(lPath + '*.png.', faAnyFile, lSearchRec);
   while lFind = 0 do
   begin
-    DeleteFile(lPath+lSearchRec.Name);
+    DeleteFile(lPath + lSearchRec.Name);
 
     lFind := FindNext(lSearchRec);
   end;
@@ -425,9 +419,9 @@ begin
   PosTimer.Enabled := False;
   FConverter.Stop;
   NormalState;
-    LogForm.OtherLog.Lines.Add('Video to GIF:');
-    LogForm.OtherLog.Lines.AddStrings(FConverter.GetConsoleOutput);
-  for I := 0 to FConverter.EncodeJobs.Count-1 do
+  LogForm.OtherLog.Lines.Add('Video to GIF:');
+  LogForm.OtherLog.Lines.AddStrings(FConverter.GetConsoleOutput);
+  for I := 0 to FConverter.EncodeJobs.Count - 1 do
   begin
     LogForm.OtherLog.Lines.Add(FConverter.EncodeJobs[i].CommandLine);
   end;
@@ -484,8 +478,9 @@ begin
     begin
       LMiliSecStr := FloatToStr(LMiliSecInt)
     end;
-  Result := LHourStr + ':' + LMinStr + ':' + LSecStr + '.' + LMiliSecStr;
+    Result := LHourStr + ':' + LMinStr + ':' + LSecStr + '.' + LMiliSecStr;
   end;
 end;
 
 end.
+

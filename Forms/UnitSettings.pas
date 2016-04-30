@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,12 +22,10 @@ unit UnitSettings;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, sSkinProvider, StdCtrls, Buttons, sBitBtn, ExtCtrls, sPanel,
-  ComCtrls, ShellAPI,
-  sComboBox, sEdit, sButton, sCheckBox, IniFiles, sLabel, sGauge,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, 
+  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, ShellAPI, IniFiles, 
   JvUrlListGrabber, JvUrlGrabbers, JvComponentBase, JvThread, JvDialogs,
-  sListBox, sPageControl, sTrackBar, Generics.Collections, sSpinEdit;
+  Generics.Collections, Vcl.Samples.Spin, Vcl.Mask, JvExMask, JvSpin;
 
 type
   TFontInfoPair = record
@@ -41,61 +39,51 @@ function GetFontResourceInfo(lpszFilename: PChar; var cbBuffer: DWORD; lpBuffer:
 
 type
   TSettingsForm = class(TForm)
-    sSkinProvider1: TsSkinProvider;
-    ResetBtn: TsBitBtn;
-    CloseBtn: TsBitBtn;
-    NumberOfThreadsList: TsComboBox;
-    ResetThreadBtn: TsButton;
-    LangIdList: TsComboBox;
-    AutoScaleList: TsComboBox;
-    sLabel1: TsLabel;
-    SubposBar: TsTrackBar;
-    SubPosEdit: TsEdit;
-    CheckUpdatesChckBtn: TsCheckBox;
-    ThreadChkBtn: TsCheckBox;
-    ClearTempFolderBtn: TsBitBtn;
-    sLabel2: TsLabel;
-    GeneralPanel: TsPanel;
-    SubtitlePanel: TsPanel;
+                                   
+    ResetBtn: TBitBtn;
+    CloseBtn: TBitBtn;
+    NumberOfThreadsList: TComboBox;
+    ResetThreadBtn: TButton;
+    LangIdList: TComboBox;
+    AutoScaleList: TComboBox;
+    sLabel1: TLabel;
+    SubposBar: TTrackBar;
+    SubPosEdit: TEdit;
+    CheckUpdatesChckBtn: TCheckBox;
+    ThreadChkBtn: TCheckBox;
+    ClearTempFolderBtn: TBitBtn;
+    sLabel2: TLabel;
+    GeneralPanel: TPanel;
+    SubtitlePanel: TPanel;
     FontDialog1: TFontDialog;
-    SkinList: TsComboBox;
-    SaturationBar: TsTrackBar;
-    Label1: TLabel;
-    SaturationLabel: TLabel;
-    EncodingPanel: TsPanel;
-    PostEncodeActionList: TsComboBox;
-    SkinPanel: TsPanel;
-    HueTrackBar: TsTrackBar;
-    sLabel3: TsLabel;
-    HueLabel: TsLabel;
-    SkinEnableBtn: TsCheckBox;
-    FontList: TsComboBox;
-    DeleteUnfinBtn: TsCheckBox;
-    x264Btn: TsCheckBox;
-    FolderStructBtn: TsCheckBox;
-    SettingsList: TsPageControl;
-    sTabSheet1: TsTabSheet;
-    sTabSheet2: TsTabSheet;
-    Encoding: TsTabSheet;
-    sTabSheet4: TsTabSheet;
-    DefScaleEdit: TsSpinEdit;
-    CopyDateBtn: TsCheckBox;
-    DontTrimBtn: TsCheckBox;
-    sTabSheet3: TsTabSheet;
-    PreferedFormatEdit: TsEdit;
-    DashVideoBtn: TsCheckBox;
-    ProcessCountEdit: TsEdit;
-    ProcessCountBar: TsTrackBar;
-    PlaySoundBtn: TsCheckBox;
-    SubSSABtn: TsCheckBox;
-    DontDoubleDownloadBtn: TsCheckBox;
-    DontPreviewImgBtn: TsCheckBox;
-    OverwriteList: TsComboBox;
-    DefaultAudioLangEdit: TsEdit;
-    DefaultSubLangEdit: TsEdit;
-    CheckYoutubeDlUpdateBtn: TsCheckBox;
-    DownloaderSpeedLimitEdit: TsSpinEdit;
-    SubLangList: TsComboBox;
+    EncodingPanel: TPanel;
+    PostEncodeActionList: TComboBox;
+    FontList: TComboBox;
+    DeleteUnfinBtn: TCheckBox;
+    x264Btn: TCheckBox;
+    FolderStructBtn: TCheckBox;
+    SettingsList: TPageControl;
+    sTabSheet1: TTabSheet;
+    sTabSheet2: TTabSheet;
+    Encoding: TTabSheet;
+    DefScaleEdit: TJvSpinEdit;
+    CopyDateBtn: TCheckBox;
+    DontTrimBtn: TCheckBox;
+    sTabSheet3: TTabSheet;
+    PreferedFormatEdit: TEdit;
+    DashVideoBtn: TCheckBox;
+    ProcessCountEdit: TEdit;
+    ProcessCountBar: TTrackBar;
+    PlaySoundBtn: TCheckBox;
+    SubSSABtn: TCheckBox;
+    DontDoubleDownloadBtn: TCheckBox;
+    DontPreviewImgBtn: TCheckBox;
+    OverwriteList: TComboBox;
+    DefaultAudioLangEdit: TEdit;
+    DefaultSubLangEdit: TEdit;
+    CheckYoutubeDlUpdateBtn: TCheckBox;
+    DownloaderSpeedLimitEdit: TJvSpinEdit;
+    SubLangList: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -105,14 +93,10 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure SubposBarMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure SubposBarChange(Sender: TObject);
-    procedure SaturationBarChange(Sender: TObject);
     procedure ResetBtnClick(Sender: TObject);
     procedure ClearTempFolderBtnClick(Sender: TObject);
     procedure sLabel2Click(Sender: TObject);
-    procedure SkinListChange(Sender: TObject);
     procedure PostEncodeActionListChange(Sender: TObject);
-    procedure HueTrackBarChange(Sender: TObject);
-    procedure SkinEnableBtnClick(Sender: TObject);
     procedure DontTrimBtnClick(Sender: TObject);
     procedure ProcessCountBarChange(Sender: TObject);
   private
@@ -183,15 +167,7 @@ begin
     NumberOfThreadsList.ItemIndex := 7;
   end;
 
-  for i := 0 to MainForm.sSkinManager1.InternalSkins.Count - 1 do
-  begin
-    SkinList.Items.Add(MainForm.sSkinManager1.InternalSkins.Items[i].Name);
-  end;
-  SkinList.ItemIndex := 12;
-
   SubPosEdit.Text := FloatToStr(SubposBar.Position);
-
-  sSkinProvider1.SkinData.SkinManager := MainForm.sSkinManager1;
 
   FFontInfos := TFontInfoPairList.Create;
   LoadFonts;
@@ -213,22 +189,6 @@ end;
 procedure TSettingsForm.FormShow(Sender: TObject);
 begin
   PostEncodeActionList.ItemIndex := MainForm.PostEncodeList.ItemIndex;
-end;
-
-procedure TSettingsForm.HueTrackBarChange(Sender: TObject);
-begin
-
-  MainForm.sSkinManager1.HueOffset := HueTrackBar.Position;
-  HueLabel.Caption := IntToStr(HueTrackBar.Position);
-
-end;
-
-procedure TSettingsForm.SaturationBarChange(Sender: TObject);
-begin
-
-  MainForm.sSkinManager1.Saturation := SaturationBar.Position;
-  SaturationLabel.Caption := IntToStr(SaturationBar.Position);
-
 end;
 
 procedure TSettingsForm.SaveBtnClick(Sender: TObject);
@@ -262,16 +222,9 @@ begin
       // WriteString('Options', 'LangStr', LangList.Text);
       // WriteInteger('Options', 'Lang', LangList.ItemIndex);
 
-      WriteInteger('Options', 'Sat', SaturationBar.Position);
-      WriteInteger('Options', 'Hue', HueTrackBar.Position);
-
-      WriteInteger('Options', 'Skins2', SkinList.ItemIndex);
-
       WriteBool('Options', 'Update', CheckUpdatesChckBtn.Checked);
 
       WriteBool('Options', 'UseThreads', ThreadChkBtn.Checked);
-
-      WriteBool('Options', 'Skinning2', SkinEnableBtn.Checked);
 
       WriteBool('Options', 'Unfinished', DeleteUnfinBtn.Checked);
       WriteBool('Options', 'FolderStruct', FolderStructBtn.Checked);
@@ -295,39 +248,6 @@ begin
     OptionFile.Free;
     DontTrimBtnClick(Self);
   end;
-
-end;
-
-procedure TSettingsForm.SkinEnableBtnClick(Sender: TObject);
-begin
-
-  if SkinEnableBtn.Checked then
-  begin
-    MainForm.sSkinManager1.Active := False;
-  end
-  else
-  begin
-    MainForm.sSkinManager1.Active := True;
-    MainForm.sSkinManager1.SkinName := SkinList.Text;
-    HueTrackBarChange(Self);
-    SaturationBarChange(Self);
-  end;
-
-end;
-
-procedure TSettingsForm.SkinListChange(Sender: TObject);
-begin
-
-  with MainForm do
-  begin
-    sSkinManager1.SkinName := sSkinManager1.InternalSkins.Items[SkinList.ItemIndex].Name;
-    sSkinManager1.RepaintForms(False);
-  end;
-
-  SaturationBar.OnChange(Self);
-  HueTrackBar.OnChange(Self);
-  SendMessage(SaturationBar.Handle, CM_RecreateWnd, 0, 0);
-  SendMessage(HueTrackBar.Handle, CM_RecreateWnd, 0, 0);
 
 end;
 
@@ -408,22 +328,8 @@ begin
       SubposBar.Position := ReadInteger('Options', 'SubPos', 100);
       SubSSABtn.Checked := ReadBool('Options', 'SubSSA', True);
 
-      SaturationBar.Position := ReadInteger('Options', 'Sat', 0);
-      SaturationLabel.Caption := IntToStr(SaturationBar.Position);
-      HueTrackBar.Position := ReadInteger('Options', 'Hue', 0);
-      HueLabel.Caption := IntToStr(HueTrackBar.Position);
       x264Btn.Checked := ReadBool('Options', 'x264', True);
       // LangList.ItemIndex := ReadInteger('Options', 'Lang', 0);
-
-      if ReadInteger('Options', 'Skins2', 92) > MainForm.sSkinManager1.InternalSkins.Count then
-      begin
-        SkinList.ItemIndex := 92;
-      end
-      else
-      begin
-        SkinList.ItemIndex := ReadInteger('Options', 'Skins2', 92);
-      end;
-      SkinEnableBtn.Checked := ReadBool('Options', 'Skinning2', True);
 
       CheckUpdatesChckBtn.Checked := ReadBool('Options', 'Update', True);
       ThreadChkBtn.Checked := ReadBool('Options', 'UseThreads', False);
@@ -468,19 +374,11 @@ end;
 procedure TSettingsForm.ResetBtnClick(Sender: TObject);
 begin
 
+// todo: update this code
   if ID_YES = Application.MessageBox('Reset all settings to their default values?', 'Reset', MB_ICONQUESTION or MB_YESNO) then
   begin
     ResetThreadBtn.OnClick(Self);
     ThreadChkBtn.Checked := False;
-    SkinList.ItemIndex := 6;
-    SkinList.OnChange(Self);
-
-    SaturationBar.Position := 0;
-    SaturationLabel.Caption := '0';
-    HueTrackBar.Position := 0;
-    HueLabel.Caption := '0';
-    MainForm.sSkinManager1.Saturation := 0;
-    MainForm.sSkinManager1.HueOffset := 0;
 
     CheckUpdatesChckBtn.Checked := True;
 
@@ -535,4 +433,4 @@ begin
 
 end;
 
-end.
+end.

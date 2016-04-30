@@ -1,5 +1,5 @@
 { *
-  * Copyright (C) 2011-2015 ozok <ozok26@gmail.com>
+  * Copyright (C) 2011-2016 ozok <ozok26@gmail.com>
   *
   * This file is part of TEncoder.
   *
@@ -22,20 +22,18 @@ unit UnitBatchAdd;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, sSkinProvider, sButton,
-  sMemo;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
 
 type
   TMode = (singlelink, playlist);
 
 type
   TBatchAddForm = class(TForm)
-    LinksList: TsMemo;
+    LinksList: TMemo;
     Label1: TLabel;
-    CancelBtn: TsButton;
-    OkBtn: TsButton;
-    sSkinProvider1: TsSkinProvider;
+    CancelBtn: TButton;
+    OkBtn: TButton;
     procedure CancelBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure OkBtnClick(Sender: TObject);
@@ -54,7 +52,8 @@ implementation
 
 {$R *.dfm}
 
-uses UnitMain;
+uses
+  UnitMain;
 
 procedure TBatchAddForm.CancelBtnClick(Sender: TObject);
 begin
@@ -91,3 +90,4 @@ begin
 end;
 
 end.
+

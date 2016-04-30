@@ -3,22 +3,21 @@ unit UnitYoutubedlUpdateChecker;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, IdIOHandler,
-  IdIOHandlerSocket, IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IdBaseComponent,
-  IdComponent, IdTCPConnection, IdTCPClient, IdHTTP, IdThreadComponent,
-  JvComponentBase, JvThread, Vcl.ComCtrls, Vcl.Samples.Gauges, sSkinProvider,
-  acProgressBar, sButton, sMemo;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, 
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, 
+  IdIOHandler, IdIOHandlerSocket, IdIOHandlerStack, IdSSL, IdSSLOpenSSL, 
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP, IdThreadComponent, 
+  JvComponentBase, JvThread, Vcl.ComCtrls, Vcl.Samples.Gauges;
 
 type
   TYoutubedlUpdateChecker = class(TForm)
-    OutputList: TsMemo;
-    CloseBtn: TsButton;
+    OutputList: TMemo;
+    CloseBtn: TButton;
     Downloader: TIdHTTP;
     IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     UpdateThread: TJvThread;
-    ProgressBar: TsProgressBar;
-    sSkinProvider1: TsSkinProvider;
+    ProgressBar: TProgressBar;
+                                   
     procedure CloseBtnClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -237,4 +236,4 @@ begin
 end;
 
 end.
-
+

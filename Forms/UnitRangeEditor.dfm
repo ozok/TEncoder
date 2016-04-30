@@ -24,35 +24,25 @@ object RangeEditorForm: TRangeEditorForm
     414)
   PixelsPerInch = 96
   TextHeight = 13
-  object StartBar: TsGauge
+  object StartBar: TGauge
     Left = 69
     Top = 322
     Width = 445
     Height = 21
     Hint = 'Start time'
     Anchors = [akLeft, akRight, akBottom]
-    OnMouseDown = StartBarMouseDown
-    Animated = False
-    SkinData.SkinSection = 'GAUGE'
-    ForeColor = clBlack
     Progress = 0
     ShowText = False
-    Suffix = '%'
   end
-  object EndBar: TsGauge
+  object EndBar: TGauge
     Left = 69
     Top = 349
     Width = 445
     Height = 21
     Hint = 'End time'
     Anchors = [akLeft, akRight, akBottom]
-    OnMouseDown = EndBarMouseDown
-    Animated = False
-    SkinData.SkinSection = 'GAUGE'
-    ForeColor = clBlack
     Progress = 100
     ShowText = False
-    Suffix = '%'
   end
   object Label1: TLabel
     Left = 8
@@ -72,33 +62,23 @@ object RangeEditorForm: TRangeEditorForm
     Caption = 'End:'
     ExplicitTop = 363
   end
-  object PositionBar: TsGauge
+  object PositionBar: TGauge
     Left = 69
     Top = 295
     Width = 445
     Height = 21
     Hint = 'Position of preview'
     Anchors = [akLeft, akRight, akBottom]
-    OnMouseDown = PositionBarMouseDown
-    Animated = False
-    SkinData.SkinSection = 'GAUGE'
-    ForeColor = clBlack
     Progress = 0
     ShowText = False
-    Suffix = '%'
   end
-  object VolumeBar: TsGauge
+  object VolumeBar: TGauge
     Left = 501
     Top = 381
     Width = 120
     Height = 20
     Anchors = [akRight, akBottom]
-    OnMouseDown = VolumeBarMouseDown
-    Animated = False
-    SkinData.SkinSection = 'GAUGE'
-    ForeColor = clBlack
     Progress = 20
-    Suffix = '%'
     ExplicitLeft = 474
   end
   object Image1: TImage
@@ -111,7 +91,7 @@ object RangeEditorForm: TRangeEditorForm
     Center = True
     ExplicitLeft = 420
   end
-  object DisplayPanel: TsPanel
+  object DisplayPanel: TPanel
     Left = 0
     Top = 0
     Width = 659
@@ -119,9 +99,8 @@ object RangeEditorForm: TRangeEditorForm
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
-    SkinData.SkinSection = 'CHECKBOX'
   end
-  object PlayBtn: TsBitBtn
+  object PlayBtn: TBitBtn
     Left = 8
     Top = 376
     Width = 30
@@ -194,9 +173,8 @@ object RangeEditorForm: TRangeEditorForm
       FF00FFFFFF00FFFFFF00}
     TabOrder = 1
     OnClick = PlayBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object StartBtn: TsBitBtn
+  object StartBtn: TBitBtn
     Left = 44
     Top = 376
     Width = 30
@@ -269,9 +247,8 @@ object RangeEditorForm: TRangeEditorForm
       FF00FFFFFF00FFFFFF00}
     TabOrder = 2
     OnClick = StartBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object EndBtn: TsBitBtn
+  object EndBtn: TBitBtn
     Left = 80
     Top = 376
     Width = 30
@@ -344,9 +321,8 @@ object RangeEditorForm: TRangeEditorForm
       FF00FFFFFF00FFFFFF00}
     TabOrder = 3
     OnClick = EndBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object ClearBtn: TsBitBtn
+  object ClearBtn: TBitBtn
     Left = 196
     Top = 376
     Width = 115
@@ -420,9 +396,8 @@ object RangeEditorForm: TRangeEditorForm
       FF00FFFFFF00FFFFFF00}
     TabOrder = 4
     OnClick = ClearBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object SaveBtn: TsBitBtn
+  object SaveBtn: TBitBtn
     Left = 317
     Top = 376
     Width = 115
@@ -496,9 +471,8 @@ object RangeEditorForm: TRangeEditorForm
       34FBA46535F9A5663568}
     TabOrder = 5
     OnClick = SaveBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object StartEdit: TsEdit
+  object StartEdit: TEdit
     Left = 547
     Top = 322
     Width = 109
@@ -516,9 +490,8 @@ object RangeEditorForm: TRangeEditorForm
     ReadOnly = True
     TabOrder = 6
     Text = '00:00:00.00'
-    SkinData.SkinSection = 'EDIT'
   end
-  object EndEdit: TsEdit
+  object EndEdit: TEdit
     Left = 547
     Top = 349
     Width = 109
@@ -536,9 +509,8 @@ object RangeEditorForm: TRangeEditorForm
     ReadOnly = True
     TabOrder = 7
     Text = '00:00:00.00'
-    SkinData.SkinSection = 'EDIT'
   end
-  object StartForwardBtn: TsBitBtn
+  object StartForwardBtn: TBitBtn
     Left = 520
     Top = 322
     Width = 21
@@ -582,9 +554,8 @@ object RangeEditorForm: TRangeEditorForm
       0000000000000000000000000000000000000000000000000000}
     TabOrder = 8
     OnClick = StartForwardBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object EndForwardBtn: TsBitBtn
+  object EndForwardBtn: TBitBtn
     Left = 520
     Top = 349
     Width = 21
@@ -628,9 +599,8 @@ object RangeEditorForm: TRangeEditorForm
       0000000000000000000000000000000000000000000000000000}
     TabOrder = 9
     OnClick = EndForwardBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object EndBackBtn: TsBitBtn
+  object EndBackBtn: TBitBtn
     Left = 42
     Top = 349
     Width = 21
@@ -674,9 +644,8 @@ object RangeEditorForm: TRangeEditorForm
       0000000000000000000000000000000000000000000000000000}
     TabOrder = 10
     OnClick = EndBackBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object StartBackBtn: TsBitBtn
+  object StartBackBtn: TBitBtn
     Left = 42
     Top = 322
     Width = 21
@@ -720,9 +689,8 @@ object RangeEditorForm: TRangeEditorForm
       0000000000000000000000000000000000000000000000000000}
     TabOrder = 11
     OnClick = StartBackBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object PositionEdit: TsEdit
+  object PositionEdit: TEdit
     Left = 520
     Top = 295
     Width = 136
@@ -740,9 +708,8 @@ object RangeEditorForm: TRangeEditorForm
     ReadOnly = True
     TabOrder = 12
     Text = '00:00:00.00/00:00:00.00'
-    SkinData.SkinSection = 'EDIT'
   end
-  object StepSecondBackBtn: TsBitBtn
+  object StepSecondBackBtn: TBitBtn
     Left = 116
     Top = 376
     Width = 30
@@ -815,9 +782,8 @@ object RangeEditorForm: TRangeEditorForm
       FF00FFFFFF00FFFFFF00}
     TabOrder = 13
     OnClick = StepSecondBackBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object StepSecondForwardBtn: TsBitBtn
+  object StepSecondForwardBtn: TBitBtn
     Left = 152
     Top = 376
     Width = 30
@@ -890,9 +856,8 @@ object RangeEditorForm: TRangeEditorForm
       FF00FFFFFF00FFFFFF00}
     TabOrder = 14
     OnClick = StepSecondForwardBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object VolumeUpBtn: TsBitBtn
+  object VolumeUpBtn: TBitBtn
     Left = 627
     Top = 381
     Width = 20
@@ -935,9 +900,8 @@ object RangeEditorForm: TRangeEditorForm
       0000000000000000000000000000000000000000000000000000}
     TabOrder = 15
     OnClick = VolumeUpBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object VolumeDownBtn: TsBitBtn
+  object VolumeDownBtn: TBitBtn
     Left = 475
     Top = 381
     Width = 20
@@ -980,19 +944,6 @@ object RangeEditorForm: TRangeEditorForm
       0000000000000000000000000000000000000000000000000000}
     TabOrder = 16
     OnClick = VolumeDownBtnClick
-    SkinData.SkinSection = 'BUTTON'
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 496
-    Top = 128
   end
   object PositionTimer: TTimer
     Enabled = False
@@ -1000,77 +951,5 @@ object RangeEditorForm: TRangeEditorForm
     OnTimer = PositionTimerTimer
     Left = 432
     Top = 200
-  end
-  object ImageList: TsAlphaImageList
-    DrawingStyle = dsTransparent
-    Items = <
-      item
-        ImageFormat = ifPNG
-        ImgData = {
-          89504E470D0A1A0A0000000D4948445200000016000000160806000000C4B46C
-          3B00000006624B474400FF00FF00FFA0BDA793000000097048597300000DD700
-          000DD70142289B780000000774494D4507D50C0815210EFFA9BBAD0000021C49
-          44415438CBED55CB8A1341143DB7AA2BDDA9F42B9D3731842C1C10DCFA1B320C
-          BEB7826E44FC2441C2301B19FC0E3F4225088388F848527186BA2E92AE549BC4
-          9DBBA95575DF73CF3D9C7BAB0AB85EFF7B91B7EF02C80FE0BE03B8003004D038
-          80F906E04BF911941B2144727C72F75C4A79CB474B297F9FBF7D77DB18732184
-          D027F78EDF1351E263EABAFEF5CDEBE91D66DE25D65AB31062783A3D8394D225
-          BD7CF542A5694AC61868AD390882E4747A5691FAECF9D3A6D69AE7F33976881B
-          8D862DF79F661F4004743B834DD13AFB1866C6ECF34700C0A077A3CCAF100B8F
-          980F35A2AE35FF1B4388E3D8FA7F9CE224495C80882A69F186304D53BBBFEF40
-          1CC7BC9738CB3226221061ED316F53CBA2699AB2D754306F417EAC624596655C
-          2A91328090D2298F93840120CF73A778B15CE0D7FC0768C3ECC72AC44551B8C0
-          D5E5258C59001BE2B268B3D974AA02295153A123F2637F13F376A60941A09C9A
-          2CCDAC5F9C08A8A91A9452CE8A76BBBD9FB8DBED72D913A56A50812A05A328D6
-          6A7ABD9EB34BA91A82A0E68A773A9DFD56F4FB7D0B80096BB5EB43B24E6AB55A
-          BCC178562804E54122C26030D83F15C3E1D005F2AC5919A576BB6D0160341AD9
-          ADA74505E3E757882793891542CC1E3D7990F900A594BD7974740500E3F198AD
-          B53F1F3EBE5FB92BF2BCB91C8FC776EFEDC6CC8DD56A1519632A931F86214751
-          648868CECC0D634CB45AAD2A98288A380CC325112DAE1F8C9DF50763DB9A21C9
-          1021070000000049454E44AE426082}
-      end
-      item
-        ImageFormat = ifPNG
-        ImgData = {
-          89504E470D0A1A0A0000000D4948445200000016000000160806000000C4B46C
-          3B0000000473424954080808087C0864880000001974455874536F6674776172
-          65007777772E696E6B73636170652E6F72679BEE3C1A0000035349444154388D
-          B5D5DF6B14571407F0EFB993D9D9CC2EDB04EBEA2A6D93DD4DAD8D184BDF2A42
-          21D4106C0B865A63D482F5A5EA8BF80B410405C1DA2E186B5B6A1B625AB3FDF1
-          0F94DA26F117A249566D412BE85329994DB29B647693ECECCC8E737C88BBECE6
-          17A9D50307EE7D98CFDC7BCEDC3BC4CC781E51563C21A26500640023CC3CF1CC
-          6000DE86C6779A1243237789E84F000966369F058C8A8A8A637EBF1FC170F5AF
-          B1BE5BA788E81F004966B6FF170C02BE3DD7A6FCD175F17D5996D7BFBE6AE5D9
-          AEDFBB3B882809609417DA14662E24805737B76CCA32335B398BD3E3693EF365
-          ABD1B2B539BEEEEDB53B010401F88A9F992BE7840787354EA575B66D9B07B47F
-          79FFA17D992D2D9BFBEAEA6AD703780580FAD4F0E0B0C64389384F4C8EB36DDB
-          7CE7AF3BCE8E8F3FCA347DB0311A0804DE04B00C806B36B8A4C66EB77B66FD18
-          98CC4CC0C81A786DC50A3AF74D5BF9C5AEDF36296EE5BD94AE477A6FF4FFECF3
-          F9C68410A3BAAE3F2AB4AAB817B5B5B5A1D56B56DDFB29FA8B921C4D809E34B3
-          A4DB920C55F5C0324DB477B41BBD7D371363C9D4614DD36E0A214689281D8BC5
-          B864C5A150C8C98F254902814A606686FD2887317D042E59C1AE4F7697376D6C
-          7AF9CC17AD6D8B5EACECCF4C66F713D1008041510C078341270FE56C6B2A7353
-          699A59589609DBB6E1380EB26606A699456069001B36BCEBCED9D65B3E9FBA34
-          180C3230ED3B0E8542CE70320E00101020212088404400517ED9906517CADD2A
-          B4B886239123869E1EBBF6D2F2E547C3E195F7014CCC80ABABAB9D1BBDD71900
-          A4B23248424008094208101188046459869935F1D5D7678D5BB7635AE50B9507
-          B6366FBF2A8448D5D7D7179A5702D7D4D4146A2C88209EC09224412E930100DD
-          3DDDD60F17BE373C1EEFF17D7B0F76AAAA9A0A87C316A645095C555555801DC7
-          0111419625B864171E3C7CE044229F9992245DD8D6B2FDD3868686210099E9E0
-          ACB0A22885B110021ED50B3D95426BEB69231E1FE87F634DDDA13D7BF6E6EBE8
-          609E987909E55FE22A4767B4D3E8B9D493082C5972A0EDBBF3DD00C601E4E603
-          E7811997AFF4D8E73B3AB25EAFE7E4E7A722ED7EBF3F05C058083827AC28EE7B
-          D11FA37F377FB8E5446363E32016B0EDD9A2E44803580C40606ABB6900FFE972
-          9F0F7661EA103FD5EFA8381E03B23BC0EF522A1C4D0000000049454E44AE4260
-          82}
-      end>
-    Left = 328
-    Top = 176
-    Bitmap = {
-      494C010100000800080001000100FFFFFFFF0400FFFFFFFFFFFFFFFF424D7600
-      0000000000007600000028000000040000000100000001000400000000000400
-      0000000000000000000000000000000000000000000000008000008000000080
-      8000800000008000800080800000C0C0C000808080000000FF0000FF000000FF
-      FF00FF000000FF00FF00FFFF0000FFFFFF0000000000}
   end
 end

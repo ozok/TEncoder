@@ -27,7 +27,7 @@ object BatchAddForm: TBatchAddForm
     Height = 13
     Caption = 'One link per line:'
   end
-  object LinksList: TsMemo
+  object LinksList: TMemo
     Left = 8
     Top = 27
     Width = 619
@@ -42,9 +42,8 @@ object BatchAddForm: TBatchAddForm
     ParentFont = False
     ScrollBars = ssBoth
     TabOrder = 0
-    SkinData.SkinSection = 'EDIT'
   end
-  object CancelBtn: TsButton
+  object CancelBtn: TButton
     Left = 471
     Top = 267
     Width = 75
@@ -53,9 +52,8 @@ object BatchAddForm: TBatchAddForm
     Caption = 'Cancel'
     TabOrder = 1
     OnClick = CancelBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object OkBtn: TsButton
+  object OkBtn: TButton
     Left = 552
     Top = 267
     Width = 75
@@ -64,18 +62,5 @@ object BatchAddForm: TBatchAddForm
     Caption = 'OK'
     TabOrder = 2
     OnClick = OkBtnClick
-    SkinData.SkinSection = 'BUTTON'
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 312
-    Top = 152
   end
 end

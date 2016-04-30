@@ -3,27 +3,25 @@ unit UnitWatermark;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, sSkinProvider, Vcl.StdCtrls, sEdit,
-  sSpinEdit, sComboBox, Vcl.Mask, sMaskEdit, sCustomComboEdit, sToolEdit,
-  Vcl.ExtCtrls, Vcl.ComCtrls, acProgressBar, Vcl.Buttons, sBitBtn, sLabel, UnitEncoder,
-  MediaInfoDll, StrUtils;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask,
+  Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Buttons, UnitEncoder, MediaInfoDll, StrUtils,
+  Vcl.Samples.Spin, JvSpin, JvExMask, JvToolEdit;
 
 type
   TWatermarkForm = class(TForm)
-    sSkinProvider1: TsSkinProvider;
-    VideoPathEdit: TsFilenameEdit;
-    ImagePathEdit: TsFilenameEdit;
-    PositionList: TsComboBox;
-    XEdit: TsSpinEdit;
-    YEdit: TsSpinEdit;
-    OutputEdit: TsEdit;
-    sLabel1: TsLabel;
-    ProgressLabel: TsLabel;
-    StartBtn: TsBitBtn;
-    StopBtn: TsBitBtn;
-    ProgressBar: TsProgressBar;
+    PositionList: TComboBox;
+    XEdit: TJvSpinEdit;
+    YEdit: TJvSpinEdit;
+    OutputEdit: TEdit;
+    sLabel1: TLabel;
+    ProgressLabel: TLabel;
+    StartBtn: TBitBtn;
+    StopBtn: TBitBtn;
     PosTimer: TTimer;
+    VideoPathEdit: TJvFilenameEdit;
+    ImagePathEdit: TJvFilenameEdit;
+    ProgressBar: TProgressBar;
     procedure PositionListChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -37,22 +35,16 @@ type
     FEncoder: TEncodingProcess;
     FDuration: string;
     FOutputFile: string;
-
     function CreateCMD: string;
-
     function GetDuration(const FileName: string): string;
-
     function CreatePositionCMD: string;
-
     procedure EncodingState;
     procedure NormalState;
   public
     { Public declarations }
 
     function CreateFileName(const FileName: string; const Extension: string): string;
-
     function FFMpegPosition(const FFMpegOutput: string; const Duration: string): string;
-
     function CreateAdvancedOptions(): string;
   end;
 
@@ -63,7 +55,8 @@ implementation
 
 {$R *.dfm}
 
-uses UnitMain, UnitEffects, UnitAdvancedOptions, UnitLogs, UnitDub;
+uses
+  UnitMain, UnitEffects, UnitAdvancedOptions, UnitLogs, UnitDub;
 
 function TWatermarkForm.CreateAdvancedOptions: string;
 var
@@ -521,8 +514,7 @@ begin
 
   CustomArgs := AdvancedOptionsForm.CustomFFmpegEdit.Text;
 
-  Result := ' -y -threads 0 -i "' + VideoPathEdit.Text + '" -i "' + ImagePathEdit.Text + '" ' + CustomArgs + ' ' + CreatePositionCMD + ' ' + VCodec + Container + AudioCMD + ACodec + ' "' +
-    OutName + '"';
+  Result := ' -y -threads 0 -i "' + VideoPathEdit.Text + '" -i "' + ImagePathEdit.Text + '" ' + CustomArgs + ' ' + CreatePositionCMD + ' ' + VCodec + Container + AudioCMD + ACodec + ' "' + OutName + '"';
 end;
 
 function TWatermarkForm.CreateFileName(const FileName, Extension: string): string;
@@ -650,9 +642,9 @@ function TWatermarkForm.FFMpegPosition(const FFMpegOutput, Duration: string): st
 var
   pos1: Integer;
   pos2: Integer;
-  Text: String;
-  prog: String;
-  last: String;
+  Text: string;
+  prog: string;
+  last: string;
   PositionInt: Integer;
 begin
   Result := '0';
@@ -868,3 +860,4 @@ begin
 end;
 
 end.
+

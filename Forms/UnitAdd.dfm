@@ -29,7 +29,7 @@ object AddForm: TAddForm
     AutoSize = False
     Caption = 'Adding files please wait...'
   end
-  object AbortBtn: TsBitBtn
+  object AbortBtn: TBitBtn
     Left = 550
     Top = 27
     Width = 100
@@ -102,18 +102,5 @@ object AddForm: TAddForm
       00000000000000000000}
     TabOrder = 0
     OnClick = AbortBtnClick
-    SkinData.SkinSection = 'BUTTON'
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 264
-    Top = 65528
   end
 end

@@ -23,7 +23,7 @@ object LogForm: TLogForm
     402)
   PixelsPerInch = 96
   TextHeight = 13
-  object OkBtn: TsBitBtn
+  object OkBtn: TBitBtn
     Left = 656
     Top = 369
     Width = 120
@@ -97,9 +97,8 @@ object LogForm: TLogForm
       00000000000000000000}
     TabOrder = 0
     OnClick = OkBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object ClearBtn: TsBitBtn
+  object ClearBtn: TBitBtn
     Left = 530
     Top = 369
     Width = 120
@@ -173,9 +172,8 @@ object LogForm: TLogForm
       FF00FFFFFF00FFFFFF00}
     TabOrder = 1
     OnClick = ClearBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object SaveBtn: TsBitBtn
+  object SaveBtn: TBitBtn
     Left = 404
     Top = 369
     Width = 120
@@ -249,9 +247,8 @@ object LogForm: TLogForm
       00000000000000000000}
     TabOrder = 2
     OnClick = SaveBtnClick
-    SkinData.SkinSection = 'BUTTON'
   end
-  object Logs: TsPageControl
+  object Logs: TPageControl
     Left = 8
     Top = 8
     Width = 768
@@ -259,12 +256,9 @@ object LogForm: TLogForm
     ActivePage = sTabSheet12
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 3
-    SkinData.SkinSection = 'PAGECONTROL'
-    object sTabSheet12: TsTabSheet
+    object sTabSheet12: TTabSheet
       Caption = 'Main'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object MainLog: TsMemo
+      object MainLog: TMemo
         Left = 0
         Top = 0
         Width = 760
@@ -280,14 +274,11 @@ object LogForm: TLogForm
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 0
-        SkinData.SkinSection = 'EDIT'
       end
     end
-    object sTabSheet1: TsTabSheet
+    object sTabSheet1: TTabSheet
       Caption = 'Video/Audio Converter'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object VideoEncoderList: TsMemo
+      object VideoEncoderList: TMemo
         Left = 0
         Top = 21
         Width = 760
@@ -304,17 +295,13 @@ object LogForm: TLogForm
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 0
-        SkinData.SkinSection = 'EDIT'
       end
-      object VideoEncoderLogsList: TsComboBox
+      object VideoEncoderLogsList: TComboBox
         Left = 0
         Top = 0
         Width = 760
         Height = 21
         Align = alTop
-        Alignment = taLeftJustify
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
@@ -322,10 +309,8 @@ object LogForm: TLogForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
-        Text = 'Encoder 1'
         OnChange = VideoEncoderLogsListChange
         Items.Strings = (
           'Encoder 1'
@@ -346,10 +331,8 @@ object LogForm: TLogForm
           'Encoder 16')
       end
     end
-    object sTabSheet9: TsTabSheet
+    object sTabSheet9: TTabSheet
       Caption = 'MPlayer'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
       object MPlayerLogList: TMemo
         Left = 0
         Top = 0
@@ -361,11 +344,9 @@ object LogForm: TLogForm
         TabOrder = 0
       end
     end
-    object sTabSheet10: TsTabSheet
+    object sTabSheet10: TTabSheet
       Caption = 'Others'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object OtherLog: TsMemo
+      object OtherLog: TMemo
         Left = 0
         Top = 0
         Width = 760
@@ -381,22 +362,16 @@ object LogForm: TLogForm
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 0
-        SkinData.SkinSection = 'EDIT'
       end
     end
-    object sTabSheet11: TsTabSheet
+    object sTabSheet11: TTabSheet
       Caption = 'Video Downloader'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object LogList: TsComboBox
+      object LogList: TComboBox
         Left = 0
         Top = 0
         Width = 760
         Height = 21
         Align = alTop
-        Alignment = taLeftJustify
-        SkinData.SkinSection = 'COMBOBOX'
-        VerticalAlignment = taAlignTop
         Style = csDropDownList
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
@@ -404,10 +379,8 @@ object LogForm: TLogForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ItemIndex = 0
         ParentFont = False
         TabOrder = 0
-        Text = 'Download Process 1'
         OnChange = LogListChange
         Items.Strings = (
           'Download Process 1'
@@ -420,7 +393,7 @@ object LogForm: TLogForm
           'Download Process 8'
           'Command lines')
       end
-      object DownloadLog: TsMemo
+      object DownloadLog: TMemo
         Left = 0
         Top = 21
         Width = 760
@@ -438,15 +411,11 @@ object LogForm: TLogForm
         ReadOnly = True
         ScrollBars = ssBoth
         TabOrder = 1
-        Text = 'DownloadLog'
-        SkinData.SkinSection = 'EDIT'
       end
     end
-    object sTabSheet2: TsTabSheet
+    object sTabSheet2: TTabSheet
       Caption = 'DVD Ripper'
-      SkinData.CustomColor = False
-      SkinData.CustomFont = False
-      object DVDPages: TsPageControl
+      object DVDPages: TPageControl
         Left = 0
         Top = 0
         Width = 760
@@ -454,12 +423,9 @@ object LogForm: TLogForm
         ActivePage = sTabSheet3
         Align = alClient
         TabOrder = 0
-        SkinData.SkinSection = 'PAGECONTROL'
-        object sTabSheet3: TsTabSheet
+        object sTabSheet3: TTabSheet
           Caption = 'Console Output'
-          SkinData.CustomColor = False
-          SkinData.CustomFont = False
-          object DVDLog: TsMemo
+          object DVDLog: TMemo
             Left = 0
             Top = 0
             Width = 752
@@ -475,14 +441,11 @@ object LogForm: TLogForm
             ReadOnly = True
             ScrollBars = ssBoth
             TabOrder = 0
-            SkinData.SkinSection = 'EDIT'
           end
         end
-        object sTabSheet4: TsTabSheet
+        object sTabSheet4: TTabSheet
           Caption = 'Command lines'
-          SkinData.CustomColor = False
-          SkinData.CustomFont = False
-          object DVDCMDLog: TsMemo
+          object DVDCMDLog: TMemo
             Left = 0
             Top = 0
             Width = 752
@@ -498,23 +461,10 @@ object LogForm: TLogForm
             ReadOnly = True
             ScrollBars = ssBoth
             TabOrder = 0
-            SkinData.SkinSection = 'EDIT'
           end
         end
       end
     end
-  end
-  object sSkinProvider1: TsSkinProvider
-    AddedTitle.Font.Charset = DEFAULT_CHARSET
-    AddedTitle.Font.Color = clNone
-    AddedTitle.Font.Height = -11
-    AddedTitle.Font.Name = 'Tahoma'
-    AddedTitle.Font.Style = []
-    FormHeader.AdditionalHeight = 0
-    SkinData.SkinSection = 'FORM'
-    TitleButtons = <>
-    Left = 104
-    Top = 120
   end
   object SaveDialog: TSaveDialog
     DefaultExt = '.txt'
