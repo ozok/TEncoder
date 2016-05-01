@@ -145,7 +145,7 @@ object WatermarkForm: TWatermarkForm
     Width = 581
     Height = 21
     TabOrder = 7
-    Text = 'VideoPathEdit'
+    Text = ''
   end
   object ImagePathEdit: TJvFilenameEdit
     Left = 56
@@ -153,7 +153,7 @@ object WatermarkForm: TWatermarkForm
     Width = 581
     Height = 21
     TabOrder = 6
-    Text = 'ImagePathEdit'
+    Text = ''
   end
   object ProgressBar: TProgressBar
     Left = 8

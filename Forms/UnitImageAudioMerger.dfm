@@ -44,6 +44,27 @@ object ImageAudiotoVideoForm: TImageAudiotoVideoForm
     AutoSize = False
     Caption = '0%'
   end
+  object Label1: TLabel
+    Left = 27
+    Top = 12
+    Width = 31
+    Height = 13
+    Caption = 'Audio:'
+  end
+  object Label2: TLabel
+    Left = 24
+    Top = 39
+    Width = 34
+    Height = 13
+    Caption = 'Image:'
+  end
+  object Label3: TLabel
+    Left = 20
+    Top = 66
+    Width = 38
+    Height = 13
+    Caption = 'Output:'
+  end
   object OutputEdit: TEdit
     Left = 64
     Top = 62

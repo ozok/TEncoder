@@ -65,6 +65,20 @@ object DownloadUIItem: TDownloadUIItem
       Font.Style = [fsUnderline]
       ParentFont = False
     end
+    object Label1: TLabel
+      Left = 5
+      Top = 44
+      Width = 43
+      Height = 13
+      Caption = 'Formats:'
+    end
+    object Label2: TLabel
+      Left = 6
+      Top = 72
+      Width = 45
+      Height = 13
+      Caption = 'Subtitles:'
+    end
     object FormatList: TComboBox
       Left = 55
       Top = 41

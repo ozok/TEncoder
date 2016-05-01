@@ -184,10 +184,6 @@ object SettingsForm: TSettingsForm
     TabOrder = 2
     object sTabSheet1: TTabSheet
       Caption = 'General'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GeneralPanel: TPanel
         Left = 0
         Top = 0
@@ -197,6 +193,20 @@ object SettingsForm: TSettingsForm
         Alignment = taRightJustify
         BevelOuter = bvNone
         TabOrder = 0
+        object Label1: TLabel
+          Left = 37
+          Top = 89
+          Width = 122
+          Height = 13
+          Caption = 'Prefered audio language:'
+        end
+        object Label2: TLabel
+          Left = 28
+          Top = 116
+          Width = 131
+          Height = 13
+          Caption = 'Prefered subtitle language:'
+        end
         object CheckUpdatesChckBtn: TCheckBox
           Left = 16
           Top = 16
@@ -317,10 +327,6 @@ object SettingsForm: TSettingsForm
     end
     object sTabSheet2: TTabSheet
       Caption = 'Subtitle'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object SubtitlePanel: TPanel
         Left = 0
         Top = 0
@@ -342,6 +348,34 @@ object SettingsForm: TSettingsForm
           Font.Style = []
           ParentFont = False
         end
+        object Label3: TLabel
+          Left = 67
+          Top = 19
+          Width = 47
+          Height = 13
+          Caption = 'Encoding:'
+        end
+        object Label4: TLabel
+          Left = 89
+          Top = 46
+          Width = 26
+          Height = 18
+          Caption = 'Font:'
+        end
+        object Label5: TLabel
+          Left = 83
+          Top = 76
+          Width = 29
+          Height = 13
+          Caption = 'Scale:'
+        end
+        object Label6: TLabel
+          Left = 49
+          Top = 101
+          Width = 66
+          Height = 13
+          Caption = 'Default scale:'
+        end
         object AutoScaleList: TComboBox
           Left = 120
           Top = 70
@@ -355,8 +389,10 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
+          ItemIndex = 0
           ParentFont = False
           TabOrder = 0
+          Text = 'No Autoscale'
           Items.Strings = (
             'No Autoscale'
             'Proportinal to video height'
@@ -376,8 +412,10 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
+          ItemIndex = 0
           ParentFont = False
           TabOrder = 1
+          Text = 'Unicode (Unicode)'
           Items.Strings = (
             'Unicode (Unicode)'
             'UTF-8 (UTF-8)'
@@ -455,7 +493,7 @@ object SettingsForm: TSettingsForm
           Left = 121
           Top = 99
           Width = 100
-          Height = 22
+          Height = 21
           Hint = 'Default scale value of subtitle'
           Value = 10.000000000000000000
           Color = clWhite
@@ -481,10 +519,6 @@ object SettingsForm: TSettingsForm
     end
     object Encoding: TTabSheet
       Caption = 'Encoding'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object EncodingPanel: TPanel
         Left = 0
         Top = 0
@@ -502,6 +536,27 @@ object SettingsForm: TSettingsForm
           Caption = '?'
           OnClick = sLabel2Click
         end
+        object Label7: TLabel
+          Left = 44
+          Top = 19
+          Width = 70
+          Height = 13
+          Caption = 'Thread Count:'
+        end
+        object Label8: TLabel
+          Left = 18
+          Top = 46
+          Width = 96
+          Height = 13
+          Caption = 'Post encode option:'
+        end
+        object Label9: TLabel
+          Left = 264
+          Top = 147
+          Width = 85
+          Height = 13
+          Caption = 'Overwrite option:'
+        end
         object NumberOfThreadsList: TComboBox
           Left = 120
           Top = 15
@@ -515,8 +570,10 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
+          ItemIndex = 0
           ParentFont = False
           TabOrder = 0
+          Text = '1'
           Items.Strings = (
             '1'
             '2'
@@ -566,8 +623,10 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
+          ItemIndex = 0
           ParentFont = False
           TabOrder = 3
+          Text = 'Nothing'
           OnChange = PostEncodeActionListChange
           Items.Strings = (
             'Nothing'
@@ -644,8 +703,10 @@ object SettingsForm: TSettingsForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
+          ItemIndex = 0
           ParentFont = False
           TabOrder = 10
+          Text = 'Add index'
           Items.Strings = (
             'Add index'
             'Skip')
@@ -654,10 +715,34 @@ object SettingsForm: TSettingsForm
     end
     object sTabSheet3: TTabSheet
       Caption = 'Video Downloader'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      object Label10: TLabel
+        Left = 13
+        Top = 7
+        Width = 81
+        Height = 13
+        Caption = 'Prefered format:'
+      end
+      object Label11: TLabel
+        Left = 47
+        Top = 59
+        Width = 68
+        Height = 13
+        Caption = 'Thread count:'
+      end
+      object Label12: TLabel
+        Left = 54
+        Top = 164
+        Width = 168
+        Height = 13
+        Caption = 'Download speed limit (0 = no limit):'
+      end
+      object Label13: TLabel
+        Left = 15
+        Top = 190
+        Width = 131
+        Height = 13
+        Caption = 'Prefered subtitle language:'
+      end
       object PreferedFormatEdit: TEdit
         Left = 100
         Top = 3
@@ -746,7 +831,7 @@ object SettingsForm: TSettingsForm
         Left = 228
         Top = 160
         Width = 121
-        Height = 22
+        Height = 21
         Color = clWhite
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
@@ -768,8 +853,10 @@ object SettingsForm: TSettingsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 8
+        Text = 'ab - Abkhaz - '#1072#1191#1089#1091#1072
         Items.Strings = (
           'ab - Abkhaz - '#1072#1191#1089#1091#1072
           'aa - Afar - Afaraf'

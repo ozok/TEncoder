@@ -41,7 +41,6 @@ type
     Label4: TLabel;
     Label13: TLabel;
     Label10: TLabel;
-    Label11: TLabel;
     Label12: TLabel;
     Label5: TLabel;
     Label6: TLabel;
@@ -49,7 +48,6 @@ type
     Label8: TLabel;
     Label9: TLabel;
     sLabel4: TLabel;
-    sLabel6: TLabel;
     procedure OkBtnClick(Sender: TObject);
     procedure Label6Click(Sender: TObject);
     procedure HomepageBtnClick(Sender: TObject);
@@ -88,7 +86,7 @@ end;
 
 procedure TAboutForm.HomepageBtnClick(Sender: TObject);
 begin
-  ShellExecute(0, 'open', 'http://www.ozok26.com/tencoder-vdeo-converter-1', nil, nil, SW_SHOWNORMAL);
+  ShellExecute(0, 'open', 'http://www.ozok26.com/categories/1/tencoder-video-converter', nil, nil, SW_SHOWNORMAL);
 end;
 
 procedure TAboutForm.Label14Click(Sender: TObject);

@@ -668,16 +668,12 @@ object MainForm: TMainForm
       Top = 0
       Width = 1012
       Height = 582
-      ActivePage = sTabSheet3
+      ActivePage = sTabSheet1
       Align = alClient
       TabOrder = 0
       OnChange = FuncPagesChange
       object sTabSheet1: TTabSheet
         Caption = 'Video/Audio Converter'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object sToolBar1: TPanel
           Left = 0
           Top = 0
@@ -1493,6 +1489,20 @@ object MainForm: TMainForm
           DesignSize = (
             1004
             48)
+          object Label1: TLabel
+            Left = 27
+            Top = 6
+            Width = 40
+            Height = 13
+            Caption = 'Subtitle:'
+          end
+          object Label2: TLabel
+            Left = 9
+            Top = 25
+            Width = 58
+            Height = 13
+            Caption = 'Audio track:'
+          end
           object AudioTracksList: TComboBox
             Left = 73
             Top = 23
@@ -1541,8 +1551,10 @@ object MainForm: TMainForm
             Font.Height = -11
             Font.Name = 'Tahoma'
             Font.Style = []
+            ItemIndex = 0
             ParentFont = False
             TabOrder = 2
+            Text = 'Embedded'
             OnChange = SubtitleTypesListChange
             Items.Strings = (
               'Embedded'
@@ -1592,16 +1604,11 @@ object MainForm: TMainForm
           ViewStyle = vsReport
           OnClick = FileListClick
           OnDblClick = FileListDblClick
-          ExplicitHeight = 444
         end
       end
       object sTabSheet2: TTabSheet
         Caption = 'Video Downloader'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object VideoDownloadToolBarPanel: TPanel
           Left = 0
           Top = 0
@@ -2086,10 +2093,25 @@ object MainForm: TMainForm
             DesignSize = (
               1002
               34)
+            object Label9: TLabel
+              Left = 1
+              Top = 9
+              Width = 22
+              Height = 13
+              Caption = 'Link:'
+            end
+            object Label10: TLabel
+              Left = 739
+              Top = 9
+              Width = 47
+              Height = 13
+              Anchors = [akTop, akRight]
+              Caption = 'Link type:'
+            end
             object LinkEdit: TEdit
-              Left = 32
+              Left = 29
               Top = 6
-              Width = 701
+              Width = 704
               Height = 21
               Anchors = [akLeft, akTop, akRight]
               Color = clWhite
@@ -2116,8 +2138,10 @@ object MainForm: TMainForm
               Font.Height = -11
               Font.Name = 'Tahoma'
               Font.Style = []
+              ItemIndex = 0
               ParentFont = False
               TabOrder = 1
+              Text = 'Single video/audio'
               Items.Strings = (
                 'Single video/audio'
                 'Playlist/User')
@@ -2216,14 +2240,21 @@ object MainForm: TMainForm
           Height = 44
           Align = alBottom
           TabOrder = 2
-          ExplicitTop = 503
           DesignSize = (
             1004
             44)
+          object Label13: TLabel
+            Left = 762
+            Top = 16
+            Width = 106
+            Height = 13
+            Anchors = [akRight, akBottom]
+            Caption = 'Post download action:'
+          end
           object sPanel3: TPanel
             Left = -1
             Top = -9
-            Width = 766
+            Width = 735
             Height = 50
             Anchors = [akLeft, akTop, akRight, akBottom]
             BevelOuter = bvNone
@@ -2232,20 +2263,22 @@ object MainForm: TMainForm
               AlignWithMargins = True
               Left = 3
               Top = 34
-              Width = 65
+              Width = 729
               Height = 13
               Align = alBottom
               Caption = 'Progress: 0/0'
+              ExplicitWidth = 65
             end
             object TotalBar: TProgressBar
               AlignWithMargins = True
               Left = 3
               Top = 18
-              Width = 760
+              Width = 729
               Height = 10
               Align = alBottom
               Smooth = True
               TabOrder = 0
+              ExplicitWidth = 760
             end
           end
           object PostEncodeList2: TComboBox
@@ -2261,8 +2294,10 @@ object MainForm: TMainForm
             Font.Height = -11
             Font.Name = 'Tahoma'
             Font.Style = []
+            ItemIndex = 0
             ParentFont = False
             TabOrder = 1
+            Text = 'Nothing'
             Items.Strings = (
               'Nothing'
               'Close TEncoder'
@@ -2287,6 +2322,20 @@ object MainForm: TMainForm
             Width = 287
             Height = 13
             Caption = 'User name and password aren'#39't saved for security reasons.'
+          end
+          object Label11: TLabel
+            Left = 34
+            Top = 9
+            Width = 26
+            Height = 13
+            Caption = 'User:'
+          end
+          object Label12: TLabel
+            Left = 231
+            Top = 9
+            Width = 50
+            Height = 13
+            Caption = 'Password:'
           end
           object UserEdit: TEdit
             Left = 66
@@ -2327,7 +2376,6 @@ object MainForm: TMainForm
           Height = 363
           Align = alClient
           TabOrder = 1
-          ExplicitHeight = 356
         end
       end
       object sTabSheet3: TTabSheet
@@ -2345,6 +2393,14 @@ object MainForm: TMainForm
           Align = alBottom
           Alignment = taCenter
           ExplicitWidth = 3
+        end
+        object Label14: TLabel
+          Left = 800
+          Top = 445
+          Width = 72
+          Height = 13
+          Anchors = [akRight, akBottom]
+          Caption = 'Post rip action:'
         end
         object DVDConsoleEdit: TEdit
           Left = 0
@@ -2397,8 +2453,10 @@ object MainForm: TMainForm
           Font.Height = -11
           Font.Name = 'Tahoma'
           Font.Style = []
+          ItemIndex = 0
           ParentFont = False
           TabOrder = 3
+          Text = 'Nothing'
           Items.Strings = (
             'Nothing'
             'Close TEncoder'
@@ -2431,6 +2489,20 @@ object MainForm: TMainForm
               DesignSize = (
                 994
                 64)
+              object Label15: TLabel
+                Left = 30
+                Top = 17
+                Width = 57
+                Height = 13
+                Caption = 'DVD Folder:'
+              end
+              object Label16: TLabel
+                Left = 3
+                Top = 42
+                Width = 84
+                Height = 13
+                Caption = 'Output file name:'
+              end
               object ReadDVDBtn: TBitBtn
                 Left = 883
                 Top = 10
@@ -2477,9 +2549,9 @@ object MainForm: TMainForm
                 OnClick = ReadDVDBtnClick
               end
               object OutputFileNameEdit: TEdit
-                Left = 81
+                Left = 93
                 Top = 39
-                Width = 902
+                Width = 890
                 Height = 21
                 Anchors = [akLeft, akTop, akRight]
                 Color = clWhite
@@ -2492,9 +2564,9 @@ object MainForm: TMainForm
                 TabOrder = 0
               end
               object DVDFolderEdit: TJvDirectoryEdit
-                Left = 81
+                Left = 93
                 Top = 12
-                Width = 796
+                Width = 784
                 Height = 21
                 DialogKind = dkWin32
                 TabOrder = 2
@@ -2512,6 +2584,22 @@ object MainForm: TMainForm
               DesignSize = (
                 994
                 132)
+              object Label17: TLabel
+                Left = 709
+                Top = 32
+                Width = 68
+                Height = 13
+                Anchors = [akTop, akRight]
+                Caption = 'Start chapter:'
+              end
+              object Label18: TLabel
+                Left = 715
+                Top = 67
+                Width = 62
+                Height = 13
+                Anchors = [akTop, akRight]
+                Caption = 'End chapter:'
+              end
               object DVDAudioTracksList: TComboBox
                 Left = 13
                 Top = 63
@@ -3023,10 +3111,6 @@ object MainForm: TMainForm
           end
           object sTabSheet5: TTabSheet
             Caption = 'DVD Jobs'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object sPanel7: TPanel
               Left = 0
               Top = 0
@@ -3346,7 +3430,7 @@ object MainForm: TMainForm
               Left = 0
               Top = 55
               Width = 996
-              Height = 367
+              Height = 353
               Align = alClient
               BorderStyle = bsNone
               Color = clWhite
@@ -3665,9 +3749,55 @@ object MainForm: TMainForm
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 3
+      ExplicitLeft = 1
+      ExplicitTop = 581
       DesignSize = (
         1226
         106)
+      object Label3: TLabel
+        Left = 44
+        Top = 9
+        Width = 35
+        Height = 13
+        Caption = 'Preset:'
+      end
+      object Label4: TLabel
+        Left = 10
+        Top = 36
+        Width = 69
+        Height = 13
+        Caption = 'Output folder:'
+      end
+      object Label5: TLabel
+        Left = 16
+        Top = 62
+        Width = 63
+        Height = 13
+        Caption = 'Video Codec:'
+      end
+      object Label6: TLabel
+        Left = 15
+        Top = 81
+        Width = 64
+        Height = 13
+        Caption = 'Audio Codec:'
+      end
+      object Label7: TLabel
+        Left = 804
+        Top = 61
+        Width = 43
+        Height = 13
+        Anchors = [akRight, akBottom]
+        Caption = 'Encoder:'
+      end
+      object Label8: TLabel
+        Left = 751
+        Top = 83
+        Width = 96
+        Height = 13
+        Anchors = [akRight, akBottom]
+        Caption = 'Container (Format):'
+      end
       object ApplyProfileBtn: TBitBtn
         Left = 1061
         Top = 6
@@ -4050,8 +4180,8 @@ object MainForm: TMainForm
     Top = 358
   end
   object ListMenu: TPopupMenu
-    Left = 24
-    Top = 100
+    Left = 48
+    Top = 196
     object Preview1: TMenuItem
       Caption = 'Preview'
       ShortCut = 16464
@@ -8222,8 +8352,8 @@ object MainForm: TMainForm
     IconIndex = 0
     Visibility = [tvVisibleTaskBar, tvVisibleTaskList, tvRestoreClick, tvRestoreDbClick, tvMinimizeClick, tvMinimizeDbClick]
     OnBalloonClick = TrayIconBalloonClick
-    Left = 720
-    Top = 224
+    Left = 552
+    Top = 216
   end
   object XPManifest1: TXPManifest
     Left = 616
@@ -8310,8 +8440,8 @@ object MainForm: TMainForm
     RunOnCreate = True
     FreeOnTerminate = True
     OnExecute = CheckUpdateThreadExecute
-    Left = 216
-    Top = 120
+    Left = 200
+    Top = 152
   end
   object UpdateChecker: TJvHttpUrlGrabber
     FileName = 'output.txt'

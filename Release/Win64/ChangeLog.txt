@@ -10,6 +10,7 @@ TEncoder Change Log
 -Fixed: [Video Downloader] Downloaded subtitles were not converted to srt
 -Fixed: [DVD Ripper] Chapter selection was not working
 -Updated: Internal libraries
+-Removed: Skins
 
 --4.5.10
 -Workaround: [Video Converter & DVD Ripper] For errors that may occur while updating progress info

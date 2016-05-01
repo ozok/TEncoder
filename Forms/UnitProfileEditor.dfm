@@ -447,11 +447,8 @@ object ProfileForm: TProfileForm
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      MaxValue = 0
-      MinValue = 0
       ParentFont = False
       TabOrder = 5
-      Value = 0
       OnChange = WidthEditChange
     end
     object HeightEdit: TJvSpinEdit
@@ -465,11 +462,8 @@ object ProfileForm: TProfileForm
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      MaxValue = 0
-      MinValue = 0
       ParentFont = False
       TabOrder = 6
-      Value = 0
       OnChange = HeightEditChange
     end
   end

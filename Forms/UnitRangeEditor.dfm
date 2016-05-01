@@ -91,6 +91,13 @@ object RangeEditorForm: TRangeEditorForm
     Center = True
     ExplicitLeft = 420
   end
+  object Label3: TLabel
+    Left = 22
+    Top = 299
+    Width = 41
+    Height = 13
+    Caption = 'Position:'
+  end
   object DisplayPanel: TPanel
     Left = 0
     Top = 0

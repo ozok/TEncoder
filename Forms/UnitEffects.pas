@@ -50,6 +50,13 @@ type
     VolumeEnableBtn: TCheckBox;
     VolumeMencoderEdit: TJvSpinEdit;
     VolumeFFMpegEdit: TJvSpinEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure CloseBtnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);

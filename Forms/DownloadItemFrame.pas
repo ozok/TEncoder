@@ -39,6 +39,8 @@ type
     sPanel2: TPanel;
     PrevievImg: TImage;
     sBevel1: TBevel;
+    Label1: TLabel;
+    Label2: TLabel;
   private
     { Private declarations }
   public

@@ -211,6 +211,13 @@ object EffectForm: TEffectForm
         Height = 13
         Caption = 'Preview may be different if you choose FFmpeg as encoder.'
       end
+      object Label1: TLabel
+        Left = 14
+        Top = 43
+        Width = 40
+        Height = 13
+        Caption = 'Method:'
+      end
       object DeintEnblBtn: TCheckBox
         Left = 10
         Top = 16
@@ -233,8 +240,10 @@ object EffectForm: TEffectForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
+        Text = 'Yadif=0'
         Items.Strings = (
           'Yadif=0'
           'Yadif=1:1'
@@ -249,10 +258,6 @@ object EffectForm: TEffectForm
     end
     object sTabSheet2: TTabSheet
       Caption = 'Crop'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label5: TLabel
         Left = 10
         Top = 68
@@ -261,6 +266,34 @@ object EffectForm: TEffectForm
         Caption = 
           'Make sure width and height values match with  the values from ma' +
           'in window.'
+      end
+      object Label2: TLabel
+        Left = 8
+        Top = 45
+        Width = 32
+        Height = 13
+        Caption = 'Width:'
+      end
+      object Label3: TLabel
+        Left = 115
+        Top = 45
+        Width = 35
+        Height = 13
+        Caption = 'Height:'
+      end
+      object Label4: TLabel
+        Left = 224
+        Top = 45
+        Width = 10
+        Height = 13
+        Caption = 'X:'
+      end
+      object Label6: TLabel
+        Left = 304
+        Top = 45
+        Width = 10
+        Height = 13
+        Caption = 'Y:'
       end
       object CropEnable: TCheckBox
         Left = 10
@@ -334,10 +367,6 @@ object EffectForm: TEffectForm
     end
     object sTabSheet3: TTabSheet
       Caption = 'Rotate'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object RotateList: TComboBox
         Left = 45
         Top = 16
@@ -350,8 +379,10 @@ object EffectForm: TEffectForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 0
+        Text = 'Do not rotate'
         Items.Strings = (
           'Do not rotate'
           'Rotate by 90 degrees clockwise and flip (default).'
@@ -366,10 +397,20 @@ object EffectForm: TEffectForm
     end
     object sTabSheet4: TTabSheet
       Caption = 'Volume'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      object Label7: TLabel
+        Left = 17
+        Top = 44
+        Width = 177
+        Height = 13
+        Caption = 'MEncoder volume level (-200/60 dB):'
+      end
+      object Label8: TLabel
+        Left = 68
+        Top = 71
+        Width = 126
+        Height = 13
+        Caption = 'FFmpeg volume level (%):'
+      end
       object VolumeEnableBtn: TCheckBox
         Left = 10
         Top = 16

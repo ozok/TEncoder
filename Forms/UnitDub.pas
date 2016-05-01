@@ -36,6 +36,10 @@ type
     PosTimer: TTimer;
     VideoEdit: TJvFilenameEdit;
     AudioEdit: TJvFilenameEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);

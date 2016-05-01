@@ -53,6 +53,7 @@ type
     StepSecondForwardBtn: TBitBtn;
     VolumeUpBtn: TBitBtn;
     VolumeDownBtn: TBitBtn;
+    Label3: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure PlayBtnClick(Sender: TObject);

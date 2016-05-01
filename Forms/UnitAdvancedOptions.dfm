@@ -121,10 +121,35 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     end
     object sTabSheet1: TTabSheet
       Caption = 'x264'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitTop = 28
+      object Label3: TLabel
+        Left = 8
+        Top = 33
+        Width = 34
+        Height = 13
+        Caption = 'Profile:'
+      end
+      object Label4: TLabel
+        Left = 114
+        Top = 35
+        Width = 29
+        Height = 13
+        Caption = 'Level:'
+      end
+      object Label5: TLabel
+        Left = 220
+        Top = 35
+        Width = 35
+        Height = 13
+        Caption = 'Preset:'
+      end
+      object Label6: TLabel
+        Left = 326
+        Top = 33
+        Width = 28
+        Height = 13
+        Caption = 'Tune:'
+      end
       object x264Btn: TCheckBox
         Left = 8
         Top = 8
@@ -136,7 +161,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       end
       object x264LevelList: TComboBox
         Left = 114
-        Top = 41
+        Top = 54
         Width = 100
         Height = 21
         Style = csDropDownList
@@ -147,8 +172,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
+        Text = 'Auto'
         Items.Strings = (
           'Auto'
           '1'
@@ -170,7 +197,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       end
       object x264PresetList: TComboBox
         Left = 220
-        Top = 41
+        Top = 52
         Width = 100
         Height = 21
         Style = csDropDownList
@@ -181,8 +208,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 2
+        Text = 'Auto'
         Items.Strings = (
           'Auto'
           'Ultrafast'
@@ -198,7 +227,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       end
       object x264ProfileList: TComboBox
         Left = 8
-        Top = 41
+        Top = 54
         Width = 100
         Height = 21
         Style = csDropDownList
@@ -209,8 +238,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 3
+        Text = 'Auto'
         Items.Strings = (
           'Auto'
           'Baseline'
@@ -219,7 +250,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       end
       object x264TuneList: TComboBox
         Left = 326
-        Top = 41
+        Top = 52
         Width = 100
         Height = 21
         Style = csDropDownList
@@ -230,8 +261,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 4
+        Text = 'Auto'
         Items.Strings = (
           'Auto'
           'Film'
@@ -245,7 +278,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       end
       object x264CRFBtn: TCheckBox
         Left = 8
-        Top = 68
+        Top = 81
         Width = 153
         Height = 19
         Caption = 'Use CRF instead of bitrate'
@@ -254,9 +287,9 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       end
       object x264CRFEdit: TJvSpinEdit
         Left = 167
-        Top = 68
-        Width = 50
-        Height = 22
+        Top = 79
+        Width = 76
+        Height = 21
         MaxValue = 51.000000000000000000
         Value = 23.000000000000000000
         Color = clWhite
@@ -272,10 +305,6 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     end
     object sTabSheet2: TTabSheet
       Caption = 'ProRes'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object sLabel1: TLabel
         Left = 3
         Top = 44
@@ -302,9 +331,16 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Style = []
         ParentFont = False
       end
+      object Label7: TLabel
+        Left = 8
+        Top = 7
+        Width = 34
+        Height = 13
+        Caption = 'Profile:'
+      end
       object ProresProfileList: TComboBox
-        Left = 40
-        Top = 8
+        Left = 48
+        Top = 3
         Width = 145
         Height = 21
         Style = csDropDownList
@@ -314,8 +350,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 0
+        Text = 'Proxy'
         Items.Strings = (
           'Proxy'
           'LT'
@@ -352,10 +390,13 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     end
     object sTabSheet4: TTabSheet
       Caption = 'FLAC'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      object Label8: TLabel
+        Left = 14
+        Top = 12
+        Width = 90
+        Height = 13
+        Caption = 'Compression level:'
+      end
       object FlacCompBar: TTrackBar
         Left = 166
         Top = 4
@@ -386,10 +427,13 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
     end
     object sTabSheet5: TTabSheet
       Caption = 'x265'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      object Label9: TLabel
+        Left = 8
+        Top = 33
+        Width = 35
+        Height = 13
+        Caption = 'Preset:'
+      end
       object x265Btn: TCheckBox
         Left = 8
         Top = 8
@@ -400,8 +444,8 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         OnClick = x265BtnClick
       end
       object x265PresetsList: TComboBox
-        Left = 8
-        Top = 41
+        Left = 3
+        Top = 52
         Width = 100
         Height = 21
         Style = csDropDownList
@@ -412,8 +456,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
+        Text = 'Auto'
         Items.Strings = (
           'Auto'
           'Ultrafast'
@@ -444,6 +490,42 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitLeft = 1
+      object Label10: TLabel
+        Left = 39
+        Top = 3
+        Width = 36
+        Height = 13
+        Caption = 'Bitrate:'
+      end
+      object Label11: TLabel
+        Left = 5
+        Top = 31
+        Width = 71
+        Height = 13
+        Caption = 'Common sizes:'
+      end
+      object Label12: TLabel
+        Left = 53
+        Top = 59
+        Width = 23
+        Height = 13
+        Caption = 'Size:'
+      end
+      object Label13: TLabel
+        Left = 54
+        Top = 85
+        Width = 22
+        Height = 13
+        Caption = 'FPS:'
+      end
+      object Label14: TLabel
+        Left = 11
+        Top = 112
+        Width = 65
+        Height = 13
+        Caption = 'Aspect Ratio:'
+      end
       object ForceASRBtn: TCheckBox
         Left = 160
         Top = 108
@@ -468,8 +550,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
+        Text = 'Keep'
         Items.Strings = (
           'Keep'
           '4/3'
@@ -534,8 +618,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 4
+        Text = 'Same as source'
         Items.Strings = (
           'Same as source'
           '8'
@@ -564,8 +650,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 5
+        Text = 'Original'
         OnChange = VideoSizeListChange
         Items.Strings = (
           'Original'
@@ -640,6 +728,27 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
+      object Label15: TLabel
+        Left = 40
+        Top = 3
+        Width = 36
+        Height = 13
+        Caption = 'Bitrate:'
+      end
+      object Label16: TLabel
+        Left = 28
+        Top = 31
+        Width = 48
+        Height = 13
+        Caption = 'Channels:'
+      end
+      object Label17: TLabel
+        Left = 15
+        Top = 57
+        Width = 61
+        Height = 13
+        Caption = 'Sample rate:'
+      end
       object AudioBitrateList: TComboBox
         Left = 82
         Top = 0
@@ -684,8 +793,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
+        Text = '1'
         Items.Strings = (
           '1'
           '2'
@@ -705,8 +816,10 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 2
+        Text = '8000'
         Items.Strings = (
           '8000'
           '11025'
@@ -740,6 +853,20 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Caption = 'Please note that arguments above will not be checked!'
       ExplicitTop = 245
     end
+    object Label1: TLabel
+      Left = 65
+      Top = 128
+      Width = 115
+      Height = 13
+      Caption = 'Custom ffmpeg options:'
+    end
+    object Label2: TLabel
+      Left = 52
+      Top = 154
+      Width = 128
+      Height = 13
+      Caption = 'Custom mencoder options:'
+    end
     object CustomFFmpegVideoBtn: TCheckBox
       Left = 8
       Top = 17
@@ -754,7 +881,7 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       Top = 44
       Width = 168
       Height = 19
-      Caption = 'FFmpeg custom audio options'
+      Caption = 'FFmpeg custom audio options:'
       TabOrder = 1
       OnClick = CustomFFmpegAudioBtnClick
     end
@@ -839,9 +966,9 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       OnClick = CustomMEncoderVideoBtnClick
     end
     object CustomFFmpegEdit: TEdit
-      Left = 66
+      Left = 186
       Top = 124
-      Width = 410
+      Width = 290
       Height = 21
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
@@ -853,9 +980,9 @@ object AdvancedOptionsForm: TAdvancedOptionsForm
       TabOrder = 8
     end
     object CustomMencoderEdit: TEdit
-      Left = 66
+      Left = 186
       Top = 151
-      Width = 410
+      Width = 290
       Height = 21
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET

@@ -309,8 +309,10 @@ object LogForm: TLogForm
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
+        ItemIndex = 0
         ParentFont = False
         TabOrder = 1
+        Text = 'Encoder 1'
         OnChange = VideoEncoderLogsListChange
         Items.Strings = (
           'Encoder 1'

@@ -4153,7 +4153,7 @@ object AboutForm: TAboutForm
         Align = alTop
         Alignment = taCenter
         AutoSize = False
-        Caption = 'Licenced under the terms of GPL version 2 or above.'
+        Caption = 'Licenced under the terms of GPL version 2.'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
@@ -4191,21 +4191,6 @@ object AboutForm: TAboutForm
         Height = 13
         Cursor = crHandPoint
         Caption = 'http://jvcl.delphi-jedi.org/'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsUnderline]
-        ParentFont = False
-        OnClick = Label6Click
-      end
-      object Label11: TLabel
-        Left = 148
-        Top = 92
-        Width = 136
-        Height = 13
-        Cursor = crHandPoint
-        Caption = 'http://www.alphaskins.com/'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlack
         Font.Height = -11
@@ -4304,19 +4289,6 @@ object AboutForm: TAboutForm
         Width = 38
         Height = 13
         Caption = 'FFMpeg'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = 2171169
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-      end
-      object sLabel6: TLabel
-        Left = 16
-        Top = 92
-        Width = 67
-        Height = 13
-        Caption = 'AlphaControls'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = 2171169
         Font.Height = -11
