@@ -2278,7 +2278,6 @@ object MainForm: TMainForm
               Align = alBottom
               Smooth = True
               TabOrder = 0
-              ExplicitWidth = 760
             end
           end
           object PostEncodeList2: TComboBox
@@ -3749,8 +3748,6 @@ object MainForm: TMainForm
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = 1
-      ExplicitTop = 581
       DesignSize = (
         1226
         106)
