@@ -6,7 +6,7 @@
   * TEncoder is free software: you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
   * the Free Software Foundation, either version 2 of the License.
-  * 
+  *
   *
   * TEncoder is distributed in the hope that it will be useful,
   * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -35,7 +35,7 @@ uses
   UnitDownloadProcess, UnitDVDRipperProcess, UnitFileInfoExtractor, UnitDVDJob,
   DownloadItemFrame, System.ImageList, UnitYoutubedlUpdateChecker,
   UnitYouTubeDlVersionReader, UnitFileInfoItem, UnitFFmpegMergeCMDCreator,
-  UnitSubtitleTypes, JvExMask, JvToolEdit;
+  UnitSubtitleTypes, JvExMask, JvToolEdit, FileListItemFrame, UnitCommonMethods;
 
 type
   TFileInfoForAdding = packed record
@@ -45,9 +45,6 @@ type
     AudioDelay: string;
     SubDelay: string;
   end;
-
-
-
 
   // dvd ripper command line
 type
@@ -75,12 +72,12 @@ type
     OpenDirectory1: TMenuItem;
     Properties1: TMenuItem;
     DirectoryEdit: TEdit;
-    SelectBtn: TBitBtn;
+    SelectBtn: TButton;
     EncoderList: TComboBox;
     Preview1: TMenuItem;
     ProfileList: TComboBox;
-    ApplyProfileBtn: TBitBtn;
-    NewProfileBtn: TBitBtn;
+    ApplyProfileBtn: TButton;
+    NewProfileBtn: TButton;
     MainMenu1: TMainMenu;
     File1: TMenuItem;
     AddFile1: TMenuItem;
@@ -88,15 +85,9 @@ type
     AddFolderTree2: TMenuItem;
     Exit1: TMenuItem;
     Edit1: TMenuItem;
-    RemoveAll2: TMenuItem;
     RemoveAll3: TMenuItem;
-    Up2: TMenuItem;
-    Down2: TMenuItem;
-    SubtitleOptions1: TMenuItem;
     Help1: TMenuItem;
     About1: TMenuItem;
-    SelectNone1: TMenuItem;
-    ReverseSelection1: TMenuItem;
     SubtitleOptions2: TMenuItem;
     SelectAll1: TMenuItem;
     SelectNone2: TMenuItem;
@@ -105,9 +96,8 @@ type
     AddFile2: TMenuItem;
     AddFolder3: TMenuItem;
     AddFolderTree3: TMenuItem;
-    ApplicationEvents: TApplicationEvents;
     ContainerList: TComboBox;
-    OpenOutDirBtn: TBitBtn;
+    OpenOutDirBtn: TButton;
     AppIniFileStorage: TJvAppIniFileStorage;
     FormStorage: TJvFormStorage;
     DoTwoPassBtn: TCheckBox;
@@ -128,7 +118,7 @@ type
     S1: TMenuItem;
     M1: TMenuItem;
     VideoEncoderList: TComboBox;
-    VideoSettingsBtn: TBitBtn;
+    VideoSettingsBtn: TButton;
     AudioEncoderList: TComboBox;
     T1: TMenuItem;
     F1: TMenuItem;
@@ -157,27 +147,20 @@ type
     FuncPages: TPageControl;
     sTabSheet1: TTabSheet;
     sTabSheet2: TTabSheet;
-    FileList: TListView;
-    SubtitleTracksList: TComboBox;
-    AudioTracksList: TComboBox;
     sToolBar1: TPanel;
-    AddFileBtn: TBitBtn;
-    UpBtn: TBitBtn;
-    DownBtn: TBitBtn;
-    RemoveBtn: TBitBtn;
-    RemoveAllBtn: TBitBtn;
-    ToolsBtn: TBitBtn;
-    PreviewBtn: TBitBtn;
-    StartBtn: TBitBtn;
-    DonateBtn: TBitBtn;
-    SettingsBtn: TBitBtn;
-    LogsBtn: TBitBtn;
+    AddFileBtn: TButton;
+    RemoveAllBtn: TButton;
+    ToolsBtn: TButton;
+    StartBtn: TButton;
+    DonateBtn: TButton;
+    SettingsBtn: TButton;
+    LogsBtn: TButton;
     VideoDownloadToolBarPanel: TPanel;
-    AddLinkBtn: TBitBtn;
-    ClearLinksBtn: TBitBtn;
-    DownloadSettingsBtn: TBitBtn;
-    StartDownloadBtn: TBitBtn;
-    StopDownloadBtn: TBitBtn;
+    AddLinkBtn: TButton;
+    ClearLinksBtn: TButton;
+    DownloadSettingsBtn: TButton;
+    StartDownloadBtn: TButton;
+    StopDownloadBtn: TButton;
     VideoDownloaderList: TScrollBox;
     AddLinkMenu: TPopupMenu;
     A3: TMenuItem;
@@ -190,7 +173,7 @@ type
     U1: TMenuItem;
     sTabSheet3: TTabSheet;
     sGroupBox1: TGroupBox;
-    ReadDVDBtn: TBitBtn;
+    ReadDVDBtn: TButton;
     OutputFileNameEdit: TEdit;
     sGroupBox2: TGroupBox;
     DVDAudioTracksList: TComboBox;
@@ -203,12 +186,12 @@ type
     DVDLoadPnl: TPanel;
     ProgressBar1: TProgressBar;
     sPanel1: TPanel;
-    OpenDVDBtn: TBitBtn;
+    OpenDVDBtn: TButton;
     DVDConsoleEdit: TEdit;
     DVDProgressBar: TProgressBar;
     sImage1: TImage;
     DVDPosTimer: TTimer;
-    DVDStopBtn: TBitBtn;
+    DVDStopBtn: TButton;
     VideoDownloaderProgressLabel: TLabel;
     S3: TMenuItem;
     CheckUpdateThread: TJvThread;
@@ -218,15 +201,14 @@ type
     sPanel3: TPanel;
     PostEncodeList2: TComboBox;
     sPanel4: TPanel;
-    StopBtn: TBitBtn;
-    OpenOutDirBtn2: TBitBtn;
-    Log2Btn: TBitBtn;
+    StopBtn: TButton;
+    OpenOutDirBtn2: TButton;
+    Log2Btn: TButton;
     PostEncodeList: TComboBox;
-    sBitBtn1: TBitBtn;
+    sBitBtn1: TButton;
     RightPnl: TPanel;
     BottomPnl: TPanel;
-    sPanel5: TPanel;
-    PassBtn: TBitBtn;
+    PassBtn: TButton;
     PassPnl: TPanel;
     UserEdit: TEdit;
     PassEdit: TEdit;
@@ -238,34 +220,31 @@ type
     TimeLabel: TLabel;
     sStatusBar1: TStatusBar;
     FBImg: TImage;
-    TrayBtn: TBitBtn;
+    TrayBtn: TButton;
     DVDInfoLabel: TLabel;
     DVDTotalProgressBar: TProgressBar;
     PostEncodeList3: TComboBox;
-    DVDFilterBtn: TBitBtn;
-    SubtitleTypesList: TComboBox;
+    DVDFilterBtn: TButton;
     DVDPages: TPageControl;
     sTabSheet4: TTabSheet;
     sTabSheet5: TTabSheet;
-    DVDAddtoBatchBtn: TBitBtn;
+    DVDAddtoBatchBtn: TButton;
     sPanel7: TPanel;
-    DVDBatchRemoveBtn: TBitBtn;
-    DVDBatchStartBtn: TBitBtn;
-    DVDBatchStopBtn: TBitBtn;
-    DVDBatchClearBtn: TBitBtn;
+    DVDBatchRemoveBtn: TButton;
+    DVDBatchStartBtn: TButton;
+    DVDBatchStopBtn: TButton;
+    DVDBatchClearBtn: TButton;
     DVDJobList: TListView;
     DVDPreTitleBtn: TButton;
     DVDNextTitleBtn: TButton;
     sPanel8: TPanel;
     LinkEdit: TEdit;
     LinkTypeList: TComboBox;
-    AddSingleLinkBtn: TBitBtn;
-    StartDVDBatchBtn: TBitBtn;
-    UpdateYoutubeDlBtn: TBitBtn;
+    AddSingleLinkBtn: TButton;
+    StartDVDBatchBtn: TButton;
+    UpdateYoutubeDlBtn: TButton;
     MergeBtn: TCheckBox;
     DVDFolderEdit: TJvDirectoryEdit;
-    Label1: TLabel;
-    Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -282,10 +261,8 @@ type
     Label16: TLabel;
     Label17: TLabel;
     Label18: TLabel;
-    procedure RemoveBtnClick(Sender: TObject);
+    FileScrollList: TScrollBox;
     procedure RemoveAllBtnClick(Sender: TObject);
-    procedure UpBtnClick(Sender: TObject);
-    procedure DownBtnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure StartBtnClick(Sender: TObject);
@@ -295,43 +272,28 @@ type
     procedure FormShow(Sender: TObject);
     procedure SearchVideoFindFile(Sender: TObject; const AName: string);
     procedure SearchVideoProgress(Sender: TObject);
-    procedure OpenDirectory1Click(Sender: TObject);
-    procedure Properties1Click(Sender: TObject);
     procedure SelectBtnClick(Sender: TObject);
-    procedure FileListDblClick(Sender: TObject);
     procedure OpenScriptDirBtnClick(Sender: TObject);
     procedure LogsBtnClick(Sender: TObject);
     procedure NewProfileBtnClick(Sender: TObject);
     procedure ProfileListChange(Sender: TObject);
     procedure About1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);
-    procedure SubtitleOptions1Click(Sender: TObject);
-    procedure SelectNone1Click(Sender: TObject);
-    procedure ReverseSelection1Click(Sender: TObject);
     procedure SubtitleOptions2Click(Sender: TObject);
     procedure SubSettingsBtnClick(Sender: TObject);
-    procedure SelectAll1Click(Sender: TObject);
     procedure AddFile2Click(Sender: TObject);
     procedure AddFolder3Click(Sender: TObject);
     procedure AddFolderTree3Click(Sender: TObject);
     procedure AddFileBtnClick(Sender: TObject);
-    procedure ApplicationEventsShowHint(var HintStr: string; var CanShow: Boolean; var HintInfo: Controls.THintInfo);
     procedure VideoEncoderListChange(Sender: TObject);
-    procedure EffectsBtnClick(Sender: TObject);
-    procedure FileListClick(Sender: TObject);
-    procedure AudioTracksListChange(Sender: TObject);
-    procedure SubtitleTracksListChange(Sender: TObject);
     procedure OpenScriptFolderBtnClick(Sender: TObject);
     procedure sBitBtn2Click(Sender: TObject);
-    procedure FileListKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure AudioEncoderListChange(Sender: TObject);
     procedure TimerTimer(Sender: TObject);
     procedure OpenOutDirBtn2Click(Sender: TObject);
     procedure StopBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure DragDropDrop(Sender: TObject; Pos: TPoint; Value: TStrings);
-    procedure EditRangeBtnClick(Sender: TObject);
-    procedure EditDelaysBtnClick(Sender: TObject);
     procedure UseSourceChkBtnClick(Sender: TObject);
     procedure ExOptionBtnClick(Sender: TObject);
     procedure TrayIconBalloonClick(Sender: TObject);
@@ -387,7 +349,6 @@ type
     procedure DVDFilterBtnClick(Sender: TObject);
     procedure DVDFolderEditAfterDialog(Sender: TObject; var Name: string; var Action: Boolean);
     procedure FuncPagesChange(Sender: TObject);
-    procedure SubtitleTypesListChange(Sender: TObject);
     procedure DVDAddtoBatchBtnClick(Sender: TObject);
     procedure DVDPreTitleBtnClick(Sender: TObject);
     procedure DVDNextTitleBtnClick(Sender: TObject);
@@ -495,6 +456,17 @@ type
     procedure FormatListChange(Sender: TObject);
     procedure SubListChange(Sender: TObject);
     procedure LabelClick(Sender: TObject);
+    // download item events end
+    // list item events
+    procedure FileDeleteBtnClick(Sender: TObject);
+    procedure FileSubTypeListChange(Sender: TObject);
+    procedure FileSubListChange(Sender: TObject);
+    procedure FileAudioListChange(Sender: TObject);
+    procedure FileRangeBtnClick(Sender: TObject);
+    procedure FilePrevieBtnClick(Sender: TObject);
+    procedure FileInfoBtnClick(Sender: TObject);
+    procedure FileFolderBtnClick(Sender: TObject);
+    // list item events end
     function CreateTempName: string;
     procedure ClearTempFolderEx(const DeleteOnlyText: Boolean);
     procedure DownloadState;
@@ -535,6 +507,8 @@ type
     FTempFolder: string;
     // process objects
     FEncoders: array[0..15] of TEncodingProcess;
+    // file list frames
+    FFileListFrames: TList<TFileListFrame>;
     // video download list items
     FVideoDownloadListItems: TList<TDownloadUIItem>;
     // dvd ripper process
@@ -560,12 +534,8 @@ type
     procedure SaveEncoderLogs();
     // changes summary according to settings
     procedure UpdateSummary();
-    // converts hh:mm:ss to integer
-    function TimeToInt(TimeStr: string): Integer;
     // converts hh:mm:ss.ms to integer
     // function TimeToIntEx(TimeStr: string): Integer;
-    // checks if a given string is numeric
-    function IsStringNumeric(Str: string): Boolean;
     // backend progress related
     function GetMencoderPosition(MencoderOutPut: string): string;
     function GetFFmpegPosition(FFmpegOutput: string; Duration: integer): string;
@@ -1106,6 +1076,7 @@ var
   LTmpList: TStringList;
   I: integer;
   j: integer;
+  LFileListFrame: TFileListFrame;
 label
   SubDefTrackSelect, AudDefTrackSelect;
 begin
@@ -1232,22 +1203,48 @@ AudDefTrackSelect:
         end;
       end;
       FMasterFileInfoList.Add(LConvertItem);
-      // interface
-      LItem := FileList.Items.Add;
-      with LItem do
+
+      LFileListFrame := TFileListFrame.Create(nil);
+      LFileListFrame.Width := FileScrollList.ClientWidth;
+      LFileListFrame.Top := FFileListFrames.Count * LFileListFrame.Height;
+      LFileListFrame.FileNameLabel.Caption := ExtractFileName(FileName);
+      LFileListFrame.FileInfoLabel.Caption := FFileInfo.DurationStr;
+      LFileListFrame.SubtitleList.Items.AddStrings(FFileInfo.SubtitleFiles);
+      LFileListFrame.AudioList.Items.AddStrings(FFileInfo.AudioStreams);
+      LFileListFrame.AudioList.ItemIndex := LConvertItem.AudioIndex;
+      LFileListFrame.SubtitleList.ItemIndex := LConvertItem.SubtitleIndex;
+      LFileListFrame.RemoveBtn.Tag := FFileListFrames.Count;
+      LFileListFrame.RangeBtn.Tag := FFileListFrames.Count;
+      LFileListFrame.PreviewBtn.Tag := FFileListFrames.Count;
+      LFileListFrame.SubtitleList.Tag := FFileListFrames.Count;
+      LFileListFrame.SubtitleTypeList.Tag := FFileListFrames.Count;
+      LFileListFrame.AudioList.Tag := FFileListFrames.Count;
+      LFileListFrame.FileInfoBtn.Tag := FFileListFrames.Count;
+      LFileListFrame.OpenFolderBtn.Tag := FFileListFrames.Count;
+      LFileListFrame.SubtitleTypeList.OnChange := FileSubTypeListChange;
+      LFileListFrame.SubtitleList.OnChange := FileSubListChange;
+      LFileListFrame.AudioList.OnChange := FileAudioListChange;
+      LFileListFrame.RemoveBtn.OnClick := FileDeleteBtnClick;
+      LFileListFrame.RangeBtn.OnClick := FileRangeBtnClick;
+      LFileListFrame.PreviewBtn.OnClick := FilePrevieBtnClick;
+      LFileListFrame.FileInfoBtn.OnClick := FileInfoBtnClick;
+      LFileListFrame.OpenFolderBtn.OnClick := FileFolderBtnClick;
+      if LConvertItem.SelectedSubtitleType = embedded then
       begin
-        Caption := ExtractFileName(FileName);
-        if Length(FFileInfo.DurationStr) > 0 then
-        begin
-          SubItems.Add(FFileInfo.DurationStr);
-        end
-        else
-        begin
-          SubItems.Add(IntegerToTime(LConvertItem.EndPosition))
-        end;
-        SubItems.Add('0');
-        SubItems.Add('0');
+        LFileListFrame.SubtitleTypeList.ItemIndex := 0;
+      end
+      else
+      begin
+        LFileListFrame.SubtitleTypeList.ItemIndex := 1;
       end;
+
+      FFileListFrames.Add(LFileListFrame);
+      if FileExists(FFileInfo.ScreenshotFile) then
+      begin
+        LFileListFrame.FileImage.Picture.LoadFromFile(FFileInfo.ScreenshotFile);
+        DeleteFile(FFileInfo.ScreenshotFile);
+      end;
+      LFileListFrame.Parent := FileScrollList;
     finally
       LTmpList.Free;
     end;
@@ -1270,7 +1267,6 @@ begin
 
     if OpenVideo.Execute then
     begin
-      FileList.Items.BeginUpdate;
       AddForm.StatusLabel.Caption := 'Adding files, please wait...';
       AddForm.AbortBtn.Enabled := True;
       AddForm.Show;
@@ -1295,7 +1291,6 @@ begin
     OpenVideo.Free;
     AddForm.Close;
     MainForm.Enabled := True;
-    FileList.Items.EndUpdate;
     FFileAddingStoppedByUser := False;
   end;
 end;
@@ -1316,7 +1311,6 @@ var
 begin
   if FileExists(FileListName) then
   begin
-    FileList.Items.BeginUpdate;
     AddForm.StatusLabel.Caption := 'Adding files please wait...';
     AddForm.AbortBtn.Enabled := True;
     AddForm.Show;
@@ -1343,7 +1337,6 @@ begin
       MainForm.Enabled := True;
       MainForm.BringToFront;
       FFileAddingStoppedByUser := False;
-      FileList.Items.EndUpdate;
       FreeAndNil(FilesToAdd);
       FLastOpenedDir := SelectDirectoryDialog.Directory;
     end;
@@ -1364,7 +1357,6 @@ begin
   end;
   if SelectDirectoryDialog.Execute then
   begin
-    FileList.Items.BeginUpdate;
     AddForm.StatusLabel.Caption := 'Adding files please wait...';
     AddForm.AbortBtn.Enabled := True;
     AddForm.Show;
@@ -1412,7 +1404,6 @@ begin
       MainForm.Enabled := True;
       MainForm.BringToFront;
       FFileAddingStoppedByUser := False;
-      FileList.Items.EndUpdate;
       FreeAndNil(FilesToAdd);
 
       FLastOpenedDir := SelectDirectoryDialog.Directory;
@@ -1428,7 +1419,6 @@ begin
   end;
   if SelectDirectoryDialog.Execute then
   begin
-    FileList.Items.BeginUpdate;
     AddForm.StatusLabel.Caption := 'Adding files please wait...';
     AddForm.AbortBtn.Enabled := True;
     AddForm.Show;
@@ -1441,7 +1431,6 @@ begin
       AddForm.Close;
       MainForm.Enabled := True;
       MainForm.BringToFront;
-      FileList.Items.EndUpdate;
     end;
   end;
 end;
@@ -1826,14 +1815,6 @@ begin
   end;
 end;
 
-procedure TMainForm.ApplicationEventsShowHint(var HintStr: string; var CanShow: Boolean; var HintInfo: Controls.THintInfo);
-begin
-  if HintInfo.HintControl = FileList then
-  begin
-    HintStr := 'List of files (' + IntToStr(FileList.Items.Count) + ' files)';
-  end;
-end;
-
 procedure TMainForm.ApplyProfile(ProfileName: string);
 const
   UserStr = '[User]';
@@ -1968,31 +1949,6 @@ begin
     AdvancedOptionsForm.AudioChannelsList.Enabled := True;
   end;
   UpdateSummary;
-end;
-
-procedure TMainForm.AudioTracksListChange(Sender: TObject);
-var
-  index: Integer;
-begin
-  index := FileList.ItemIndex;
-  if index > -1 then
-  begin
-    if (AudioTracksList.Items.Count > 0) or (Length(AudioTracksList.Text) > 0) then
-    begin
-      if AudioTracksList.Text = '1. No audio' then
-      begin
-        FMasterFileInfoList[Index].AudioIndex := -1;
-      end
-      else
-      begin
-        FMasterFileInfoList[Index].AudioIndex := AudioTracksList.ItemIndex;
-      end;
-    end
-    else
-    begin
-      FMasterFileInfoList[Index].AudioIndex := -1;
-    end;
-  end;
 end;
 
 procedure TMainForm.BatchAdd(const Links: TStrings; const SingleLink: Boolean);
@@ -3632,67 +3588,6 @@ begin
   ShellExecute(0, 'open', 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QX8G3B2A4VRJG', nil, nil, SW_SHOWNORMAL);
 end;
 
-procedure TMainForm.DownBtnClick(Sender: TObject);
-var
-  index, i: Integer;
-  lv, lv2: TListItem;
-  SelectedItems: TStringList;
-begin
-
-  try
-    SelectedItems := TStringList.Create;
-
-    i := FileList.Items.Count - 1;
-
-    while i > -1 do
-    begin
-      Application.ProcessMessages;
-
-      if FileList.Items.Item[i].Selected then
-      begin
-        index := i;
-        SelectedItems.Add(FloatToStr(i + 1));
-        if (index >= 0) and (index < FileList.Items.Count - 1) then
-        begin
-          lv2 := FileList.Items[index];
-          try
-            // queue list
-            lv := FileList.Items.Insert(Index + 2);
-            lv.Assign(lv2);
-            lv2.Delete;
-
-            FMasterFileInfoList.Exchange(i, i + 1);
-
-            ExchangeItems(FileList, i, i + 1);
-            ExchangeItems(FileList, i, i + 1);
-          finally
-
-          end;
-        end;
-      end
-      else
-      begin
-        Dec(i);
-      end;
-    end;
-
-    if SelectedItems.Count > 0 then
-    begin
-      for i := 0 to SelectedItems.Count - 1 do
-      begin
-        Index := StrToInt(SelectedItems.Strings[i]);
-        if Index < FileList.Items.Count then
-        begin
-          FileList.Items.Item[Index].Selected := True;
-          FileList.Items.Item[Index].Focused := True;
-        end;
-      end;
-    end;
-  finally
-    FreeAndNil(SelectedItems);
-  end;
-end;
-
 procedure TMainForm.DownloadNormalState;
 var
   I: Integer;
@@ -4977,56 +4872,6 @@ begin
   Result := ':threads=' + FloatToStr(CPUCount);
 end;
 
-procedure TMainForm.EditDelaysBtnClick(Sender: TObject);
-begin
-
-  FileList.OnDblClick(Self);
-
-end;
-
-procedure TMainForm.EditRangeBtnClick(Sender: TObject);
-var
-  index: integer;
-begin
-  index := FileList.ItemIndex;
-  if index > -1 then
-  begin
-    MainForm.Enabled := False;
-    with RangeEditorForm do
-    begin
-      VideoName := FMasterFileInfoList[Index].FilePath;
-      VideoIndex := index;
-      SubtitleIndex := FMasterFileInfoList[index].SubtitleIndex;
-      StartValue := FMasterFileInfoList[Index].StartPosition;
-      EndValue := FMasterFileInfoList[Index].EndPosition;
-      PositionBar.MaxValue := FMasterFileInfoList[index].ConstDuration;
-      if EndValue > StartValue then
-      begin
-        Show;
-      end
-      else
-      begin
-        Application.MessageBox('Invalid range values!', 'Error', MB_ICONERROR);
-      end;
-    end;
-  end;
-end;
-
-procedure TMainForm.EffectsBtnClick(Sender: TObject);
-var
-  i: Integer;
-begin
-  for i := 0 to FileList.Items.Count - 1 do
-  begin
-    EffectForm.PreviewList.Items.Add(ExtractFileName(FMasterFileInfoList[I].FilePath));
-  end;
-
-  if EffectForm.PreviewList.Items.Count > 0 then
-    EffectForm.PreviewList.ItemIndex := 0;
-
-  EffectForm.Show;
-  MainForm.Enabled := False;
-end;
 
 procedure TMainForm.EnableSubBtnClick(Sender: TObject);
 begin
@@ -5085,61 +4930,95 @@ begin
   ShellExecute(Handle, 'open', 'https://www.facebook.com/tencoder', nil, nil, SW_NORMAL);
 end;
 
-procedure TMainForm.FileListClick(Sender: TObject);
+procedure TMainForm.FileAudioListChange(Sender: TObject);
 var
-  i: Integer;
+  index: Integer;
+  LAudioList: TComboBox;
 begin
-  if FileList.ItemIndex > -1 then
+  LAudioList := (Sender as TComboBox);
+  index := LAudioList.Tag;
+  if index > -1 then
   begin
-    // audio tracks
-    AudioTracksList.Items.Clear;
-    AudioTracksList.Items.AddStrings(FMasterFileInfoList[FileList.ItemIndex].AudioTracks);
-    for i := 0 to AudioTracksList.Items.Count - 1 do
+    if (LAudioList.Items.Count > 0) or (Length(LAudioList.Text) > 0) then
     begin
-      AudioTracksList.Items[i] := FloatToStr(FMasterFileInfoList[FileList.ItemIndex].AudioIDs[i]) + '. ' + AudioTracksList.Items[i]
-    end;
-    if FMasterFileInfoList[FileList.ItemIndex].AudioIndex < AudioTracksList.Items.Count then
+      if LAudioList.Text = '1. No audio' then
+      begin
+        FMasterFileInfoList[Index].AudioIndex := -1;
+      end
+      else
+      begin
+        FMasterFileInfoList[Index].AudioIndex := LAudioList.ItemIndex;
+      end;
+    end
+    else
     begin
-      AudioTracksList.ItemIndex := FMasterFileInfoList[FileList.ItemIndex].AudioIndex;
+      FMasterFileInfoList[Index].AudioIndex := -1;
     end;
-
-    // subtitles
-    SubtitleTracksList.Items.Clear;
-    case FMasterFileInfoList[FileList.ItemIndex].SelectedSubtitleType of
-      embedded:
-        begin
-          SubtitleTypesList.ItemIndex := 0;
-          SubtitleTracksList.Items.AddStrings(FMasterFileInfoList[FileList.ItemIndex].SubtitleTracks);
-          if SubtitleTracksList.Items.Count > 0 then
-          begin
-            SubtitleTracksList.ItemIndex := FMasterFileInfoList[FileList.ItemIndex].SubtitleTrackIndex;
-          end;
-        end;
-      subfile:
-        begin
-          SubtitleTypesList.ItemIndex := 1;
-          SubtitleTracksList.Items.AddStrings(FMasterFileInfoList[FileList.ItemIndex].SubtitleFiles);
-          if SubtitleTracksList.Items.Count > 0 then
-          begin
-            SubtitleTracksList.ItemIndex := FMasterFileInfoList[FileList.ItemIndex].SubtitleIndex;
-          end;
-        end;
-    end;
-    SubtitleTypesListChange(Self);
-  end
-  else
-  begin
-    AudioTracksList.Items.Clear;
-    SubtitleTracksList.Items.Clear;
   end;
 end;
 
-procedure TMainForm.FileListDblClick(Sender: TObject);
+procedure TMainForm.FileDeleteBtnClick(Sender: TObject);
+var
+  LItemIndex, i: integer;
+begin
+  LItemIndex := (Sender as TButton).Tag;
+  if LItemIndex < FFileListFrames.Count then
+  begin
+    FFileListFrames[LItemIndex].Visible := False;
+    FFileListFrames.Delete(LItemIndex);
+    FMasterFileInfoList.Delete(LItemIndex);
+    for I := 0 to FFileListFrames.Count - 1 do
+    begin
+      if FFileListFrames[i].RemoveBtn.Tag > LItemIndex then
+      begin
+        FFileListFrames[i].RemoveBtn.Tag := FFileListFrames[i].RemoveBtn.Tag - 1;
+      end;
+      FFileListFrames[i].Top := i * 120;
+    end;
+  end;
+end;
+
+
+procedure TMainForm.FileFolderBtnClick(Sender: TObject);
+var
+  FileDir: string;
+  index: Integer;
+begin
+  index := (Sender as TButton).Tag;
+  if index > -1 then
+  begin
+    FileDir := ExtractFileDir(FMasterFileInfoList[Index].FilePath);
+    if DirectoryExists(FileDir) then
+    begin
+      ShellExecute(Handle, 'open', 'explorer', PChar(' /n,/select, ' + '"' + FMasterFileInfoList[Index].FilePath + '"'), nil, SW_SHOWNORMAL);
+    end;
+  end;
+end;
+
+procedure TMainForm.FileInfoBtnClick(Sender: TObject);
 var
   Index: Integer;
   FileName: string;
 begin
-  Index := FileList.ItemIndex;
+  Index := (Sender as TButton).Tag;
+  if Index > -1 then
+  begin
+    FileName := FMasterFileInfoList[Index].FilePath;
+    try
+      GetFileInfo(FileName);
+    finally
+      InfoForm.Show;
+      MainForm.Enabled := False;
+    end;
+  end;
+end;
+
+procedure TMainForm.FilePrevieBtnClick(Sender: TObject);
+var
+  Index: Integer;
+  FileName: string;
+begin
+  Index := (Sender as TButton).Tag;
   if Index > -1 then
   begin
     FMPlayerPath := ExtractFileDir(Application.ExeName) + '\MEncoder\Mplayer.exe';
@@ -5169,19 +5048,103 @@ begin
   end;
 end;
 
-procedure TMainForm.FileListKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TMainForm.FileRangeBtnClick(Sender: TObject);
+var
+  LItemIndex, i: integer;
 begin
-
-  if FileList.Items.Count > 0 then
+  LItemIndex := (Sender as TButton).Tag;
+  if LItemIndex > -1 then
   begin
-
-    if (Key = VK_UP) or (Key = VK_DOWN) then
+    MainForm.Enabled := False;
+    with RangeEditorForm do
     begin
-      FileList.OnClick(Self);
+      VideoName := FMasterFileInfoList[LItemIndex].FilePath;
+      VideoIndex := LItemIndex;
+      SubtitleIndex := FMasterFileInfoList[LItemIndex].SubtitleIndex;
+      StartValue := FMasterFileInfoList[LItemIndex].StartPosition;
+      EndValue := FMasterFileInfoList[LItemIndex].EndPosition;
+      PositionBar.MaxValue := FMasterFileInfoList[LItemIndex].ConstDuration;
+      if EndValue > StartValue then
+      begin
+        Show;
+      end
+      else
+      begin
+        Application.MessageBox('Invalid range values!', 'Error', MB_ICONERROR);
+      end;
     end;
-
   end;
+end;
 
+procedure TMainForm.FileSubListChange(Sender: TObject);
+var
+  index: Integer;
+  LSubTypeList: TComboBox;
+  LSubList: TComboBox;
+begin
+  LSubList := (Sender as TComboBox);
+  index := LSubList.Tag;
+  LSubTypeList := FFileListFrames[index].SubtitleTypeList;
+  if index > -1 then
+  begin
+    case LSubTypeList.ItemIndex of
+      0: // embedded
+        begin
+          if LSubList.Items.Count > 0 then
+          begin
+            FMasterFileInfoList[index].SubtitleTrackIndex := LSubList.ItemIndex;
+          end
+          else
+          begin
+            FMasterFileInfoList[index].SubtitleTrackIndex := -1;
+          end;
+        end;
+      1: // sub file
+        begin
+          if LSubList.Items.Count > 0 then
+          begin
+            FMasterFileInfoList[index].SubtitleIndex := LSubList.ItemIndex;
+          end
+          else
+          begin
+            FMasterFileInfoList[index].SubtitleIndex := -1;
+          end;
+        end;
+    end;
+  end;
+end;
+
+procedure TMainForm.FileSubTypeListChange(Sender: TObject);
+var
+  LConvertItem: TFileInfoItem;
+  LFileIndex: integer;
+  LSubtypeCBox: TComboBox;
+  LSubtitleCBox: TComboBox;
+begin
+  LSubtypeCBox := (Sender as TComboBox);
+  LFileIndex := LSubtypeCBox.Tag;
+  if LFileIndex > -1 then
+  begin
+    LSubtitleCBox := FFileListFrames[LFileIndex].SubtitleList;
+
+    LConvertItem := FMasterFileInfoList[LFileIndex];
+    LSubtitleCBox.Items.Clear;
+    case LSubtypeCBox.ItemIndex of
+      0: // embedded
+        begin
+          LSubtitleCBox.Items.AddStrings(LConvertItem.SubtitleTracks);
+          LSubtitleCBox.ItemIndex := LConvertItem.SubtitleTrackIndex;
+          LConvertItem.SelectedSubtitleType := embedded;
+        end;
+      1: // files
+        begin
+          LSubtitleCBox.Items.AddStrings(LConvertItem.SubtitleFiles);
+          LSubtitleCBox.ItemIndex := LConvertItem.SubtitleIndex;
+          LConvertItem.SelectedSubtitleType := subfile;
+        end;
+    end;
+    FMasterFileInfoList[LFileIndex] := LConvertItem;
+  end;
 end;
 
 procedure TMainForm.FillSummary;
@@ -5472,7 +5435,7 @@ begin
 
   for I := Low(FEncoders) to High(FEncoders) do
     FEncoders[i] := TEncodingProcess.Create;
-
+  FFileListFrames := TList<TFileListFrame>.Create;
   ClearTempFolder;
   FTimePassed := 0;
   FDownloadItems := TDownloadItemList.Create;
@@ -5486,12 +5449,7 @@ begin
   FFilesToCheck := TStringList.Create;
   FTitles := TList<TTitle>.Create;
   FMasterFileInfoList := TFileInfoList.Create;
-  FFileInfo := TFileInfoExtractor.Create(FFFMpegPath, FMPlayerPath);
-
-  AudioTracksList.Items.StrictDelimiter := True;
-  AudioTracksList.Items.Delimiter := '|';
-  SubtitleTracksList.Items.StrictDelimiter := True;
-  SubtitleTracksList.Items.Delimiter := '|';
+  FFileInfo := TFileInfoExtractor.Create(FFFMpegPath, FMPlayerPath, FTempFolder);
 
   FBImg.Parent := sStatusBar1;
 
@@ -5500,7 +5458,7 @@ begin
   begin
     if not InitializeTaskbarAPI then
     begin
-      Application.MessageBox('You seem to have Windows 7 but program can''t start taskbar progressbar!', 'Error', MB_ICONERROR);
+      Application.MessageBox('You seem to have Windows 7 or later but program can''t start taskbar progressbar!', 'Error', MB_ICONERROR);
     end;
   end;
 
@@ -5550,6 +5508,7 @@ begin
     FDVDJobs[i].Free;
   FMasterFileInfoList.Free;
   FFileInfo.Free;
+  FFileListFrames.Free;
 end;
 
 procedure TMainForm.FormMouseWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint; var Handled: Boolean);
@@ -5578,7 +5537,6 @@ procedure TMainForm.FormResize(Sender: TObject);
 begin
   try
     ProgressList.Columns[0].Width := ProgressList.ClientWidth - ProgressList.Columns[1].Width - ProgressList.Columns[2].Width - 20;
-    FileList.Columns[0].Width := FileList.ClientWidth - FileList.Columns[1].Width - FileList.Columns[2].Width - FileList.Columns[3].Width - 20;
     sStatusBar1.Panels[0].Width := sStatusBar1.ClientWidth - sStatusBar1.Panels[1].Width;
     DVDJobList.Columns[0].Width := DVDJobList.ClientWidth - DVDJobList.Columns[1].Width - 20;
   except
@@ -6378,35 +6336,6 @@ begin
 
 end;
 
-function TMainForm.IsStringNumeric(Str: string): Boolean;
-var
-  P: PChar;
-begin
-
-  if Length(Str) < 1 then
-  begin
-    Result := False;
-    Exit;
-  end;
-
-  P := PChar(Str);
-  Result := False;
-
-  while P^ <> #0 do
-  begin
-    Application.ProcessMessages;
-
-    if (not CharInSet(P^, ['0'..'9'])) then
-    begin
-      Exit;
-    end;
-
-    Inc(P);
-  end;
-
-  Result := True;
-end;
-
 procedure TMainForm.LabelClick(Sender: TObject);
 begin
   ShellExecute(Handle, 'open', PWideChar(TLabel(Sender).Caption), nil, nil, SW_SHOWNORMAL);
@@ -6552,22 +6481,6 @@ begin
   ProfileForm.Show;
   MainForm.Enabled := False;
 
-end;
-
-procedure TMainForm.OpenDirectory1Click(Sender: TObject);
-var
-  FileDir: string;
-  index: Integer;
-begin
-  index := FileList.ItemIndex;
-  if index > -1 then
-  begin
-    FileDir := ExtractFileDir(FMasterFileInfoList[Index].FilePath);
-    if DirectoryExists(FileDir) then
-    begin
-      ShellExecute(Handle, 'open', 'explorer', PChar(' /n,/select, ' + '"' + FMasterFileInfoList[Index].FilePath + '"'), nil, SW_SHOWNORMAL);
-    end;
-  end;
 end;
 
 procedure TMainForm.OpenDVDBtnClick(Sender: TObject);
@@ -6891,24 +6804,6 @@ begin
 
 end;
 
-procedure TMainForm.Properties1Click(Sender: TObject);
-var
-  Index: Integer;
-  FileName: string;
-begin
-  Index := FileList.ItemIndex;
-  if Index > -1 then
-  begin
-    FileName := FMasterFileInfoList[Index].FilePath;
-    try
-      GetFileInfo(FileName);
-    finally
-      InfoForm.Show;
-      MainForm.Enabled := False;
-    end;
-  end;
-end;
-
 procedure TMainForm.R1Click(Sender: TObject);
 begin
   ShellExecute(Application.Handle, 'open', PChar('https://sourceforge.net/p/tencoder/bugs/'), nil, nil, SW_SHOWNORMAL);
@@ -7014,29 +6909,19 @@ begin
 end;
 
 procedure TMainForm.RemoveAllBtnClick(Sender: TObject);
+var
+  i: integer;
 begin
   if ID_YES = Application.MessageBox('Remove all from file list?', 'Remove All', MB_ICONQUESTION or MB_YESNO) then
   begin
-    FileList.Items.Clear;
     FMasterFileInfoList.Clear;
-    AudioTracksList.Items.Clear;
-    SubtitleTracksList.Items.Clear;
-  end;
-end;
-
-procedure TMainForm.RemoveBtnClick(Sender: TObject);
-var
-  i: Integer;
-begin
-  for i := FileList.Items.Count - 1 downto 0 do
-  begin
-    if FileList.Items[i].Selected then
+    for I := 0 to FFileListFrames.Count - 1 do
     begin
-      FileList.Items.Delete(i);
-      FMasterFileInfoList.Delete(i);
+      FFileListFrames[i].Visible := False;
+      FFileListFrames[i].Free;
     end;
+    FFileListFrames.Clear;
   end;
-  FileList.OnClick(Self);
 end;
 
 procedure TMainForm.RemoveLogs;
@@ -7050,16 +6935,6 @@ begin
       DeleteFile(FAppDataFolder + '\' + Search.Name);
     until (FindNext(Search) <> 0);
     FindClose(Search);
-  end;
-end;
-
-procedure TMainForm.ReverseSelection1Click(Sender: TObject);
-var
-  i: Integer;
-begin
-  for i := 0 to FileList.Items.Count - 1 do
-  begin
-    FileList.Items[i].Selected := not FileList.Items[i].Selected;
   end;
 end;
 
@@ -7247,13 +7122,6 @@ begin
   ShellExecute(Application.Handle, 'open', PChar(ExtractFileDir(Application.ExeName) + '\ChangeLog.txt'), nil, nil, SW_SHOWNORMAL);
 end;
 
-procedure TMainForm.SelectAll1Click(Sender: TObject);
-begin
-
-  FileList.SelectAll;
-
-end;
-
 procedure TMainForm.SelectBtnClick(Sender: TObject);
 begin
 
@@ -7265,18 +7133,6 @@ begin
   if SelectDirectoryDialog.Execute then
   begin
     DirectoryEdit.Text := SelectDirectoryDialog.Directory;
-  end;
-
-end;
-
-procedure TMainForm.SelectNone1Click(Sender: TObject);
-var
-  i: Integer;
-begin
-
-  for i := 0 to FileList.Items.Count - 1 do
-  begin
-    FileList.Items[i].Selected := False;
   end;
 
 end;
@@ -7505,12 +7361,13 @@ begin
   end;
 {$ENDREGION}
   // remove files that dont exist
-  for i := FileList.Items.Count - 1 downto 0 do
+  for i := FMasterFileInfoList.Count - 1 downto 0 do
   begin
     if not FileExists(FMasterFileInfoList[I].FilePath) then
     begin
       AddToLog(0, 'Removing ' + FMasterFileInfoList[I].FilePath + ' from list, because it does not exist.');
-      FileList.Items.Delete(i);
+      FFileListFrames[i].Visible := False;
+      FFileListFrames[i].Free;
       FMasterFileInfoList.Delete(i);
     end;
   end;
@@ -7534,9 +7391,8 @@ begin
   // create log folder
   ForceDirectories(FLogFolder);
 
-  if (FileList.Items.Count > 0) and (Length(DirectoryEdit.Text) > 0) then
+  if (FMasterFileInfoList.Count > 0) and (Length(DirectoryEdit.Text) > 0) then
   begin
-
     if not DirectoryExists(DirectoryEdit.Text) then
     begin
       if not CreateDir(DirectoryEdit.Text) then
@@ -7581,9 +7437,9 @@ begin
 {$ENDREGION}
 
       // decide number of processes
-      if (SettingsForm.NumberOfThreadsList.ItemIndex + 1) > FileList.Items.Count then
+      if (SettingsForm.NumberOfThreadsList.ItemIndex + 1) > FMasterFileInfoList.Count then
       begin
-        LNumberOfProcesses := FileList.Items.Count;
+        LNumberOfProcesses := FMasterFileInfoList.Count;
       end
       else
       begin
@@ -7628,7 +7484,7 @@ begin
       else
       begin
         // add commands for normal encoding
-        for I := 0 to FileList.Items.Count - 1 do
+        for I := 0 to FMasterFileInfoList.Count - 1 do
         begin
           Application.ProcessMessages;
 
@@ -8098,77 +7954,10 @@ begin
 
 end;
 
-procedure TMainForm.SubtitleOptions1Click(Sender: TObject);
-begin
-
-  FileList.SelectAll;
-
-end;
-
 procedure TMainForm.SubtitleOptions2Click(Sender: TObject);
 begin
   SettingsForm.Show;
   MainForm.Enabled := False;
-end;
-
-procedure TMainForm.SubtitleTracksListChange(Sender: TObject);
-var
-  index: Integer;
-begin
-  index := FileList.ItemIndex;
-  if index > -1 then
-  begin
-    case SubtitleTypesList.ItemIndex of
-      0: // embedded
-        begin
-          if SubtitleTracksList.Items.Count > 0 then
-          begin
-            FMasterFileInfoList[index].SubtitleTrackIndex := SubtitleTracksList.ItemIndex;
-          end
-          else
-          begin
-            FMasterFileInfoList[index].SubtitleTrackIndex := -1;
-          end;
-        end;
-      1: // sub file
-        begin
-          if SubtitleTracksList.Items.Count > 0 then
-          begin
-            FMasterFileInfoList[index].SubtitleIndex := SubtitleTracksList.ItemIndex;
-          end
-          else
-          begin
-            FMasterFileInfoList[index].SubtitleIndex := -1;
-          end;
-        end;
-    end;
-  end;
-end;
-
-procedure TMainForm.SubtitleTypesListChange(Sender: TObject);
-var
-  LConvertItem: TFileInfoItem;
-begin
-  if FileList.ItemIndex > -1 then
-  begin
-    LConvertItem := FMasterFileInfoList[FileList.ItemIndex];
-    SubtitleTracksList.Items.Clear;
-    case SubtitleTypesList.ItemIndex of
-      0: // embedded
-        begin
-          SubtitleTracksList.Items.AddStrings(LConvertItem.SubtitleTracks);
-          SubtitleTracksList.ItemIndex := LConvertItem.SubtitleTrackIndex;
-          LConvertItem.SelectedSubtitleType := embedded;
-        end;
-      1: // files
-        begin
-          SubtitleTracksList.Items.AddStrings(LConvertItem.SubtitleFiles);
-          SubtitleTracksList.ItemIndex := LConvertItem.SubtitleIndex;
-          LConvertItem.SelectedSubtitleType := subfile;
-        end;
-    end;
-    FMasterFileInfoList[FileList.ItemIndex] := LConvertItem;
-  end;
 end;
 
 procedure TMainForm.SwitchToEncoding;
@@ -8221,7 +8010,7 @@ begin
   end;
   NumberOfCores := Info.CPU.ProcessorCount;
   NumberOfSelectedThreads := SettingsForm.NumberOfThreadsList.ItemIndex + 1;
-  if FileList.Items.Count >= NumberOfCores then
+  if FMasterFileInfoList.Count >= NumberOfCores then
   begin
     // if user selected less then available cores
     if NumberOfCores > NumberOfSelectedThreads then
@@ -8246,9 +8035,9 @@ begin
   end
   else
   begin
-    if (FileList.Items.Count < NumberOfCores) then
+    if (FMasterFileInfoList.Count < NumberOfCores) then
     begin
-      NumberOfThreads := NumberOfCores div FileList.Items.Count;
+      NumberOfThreads := NumberOfCores div FMasterFileInfoList.Count;
       if NumberOfThreads > 1 then
       begin
         // in any case
@@ -8278,59 +8067,6 @@ begin
   begin
     TimeLabel.Caption := IntegerToTime(FTimePassed);
   end;
-end;
-
-function TMainForm.TimeToInt(TimeStr: string): Integer;
-var
-  TimeList: TStringList;
-  hour: Integer;
-  minute: Integer;
-  second: Integer;
-begin
-
-  Result := 0;
-
-  if Length(TimeStr) = 8 then
-  begin
-
-    TimeList := TStringList.Create;
-    try
-      TimeList.Delimiter := ':';
-      TimeList.StrictDelimiter := True;
-      TimeList.DelimitedText := TimeStr;
-
-      hour := 0;
-      minute := 0;
-      second := 0;
-
-      if TimeList.Count = 3 then
-      begin
-
-        if IsStringNumeric(TimeList[0]) then
-        begin
-          hour := StrToInt(TimeList[0]);
-        end;
-
-        if IsStringNumeric(TimeList[1]) then
-        begin
-          minute := StrToInt(TimeList[1]);
-        end;
-
-        if IsStringNumeric(TimeList[2]) then
-        begin
-          second := StrToInt(TimeList[2]);
-        end;
-
-        Result := (hour * 3600) + (minute * 60) + second;
-
-      end;
-
-    finally
-      FreeAndNil(TimeList);
-    end;
-
-  end;
-
 end;
 
 procedure TMainForm.TitlesListChange(Sender: TObject);
@@ -8409,33 +8145,6 @@ begin
   ShellExecute(Application.Handle, 'open', PChar(ExtractFileDir(Application.ExeName) + '\youtube-dl\youtube-dl.exe'), '-U', nil, SW_SHOWNORMAL);
 end;
 
-procedure TMainForm.UpBtnClick(Sender: TObject);
-var
-  i: Integer;
-  lv, lv2: TListItem;
-begin
-  for i := 0 to FileList.Items.Count - 1 do
-  begin
-    Application.ProcessMessages;
-    if FileList.Items.Item[i].Selected then
-    begin
-      if i > 0 then
-      begin
-        lv2 := FileList.Items[i];
-        try
-          lv := FileList.Items.Insert(i - 1);
-          lv.Assign(lv2);
-          lv2.Delete;
-          FMasterFileInfoList.Exchange(i, i - 1);
-        finally
-          lv.Selected := True;
-          lv.Focused := True;
-        end;
-      end;
-    end;
-  end;
-end;
-
 procedure TMainForm.UpdateCheckerDoneStream(Sender: TObject; Stream: TStream; StreamSize: Integer; Url: string);
 var
   VersionFile: TStringList;
@@ -8446,7 +8155,7 @@ begin
     VersionFile.LoadFromStream(Stream);
     if VersionFile.Count = 1 then
     begin
-      if MainForm.IsStringNumeric(VersionFile.Strings[0]) then
+      if IsStringNumeric(VersionFile.Strings[0]) then
       begin
         LatestVersion := StrToInt(VersionFile.Strings[0]);
         if LatestVersion > Build then

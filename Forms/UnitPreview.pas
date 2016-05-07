@@ -329,8 +329,9 @@ begin
   end;
 
   // update main form file list
-  MainForm.FileList.Items[VideoIndex].SubItems[1] := FloatToStr(AudioDelayValue);
-  MainForm.FileList.Items[VideoIndex].SubItems[2] := FloatToStr(SubDelayValue);
+  // todo: show on ui
+//  MainForm.FileList.Items[VideoIndex].SubItems[1] := FloatToStr(AudioDelayValue);
+//  MainForm.FileList.Items[VideoIndex].SubItems[2] := FloatToStr(SubDelayValue);
 
   if FromMainForm then
   begin

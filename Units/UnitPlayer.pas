@@ -6,7 +6,7 @@
   * TEncoder is free software: you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
   * the Free Software Foundation, either version 2 of the License.
-  * 
+  *
   *
   * TEncoder is distributed in the hope that it will be useful,
   * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +21,8 @@ unit UnitPlayer;
 
 interface
 
-uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, UnitEffects, dialogs, UnitSubtitleTypes;
+uses
+  Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, UnitEffects, UnitSubtitleTypes, UnitCommonMethods;
 
 type
   TPlayerStatus = (psPlaying, psPaused, psStopped, psFontCache);
@@ -79,8 +80,6 @@ type
     function CreatePlayerCommandLine(Options: TPlayerOptions): string;
     // checks if MPlayer is still runing
     function IsMplayerAlive(): Boolean;
-    // checks if given string is numeric
-    function IsStringNumeric(Str: String): Boolean;
     // create range CMD
     function MPlayerRangeCMD(Options: TPlayerOptions): string;
 
@@ -97,7 +96,6 @@ type
     property MplayerProgress: Integer read FProgress;
     property MplayerConsoleOutput: TStringList read FConsoleOutput;
     property MplayerOutput: string read FMplayerOutput;
-
     constructor Create(DisplayHandle: THandle; MplayerPath: string);
     destructor Destroy(); override;
 
@@ -130,12 +128,12 @@ type
 
     // returns mplayer's commandline
     function GetCommandLine: string;
-
   end;
 
 implementation
 
-uses UnitMain;
+uses
+  UnitMain;
 
 { TPlayer }
 
@@ -345,15 +343,13 @@ begin
               begin
                 if FileExists(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile) then
                 begin
-                  if UseSSAStyle and ((LowerCase(ExtractFileExt(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile)) = '.ass') or
-                    (LowerCase(ExtractFileExt(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile)) = '.ssa')) then
+                  if UseSSAStyle and ((LowerCase(ExtractFileExt(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile)) = '.ass') or (LowerCase(ExtractFileExt(FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile)) = '.ssa')) then
                   begin
                     SubtitleCMD := ' -ass -sub "' + FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '" -ass-styles "' + FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '"'
                   end
                   else
                   begin
-                    SubtitleCMD := ' -subfont-autoscale ' + FontAutoScale + ' -subfont-blur 2 -subfont-outline 2 -subfont "' + FontPath + '" -subcp ' + SubEncoding + ' -subfont-text-scale ' +
-                      TextScale + ' -sub "' + FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '"';
+                    SubtitleCMD := ' -subfont-autoscale ' + FontAutoScale + ' -subfont-blur 2 -subfont-outline 2 -subfont "' + FontPath + '" -subcp ' + SubEncoding + ' -subfont-text-scale ' + TextScale + ' -sub "' + FMasterFileInfoList[Options.FileIndex].SelectedSubtitleFile + '"';
 
                     if length(SubEncoding) > 0 then
                     begin
@@ -407,9 +403,8 @@ begin
       VideoSize := VideoSize + ' -aid ' + (Options._AudioStream)
     end;
 
-    Params := ' -nofs -slave -noquiet -nomouseinput -identify -idx -osdlevel 1 ' + VideoSize + ' -colorkey 0x101010 ' + SubtitleCMD + ' -delay ' +
-      StringReplace(FloatToStr(Options.AudioDelay), ',', '.', []) + ' ' + MPlayerRangeCMD(Options) + ' -wid ' + FloatToStr(FDisplayHandle) + ' -vo direct3d  ' + VAspect + ' -softvol -softvol-max 300 '
-      + ' -volume ' + FloatToStr(Options.VideoVolumeLevel) + ' "' + Options.FileName + '"';;
+    Params := ' -nofs -slave -noquiet -nomouseinput -identify -idx -osdlevel 1 ' + VideoSize + ' -colorkey 0x101010 ' + SubtitleCMD + ' -delay ' + StringReplace(FloatToStr(Options.AudioDelay), ',', '.', []) + ' ' + MPlayerRangeCMD(Options) + ' -wid ' + FloatToStr(FDisplayHandle) + ' -vo direct3d  ' + VAspect + ' -softvol -softvol-max 300 ' + ' -volume ' + FloatToStr(Options.VideoVolumeLevel) + ' "' + Options.FileName + '"';
+    ;
 
     Result := Params;
 
@@ -448,34 +443,6 @@ begin
 
   Result := FMPlayer.ProcessInfo.hProcess <> 0;
 
-end;
-
-function TPlayer.IsStringNumeric(Str: String): Boolean;
-var
-  p: PChar;
-begin
-
-  if length(Str) < 1 then
-  begin
-    Result := False;
-    Exit;
-  end;
-
-  p := PChar(Str);
-  Result := False;
-
-  while p^ <> #0 do
-  begin
-
-    if (Not CharInSet(p^, ['0' .. '9'])) then
-    begin
-      Exit;
-    end;
-
-    Inc(p);
-  end;
-
-  Result := True;
 end;
 
 function TPlayer.MPlayerRangeCMD(Options: TPlayerOptions): string;
@@ -727,3 +694,4 @@ begin
 end;
 
 end.
+

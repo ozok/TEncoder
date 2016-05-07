@@ -21,7 +21,7 @@ unit UnitFFmpegCommandLineCreator;
 
 interface
 
-uses Classes, Windows, SysUtils, Dialogs, MediaInfoDLL, StrUtils, UnitEffects;
+uses Classes, Windows, SysUtils, Dialogs, MediaInfoDLL, StrUtils, UnitEffects, UnitCommonMethods;
 
 type
   TFFMpegCommandLine = record
@@ -42,7 +42,6 @@ type
     function CreateRangeCMD(StartTime, EndTime: Integer): string;
     function IntegerToTime(Time: Integer): string;
 
-    function IsStringNumeric(Str: String): Boolean;
     function IsAudioOnly(const FileName: string): Boolean;
     function CreateAdvancedOptions(): string;
   public
@@ -1032,34 +1031,6 @@ begin
 
   end;
 
-end;
-
-function TFFMpegCommandLineCreator.IsStringNumeric(Str: String): Boolean;
-var
-  p: PChar;
-begin
-
-  if Length(Str) < 1 then
-  begin
-    Result := False;
-    Exit;
-  end;
-
-  p := PChar(Str);
-  Result := False;
-
-  while p^ <> #0 do
-  begin
-
-    if (Not CharInSet(p^, ['0' .. '9'])) then
-    begin
-      Exit;
-    end;
-
-    Inc(p);
-  end;
-
-  Result := True;
 end;
 
 end.

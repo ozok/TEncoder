@@ -34,7 +34,7 @@ type
     x264LevelList: TComboBox;
     x264TuneList: TComboBox;
     x264Btn: TCheckBox;
-    CloseBtn: TBitBtn;
+    CloseBtn: TButton;
     OptionPages: TPageControl;
     sTabSheet1: TTabSheet;
     sTabSheet2: TTabSheet;

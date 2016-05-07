@@ -6,7 +6,7 @@
   * TEncoder is free software: you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
   * the Free Software Foundation, either version 2 of the License.
-  * 
+  *
   *
   * TEncoder is distributed in the hope that it will be useful,
   * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +21,9 @@ unit UnitDVDReader;
 
 interface
 
-uses Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, Generics.Collections, dialogs;
+uses
+  Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, Generics.Collections,
+  UnitCommonMethods;
 
 type
   TStatus = (fsReading, fsDone);
@@ -63,12 +65,10 @@ type
     FTitleCount: Integer;
     FMPlayerPath: string;
     FDVDFolder: string;
-
     procedure ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
   public
     property Status: TStatus read FStatus;
     property TitleCount: Integer read FTitleCount;
-
     constructor Create(const DVDFolder: string; const MplayerPath: string);
     destructor Destroy(); override;
     procedure Start();
@@ -83,14 +83,10 @@ type
     FDVDFolder: string;
     FTitleIndex: Integer;
     FTitle: TTitle;
-
     procedure ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
-    function TimeToInt(TimeStr: string): Integer;
-    function IsStringNumeric(Str: String): Boolean;
   public
     property Status: TStatus read FStatus;
     property Title: TTitle read FTitle;
-
     constructor Create(const DVDFolder: string; const MplayerPath: string; const TitleIndex: Integer);
     destructor Destroy(); override;
     procedure Start();
@@ -98,7 +94,8 @@ type
 
 implementation
 
-uses UnitMain;
+uses
+  UnitMain;
 
 { TTitle }
 
@@ -278,34 +275,6 @@ begin
   FProcess.Free;
 end;
 
-function TDVDTitleInfoExtractor.IsStringNumeric(Str: String): Boolean;
-var
-  P: PChar;
-begin
-
-  if Length(Str) < 1 then
-  begin
-    Result := False;
-    Exit;
-  end;
-
-  P := PChar(Str);
-  Result := False;
-
-  while P^ <> #0 do
-  begin
-
-    if (Not CharInSet(P^, ['0' .. '9'])) then
-    begin
-      Exit;
-    end;
-
-    Inc(P);
-  end;
-
-  Result := True;
-end;
-
 procedure TDVDTitleInfoExtractor.ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
 const
   Audio = 'audio stream';
@@ -430,56 +399,5 @@ begin
   FProcess.Run;
 end;
 
-function TDVDTitleInfoExtractor.TimeToInt(TimeStr: string): Integer;
-var
-  TimeList: TStringList;
-  hour: Integer;
-  minute: Integer;
-  second: Integer;
-begin
-
-  Result := 0;
-
-  if Length(TimeStr) = 8 then
-  begin
-
-    TimeList := TStringList.Create;
-    try
-      TimeList.Delimiter := ':';
-      TimeList.StrictDelimiter := True;
-      TimeList.DelimitedText := TimeStr;
-
-      hour := 0;
-      minute := 0;
-      second := 0;
-
-      if TimeList.Count = 3 then
-      begin
-
-        if IsStringNumeric(TimeList[0]) then
-        begin
-          hour := StrToInt(TimeList[0]);
-        end;
-
-        if IsStringNumeric(TimeList[1]) then
-        begin
-          minute := StrToInt(TimeList[1]);
-        end;
-
-        if IsStringNumeric(TimeList[2]) then
-        begin
-          second := StrToInt(TimeList[2]);
-        end;
-
-        Result := (hour * 3600) + (minute * 60) + second;
-
-      end;
-
-    finally
-      FreeAndNil(TimeList);
-    end;
-
-  end;
-end;
-
 end.
+

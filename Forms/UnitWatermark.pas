@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask,
   Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.Buttons, UnitEncoder, MediaInfoDll, StrUtils,
-  Vcl.Samples.Spin, JvSpin, JvExMask, JvToolEdit;
+  Vcl.Samples.Spin, JvSpin, JvExMask, JvToolEdit, UnitCommonMethods;
 
 type
   TWatermarkForm = class(TForm)
@@ -657,9 +657,9 @@ begin
     prog := Copy(Text, pos1 + 1, (pos2 - pos1 - 1));
     last := Copy(prog, 5, Length(prog) - 4);
 
-    PositionInt := MainForm.TimeToInt(LeftBStr(Trim(last), 8));
+    PositionInt := TimeToInt(LeftBStr(Trim(last), 8));
 
-    if MainForm.IsStringNumeric(Duration) and (Duration <> '0') then
+    if IsStringNumeric(Duration) and (Duration <> '0') then
     begin
       Result := IntToStr((100 * PositionInt) div StrToInt(Duration));
     end;

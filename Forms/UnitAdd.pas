@@ -29,7 +29,7 @@ type
   TAddForm = class(TForm)
     StatusLabel: TLabel;
                                    
-    AbortBtn: TBitBtn;
+    AbortBtn: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure AbortBtnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);

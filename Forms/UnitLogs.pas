@@ -27,9 +27,9 @@ uses
 
 type
   TLogForm = class(TForm)
-    OkBtn: TBitBtn;
-    ClearBtn: TBitBtn;
-    SaveBtn: TBitBtn;
+    OkBtn: TButton;
+    ClearBtn: TButton;
+    SaveBtn: TButton;
     SaveDialog: TSaveDialog;
     ClearPopup: TPopupMenu;
     ClearSelected1: TMenuItem;

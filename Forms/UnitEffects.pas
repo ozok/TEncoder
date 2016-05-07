@@ -28,8 +28,8 @@ uses
 
 type
   TEffectForm = class(TForm)
-    CloseBtn: TBitBtn;
-    PreviewBtn: TBitBtn;
+    CloseBtn: TButton;
+    PreviewBtn: TButton;
     PreviewList: TComboBox;
     DeintEnblBtn: TCheckBox;
     DeintMethodList: TComboBox;
@@ -163,7 +163,7 @@ begin
   if FileIndex >= 0 then
   begin
 
-    if FileIndex < MainForm.FileList.Items.Count then
+    if FileIndex < MainForm.FMasterFileInfoList.Count then
     begin
       FileName := MainForm.FMasterFileInfoList[FileIndex].FilePath;
 

@@ -29,8 +29,8 @@ uses
 type
   TAboutForm = class(TForm)
     Image1: TImage;
-    OkBtn: TBitBtn;
-    HomepageBtn: TBitBtn;
+    OkBtn: TButton;
+    HomepageBtn: TButton;
                                    
     sPageControl1: TPageControl;
     sTabSheet1: TTabSheet;

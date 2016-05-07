@@ -39,9 +39,8 @@ function GetFontResourceInfo(lpszFilename: PChar; var cbBuffer: DWORD; lpBuffer:
 
 type
   TSettingsForm = class(TForm)
-                                   
-    ResetBtn: TBitBtn;
-    CloseBtn: TBitBtn;
+    ResetBtn: TButton;
+    CloseBtn: TButton;
     NumberOfThreadsList: TComboBox;
     ResetThreadBtn: TButton;
     LangIdList: TComboBox;
@@ -51,7 +50,7 @@ type
     SubPosEdit: TEdit;
     CheckUpdatesChckBtn: TCheckBox;
     ThreadChkBtn: TCheckBox;
-    ClearTempFolderBtn: TBitBtn;
+    ClearTempFolderBtn: TButton;
     sLabel2: TLabel;
     GeneralPanel: TPanel;
     SubtitlePanel: TPanel;

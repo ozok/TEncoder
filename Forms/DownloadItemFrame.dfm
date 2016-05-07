@@ -86,6 +86,7 @@ object DownloadUIItem: TDownloadUIItem
       Height = 21
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
+      DropDownCount = 16
       TabOrder = 0
     end
     object SubtitleList: TComboBox

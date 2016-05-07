@@ -6,7 +6,7 @@
   * TEncoder is free software: you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
   * the Free Software Foundation, either version 2 of the License.
-  * 
+  *
   *
   * TEncoder is distributed in the hope that it will be useful,
   * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +23,7 @@ interface
 
 uses
   Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, Generics.Collections,
-  UnitImageResize, UnitCommonTypes, UnitImageTypeExtractor;
+  UnitImageResize, UnitCommonTypes, UnitImageTypeExtractor, UnitCommonMethods;
 
 type
   TStatus = (stReading, stDone);
@@ -71,7 +71,6 @@ type
     function LineToVideoTypeInfo(const Line: string): TTypeInfo;
     function LineToExtension(const Line: string): string;
     function SoundCloudLineToTypeInfo(const Line: string): TTypeInfo;
-    function CreateTempFileName: string;
     procedure ResizeImg;
   public
     property FormatStatus: TStatus read FFormatStatus;
@@ -223,14 +222,6 @@ begin
   FSubtitles.Add('Do not download subtitles');
   FPass := UserPass;
   FDownloadImg := DownloadImg;
-end;
-
-function TYouTubeVideoInfoExtractor.CreateTempFileName: string;
-var
-  LGUID: TGUID;
-begin
-  CreateGUID(LGUID);
-  Result := GUIDToString(LGUID);
 end;
 
 destructor TYouTubeVideoInfoExtractor.Destroy;
@@ -541,7 +532,7 @@ begin
         // means found a sub
         if LStartIndex > -1 then
         begin
-          for I := LStartIndex+2 to FSubtitleProcess.ConsoleOutput.Count - 1 do
+          for I := LStartIndex + 2 to FSubtitleProcess.ConsoleOutput.Count - 1 do
           begin
             LSubLine := Trim(FSubtitleProcess.ConsoleOutput[i]);
             if Length(LSubLine) > 0 then
@@ -643,7 +634,7 @@ begin
     begin
       LPass := ' -u ' + FPass.UserName + ' -p ' + FPass.Password;
     end;
-    FImageName := FTempFolder + '\' + CreateTempFileName + '.jpg';
+    FImageName := FTempFolder + '\' + UnitCommonMethods.GenGUID + '.jpg';
     FThumbProcess.ApplicationName := FYouTube_dlPath;
     FThumbProcess.CommandLine := ' ' + LPass + ' -i "' + FURL + '" --write-thumbnail -o "' + FImageName + '"  --no-playlist --playlist-start 1 --playlist-end 1';
     FThumbProcess.Run;

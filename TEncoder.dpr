@@ -44,7 +44,9 @@ uses
   UnitYouTubeDlVersionReader in 'Units\DownloaderUnits\UnitYouTubeDlVersionReader.pas',
   UnitFFmpegMergeCMDCreator in 'Units\UnitFFmpegMergeCMDCreator.pas',
   UnitFileInfoItem in 'Units\UnitFileInfoItem.pas',
-  UnitSubtitleTypes in 'Units\UnitSubtitleTypes.pas';
+  UnitSubtitleTypes in 'Units\UnitSubtitleTypes.pas',
+  FileListItemFrame in 'Forms\FileListItemFrame.pas' {FileListFrame: TFrame},
+  UnitCommonMethods in 'Units\UnitCommonMethods.pas';
 
 {$R *.res}
 

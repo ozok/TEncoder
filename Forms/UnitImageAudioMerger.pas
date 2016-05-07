@@ -25,7 +25,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.Mask, UnitEncoder, MediaInfoDll, StrUtils, Vcl.ExtCtrls,
-  JvExMask, JvToolEdit;
+  JvExMask, JvToolEdit, UnitCommonMethods;
 
 type
   TImageAudiotoVideoForm = class(TForm)
@@ -654,8 +654,8 @@ begin
     prog := Copy(Text, pos1 + 1, (pos2 - pos1 - 1));
     last := Copy(prog, 5, Length(prog) - 4);
 
-    PositionInt := MainForm.TimeToInt(LeftBStr(Trim(last), 8));
-    if MainForm.IsStringNumeric(Duration) and (Duration <> '0') then
+    PositionInt := TimeToInt(LeftBStr(Trim(last), 8));
+    if IsStringNumeric(Duration) and (Duration <> '0') then
     begin
       Result := IntToStr((100 * PositionInt) div StrToInt(Duration));
     end;

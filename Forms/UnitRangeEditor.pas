@@ -192,7 +192,8 @@ begin
     end;
   end;
   // update main form
-  MainForm.FileList.Items[VideoIndex].SubItems[0] := MainForm.IntegerToTime(EndValue - StartValue);
+  //todo: arayüzde rangei göster
+//  MainForm.FileList.Items[VideoIndex].SubItems[0] := MainForm.IntegerToTime(EndValue - StartValue);
   LogForm.MPlayerLogList.Lines.AddStrings(Player.MplayerConsoleOutput);
 end;
 

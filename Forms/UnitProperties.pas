@@ -27,10 +27,9 @@ uses
 
 type
   TInfoForm = class(TForm)
-                                   
-    OkBtn: TBitBtn;
+    OkBtn: TButton;
     Infos: TListView;
-    SaveBtn: TBitBtn;
+    SaveBtn: TButton;
     SaveDialog1: TSaveDialog;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure OkBtnClick(Sender: TObject);
