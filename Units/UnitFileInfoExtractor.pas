@@ -23,7 +23,7 @@ interface
 
 uses
   Classes, Windows, SysUtils, JvCreateProcess, Messages, StrUtils, Generics.Collections,
-  UnitCommonMethods;
+  UnitCommonMethods, UnitFileInfoItem;
 
 type
   TStatus = (Reading, Done);
@@ -49,16 +49,19 @@ type
     FMapStrSplit: TStringList;
     FDurationStr: string;
     FAudioExtensions: TStringList;
-    FDuration: integer;
+    FDuration: Int64;
     FTempFolder: string;
     FScreenshotFile: string;
+    FFFMpegFolder: string;
     procedure ProcessTerminate(Sender: TObject; ExitCode: Cardinal);
     procedure ProcessTerminate2(Sender: TObject; ExitCode: Cardinal);
     procedure ProcessTerminate3(Sender: TObject; ExitCode: Cardinal);
     function CodecToExtension(const AudioCodec: string): string;
     function GetBusy: Boolean;
     procedure GetSubtitles;
+    function GetFileInfoItem: TFileInfoItem;
   public
+    property FileInfoItem: TFileInfoItem read GetFileInfoItem;
     property FFMpegStatus: TStatus read FFFMpegStatus;
     property MEncoderStatus: TStatus read FMEncoderStatus;
     property ScreenshotStatus: TStatus read FScreenshotStatus;
@@ -70,13 +73,13 @@ type
     property AudioMencoderIndexes: TList<Integer> read FAudioMencoderIndexes;
     property IsBusy: Boolean read GetBusy;
     property DurationStr: string read FDurationStr;
-    property DurationInt: Integer read FDuration;
+    property DurationInt: Int64 read FDuration;
     property AudioExtensions: TStringList read FAudioExtensions;
     property SubtitleTrackIndexes: TList<Integer> read FSubtitleTrackIndexes;
     property FFmpegVideoID: integer read FFFmpegVideoIndex;
     property MEncoderVideoID: integer read FMencoderVideoIndex;
     property ScreenshotFile: string read FScreenshotFile;
-    constructor Create(const FFmpegPath: string; const MEncoderPath: string; const TempFolder: string);
+    constructor Create(const FFmpegPath: string; const MEncoderPath: string; const TempFolder: string; const FFmpegFolder: string);
     destructor Destroy(); override;
     procedure Start(const FileName: string);
     procedure Stop;
@@ -136,7 +139,7 @@ begin
   end;
 end;
 
-constructor TFileInfoExtractor.Create(const FFmpegPath: string; const MEncoderPath: string; const TempFolder: string);
+constructor TFileInfoExtractor.Create(const FFmpegPath: string; const MEncoderPath: string; const TempFolder: string; const FFmpegFolder: string);
 begin
   inherited Create;
 
@@ -218,6 +221,7 @@ begin
   FDurationStr := '00:00:00.00';
   FDuration := 0;
   FTempFolder := TempFolder;
+  FFFMpegFolder := FFmpegFolder;
 end;
 
 destructor TFileInfoExtractor.Destroy;
@@ -238,6 +242,11 @@ end;
 function TFileInfoExtractor.GetBusy: Boolean;
 begin
   Result := (FFMpegStatus = Reading) or (FMEncoderStatus = Reading) or (FScreenshotStatus = Reading);
+end;
+
+function TFileInfoExtractor.GetFileInfoItem: TFileInfoItem;
+begin
+
 end;
 
 procedure TFileInfoExtractor.GetSubtitles;
@@ -515,15 +524,15 @@ procedure TFileInfoExtractor.ProcessTerminate3(Sender: TObject; ExitCode: Cardin
 begin
   FScreenshotStatus := Reading;
   try
-                                                                LogForm.MainLog.Lines.Add(FTempFolder);
-    LogForm.MainLog.Lines.Add(FScreenShotProcess.CommandLine);
-    LogForm.MainLog.Lines.AddStrings(FScreenShotProcess.ConsoleOutput);
+
   finally
     FScreenshotStatus := Done;
   end;
 end;
 
 procedure TFileInfoExtractor.Start(const FileName: string);
+var
+  I: Integer;
 begin
   // reset
   FAudioStreams.Clear;
@@ -546,7 +555,6 @@ begin
   FMencoderProcess.CommandLine := ' -identify -frames 0 -vo null -ao null "' + FileName + '"';
   FFFMpegProcess.Run;
   FMencoderProcess.Run;
-  FFFMpegStatus := Reading;
   FMEncoderStatus := Reading;
   FScreenshotStatus := Reading;
 end;

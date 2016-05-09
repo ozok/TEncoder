@@ -1,8 +1,9 @@
 unit UnitFileInfoItem;
 
 interface
-  uses Classes, Generics.Collections, System.SysUtils, UnitSubtitleTypes;
 
+uses
+  Classes, Generics.Collections, System.SysUtils, UnitSubtitleTypes;
 
 type
   TFileDatePair = record
@@ -11,25 +12,49 @@ type
   end;
 
 type
+  TVideoStream = record
+    FFmpegId: integer;
+    MEncoderId: integer;
+  end;
+
+type
+  TAudioStream = record
+    TrackName: string;
+    FFmpegId: integer;
+    MEncoderId: integer;
+    Extension: string;
+    Delay: Extended;
+  end;
+
+type
+  TSubtitleEmbeddedStream = record
+    TrackName: string;
+    Id: integer;
+    Delay: Extended;
+  end;
+
+type
+  TSubtitleFileStream = record
+    Path: string;
+  end;
+
+type
   TFileInfoItem = class(TObject)
     // Video ids
     FFMmpegVideoID: integer;
     MEncoderVideoID: integer;
+
     // subtitle
-    SubtitleFiles: TStringList;
-    SubtitleIndex: integer;
-    SubtitleDelay: Extended;
-    SubtitleTracks: TStringList;
+    SubtitleFileIndex: integer;
     SubtitleTrackIndex: integer;
-    SubtitleTrackIndexes: TList<Integer>;
+    SubtitleEmbeddedStreams: TList<TSubtitleEmbeddedStream>;
+    SubtitleFileStreams: TList<TSubtitleFileStream>;
     SelectedSubtitleType: TSubtitleType;
+
     // audio
-    AudioTracks: TStringList;
     AudioIndex: integer;
-    AudioIDs: TList<Integer>;
-    AudioMencoderIDs: TList<Integer>;
-    AudioExtensions: TStringList;
-    AudioDelay: Extended;
+    AudioStreams: TList<TAudioStream>;
+
     // range
     StartPosition: integer;
     EndPosition: integer;
@@ -43,14 +68,24 @@ type
     function GetAudioExt: string;
     function GetMencoderAudioID: string;
     function GetSubtitleTrackID: string;
+    function GetSubTrackDelay: string;
+    function GetAudioTrackDelayAsExtended: Extended;
+    function GetSubTrackDelayAsExtended: Extended;
+    function GetAudioTrackDelay: string;
   public
     property SelectedSubtitleFile: string read GetSubtitle;
     property SelectedSubtitleTrack: string read GetSubtitleTrackID;
-    property SelectedAudio: string read GetAudioID;
+    property SelectedFFmpegAudio: string read GetAudioID;
     property SelectedMEncoderAudio: string read GetMencoderAudioID;
     property SelectedAudioExt: string read GetAudioExt;
+    property SelectedSubTrackDelay: string read GetSubTrackDelay;
+    property SelectedSubTrackDelayAsExtended: Extended read GetSubTrackDelayAsExtended;
+    property SelectedAudioTrackDelayAsExtended: Extended read GetAudioTrackDelayAsExtended;
+    property SelectedAudioTrackDelay: string read GetAudioTrackDelay;
     constructor Create;
     destructor Destroy; override;
+    procedure SetSelectedAudioTrackDelay(const Value: Extended);
+    procedure SetSelectedSubTrackDelay(const Value: Extended);
   end;
 
   TFileInfoList = TList<TFileInfoItem>;
@@ -62,26 +97,17 @@ implementation
 constructor TFileInfoItem.Create;
 begin
   inherited;
-  SubtitleFiles := TStringList.Create;
-  AudioTracks := TStringList.Create;
-  AudioIDs := TList<Integer>.Create;
-  AudioExtensions := TStringList.Create;
-  SubtitleTracks := TStringList.Create;
-  AudioMencoderIDs := TList<Integer>.Create;
-  SubtitleTrackIndexes := TList<Integer>.Create;
+  SubtitleEmbeddedStreams := TList<TSubtitleEmbeddedStream>.Create;
+  SubtitleFileStreams := TList<TSubtitleFileStream>.Create;
+  AudioStreams := TList<TAudioStream>.Create;
 end;
 
 destructor TFileInfoItem.Destroy;
 begin
   inherited;
-  SubtitleFiles.Free;
-  AudioTracks.Free;
-  AudioIDs.Free;
-  AudioExtensions.Free;
-  SubtitleTracks.Free;
-  AudioMencoderIDs.Free;
-  SubtitleTrackIndexes.Free;
-
+  SubtitleEmbeddedStreams.Free;
+  SubtitleFileStreams.Free;
+  AudioStreams.Free;
 end;
 
 function TFileInfoItem.GetAudioExt: string;
@@ -89,9 +115,9 @@ begin
   Result := '.wav';
   if AudioIndex > -1 then
   begin
-    if AudioIndex < AudioExtensions.Count then
+    if AudioIndex < AudioStreams.Count then
     begin
-      Result := AudioExtensions[AudioIndex];
+      Result := AudioStreams[AudioIndex].Extension;
     end;
   end;
 end;
@@ -101,9 +127,33 @@ begin
   Result := '1';
   if AudioIndex > -1 then
   begin
-    if AudioIndex < AudioIDs.Count then
+    if AudioIndex < AudioStreams.Count then
     begin
-      Result := FloatToStr(AudioIDs[AudioIndex]);
+      Result := FloatToStr(AudioStreams[AudioIndex].FFmpegId);
+    end;
+  end;
+end;
+
+function TFileInfoItem.GetAudioTrackDelay: string;
+begin
+  Result := '0';
+  if AudioIndex > -1 then
+  begin
+    if AudioIndex < AudioStreams.Count then
+    begin
+      Result := FloatToStr(AudioStreams[AudioIndex].Delay);
+    end;
+  end;
+end;
+
+function TFileInfoItem.GetAudioTrackDelayAsExtended: Extended;
+begin
+  Result := 0;
+  if AudioIndex > -1 then
+  begin
+    if AudioIndex < AudioStreams.Count then
+    begin
+      Result := AudioStreams[AudioIndex].Delay;
     end;
   end;
 end;
@@ -113,9 +163,9 @@ begin
   Result := '1';
   if AudioIndex > -1 then
   begin
-    if AudioIndex < AudioMencoderIDs.Count then
+    if AudioIndex < AudioStreams.Count then
     begin
-      Result := FloatToStr(AudioMencoderIDs[AudioIndex]);
+      Result := FloatToStr(AudioStreams[AudioIndex].MEncoderId);
     end;
   end;
 end;
@@ -123,11 +173,11 @@ end;
 function TFileInfoItem.GetSubtitle: string;
 begin
   Result := '';
-  if SubtitleIndex > -1 then
+  if SubtitleFileIndex > -1 then
   begin
-    if SubtitleIndex < SubtitleFiles.Count then
+    if SubtitleFileIndex < SubtitleFileStreams.Count then
     begin
-      Result := SubtitleFiles[SubtitleIndex];
+      Result := SubtitleFileStreams[SubtitleFileIndex].Path;
     end;
   end;
 end;
@@ -137,9 +187,63 @@ begin
   Result := '';
   if SubtitleTrackIndex > -1 then
   begin
-    if SubtitleTrackIndex < SubtitleTrackIndexes.Count then
+    if SubtitleTrackIndex < SubtitleEmbeddedStreams.Count then
     begin
-      Result := FloatToStr(SubtitleTrackIndexes[SubtitleTrackIndex]);
+      Result := FloatToStr(SubtitleEmbeddedStreams[SubtitleTrackIndex].Id);
+    end;
+  end;
+end;
+
+function TFileInfoItem.GetSubTrackDelay: string;
+begin
+  Result := '0';
+  if SubtitleTrackIndex > -1 then
+  begin
+    if SubtitleTrackIndex < SubtitleEmbeddedStreams.Count then
+    begin
+      Result := FloatToStr(SubtitleEmbeddedStreams[SubtitleTrackIndex].Delay);
+    end;
+  end;
+end;
+
+function TFileInfoItem.GetSubTrackDelayAsExtended: Extended;
+begin
+  Result := 0;
+  if SubtitleTrackIndex > -1 then
+  begin
+    if SubtitleTrackIndex < SubtitleEmbeddedStreams.Count then
+    begin
+      Result := SubtitleEmbeddedStreams[SubtitleTrackIndex].Delay;
+    end;
+  end;
+end;
+
+procedure TFileInfoItem.SetSelectedAudioTrackDelay(const Value: Extended);
+var
+  LTrack: TAudioStream;
+begin
+  if AudioIndex > -1 then
+  begin
+    if AudioIndex < AudioStreams.Count then
+    begin
+      LTrack := AudioStreams[AudioIndex];
+      LTrack.Delay := Value;
+      AudioStreams[AudioIndex] := LTrack;
+    end;
+  end;
+end;
+
+procedure TFileInfoItem.SetSelectedSubTrackDelay(const Value: Extended);
+var
+  LTrack: TSubtitleEmbeddedStream;
+begin
+  if SubtitleTrackIndex > -1 then
+  begin
+    if SubtitleTrackIndex < SubtitleEmbeddedStreams.Count then
+    begin
+      LTrack := SubtitleEmbeddedStreams[SubtitleTrackIndex];
+      LTrack.Delay := Value;
+      SubtitleEmbeddedStreams[SubtitleTrackIndex] := LTrack;
     end;
   end;
 end;

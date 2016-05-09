@@ -133,7 +133,6 @@ type
     VideoEffects1: TMenuItem;
     Delays1: TMenuItem;
     rim1: TMenuItem;
-    FileInfo1: TMenuItem;
     SubOptionsBtn: TButton;
     MainSummaryList: TTreeView;
     ProgressLabel: TLabel;
@@ -1077,6 +1076,10 @@ var
   I: integer;
   j: integer;
   LFileListFrame: TFileListFrame;
+
+  LSubFileStream: TSubtitleFileStream;
+  LSubEmbeddedStream: TSubtitleEmbeddedStream;
+  LAudioStream: TAudioStream;
 label
   SubDefTrackSelect, AudDefTrackSelect;
 begin
@@ -1109,20 +1112,33 @@ begin
         if EndPosition > 0 then
         begin
           // subtitle files
-          SubtitleFiles.AddStrings(FFileInfo.SubtitleFiles);
-          if SubtitleFiles.Count > 0 then
+          for I := 0 to FFileInfo.SubtitleFiles.Count-1 do
           begin
-            SubtitleIndex := 0;
+            LSubFileStream.Path := FFileInfo.SubtitleFiles[i];
+            SubtitleFileStreams.Add(LSubFileStream);
+          end;
+          if SubtitleFileStreams.Count > 0 then
+          begin
+            SubtitleFileIndex := 0;
           end
           else
           begin
-            SubtitleIndex := -1;
+            SubtitleFileIndex := -1;
           end;
-          SubtitleDelay := 0;
-          // subtitle tracks
-          SubtitleTracks.AddStrings(FFileInfo.SubtitleTracks);
-          SubtitleTrackIndexes.AddRange(FFileInfo.SubtitleTrackIndexes.ToArray);
-          if SubtitleTrackIndexes.Count > 0 then
+
+          for I := 0 to FFileInfo.SubtitleTracks.Count-1 do
+          begin
+            with LSubEmbeddedStream do
+            begin
+              Delay := 0;
+              TrackName := FFileInfo.SubtitleTracks[i];
+              Id := FFileInfo.SubtitleTrackIndexes[i];
+
+            end;
+            SubtitleEmbeddedStreams.Add(LSubEmbeddedStream);
+          end;
+
+          if SubtitleEmbeddedStreams.Count > 0 then
           begin
             SubtitleTrackIndex := 0;
             LTmpList.DelimitedText := SettingsForm.DefaultSubLangEdit.Text;
@@ -1145,15 +1161,15 @@ SubDefTrackSelect:
           begin
             SubtitleTrackIndex := -1;
           end;
-          if SubtitleFiles.Count > 0 then
+          if SubtitleFileStreams.Count > 0 then
           begin
-            SubtitleIndex := 0;
+            SubtitleFileIndex := 0;
           end
           else
           begin
-            SubtitleIndex := -1;
+            SubtitleFileIndex := -1;
           end;
-          if SubtitleFiles.Count > 0 then
+          if SubtitleFileStreams.Count > 0 then
           begin
             SelectedSubtitleType := subfile;
           end
@@ -1162,10 +1178,20 @@ SubDefTrackSelect:
             SelectedSubtitleType := embedded;
           end;
           // audio streams
-          AudioTracks.AddStrings(FFileInfo.AudioStreams);
-          AudioIDs.AddRange(FFileInfo.AudioIndexes.ToArray);
-          AudioMencoderIDs.AddRange(FFileInfo.AudioMencoderIndexes.ToArray);
-          if AudioTracks.Count > 0 then
+          for I := 0 to FFileInfo.AudioStreams.Count-1 do
+          begin
+            with LAudioStream do
+            begin
+              TrackName := FFileInfo.AudioStreams[i];
+              FFmpegId := FFileInfo.AudioIndexes[i];
+              MEncoderId := FFileInfo.AudioMencoderIndexes[i];
+              Extension := FFileInfo.AudioExtensions[i];
+              Delay := 0;
+            end;
+            AudioStreams.Add(LAudioStream);
+          end;
+
+          if AudioStreams.Count > 0 then
           begin
             AudioIndex := 0;
             LTmpList.DelimitedText := SettingsForm.DefaultAudioLangEdit.Text;
@@ -1188,7 +1214,6 @@ AudDefTrackSelect:
           begin
             AudioIndex := -1;
           end;
-          AudioExtensions.AddStrings(FFileInfo.AudioExtensions);
           ConstDuration := EndPosition;
           FilePath := FileName;
           FileDate := ReadFileDate(FileName);
@@ -1212,7 +1237,7 @@ AudDefTrackSelect:
       LFileListFrame.SubtitleList.Items.AddStrings(FFileInfo.SubtitleFiles);
       LFileListFrame.AudioList.Items.AddStrings(FFileInfo.AudioStreams);
       LFileListFrame.AudioList.ItemIndex := LConvertItem.AudioIndex;
-      LFileListFrame.SubtitleList.ItemIndex := LConvertItem.SubtitleIndex;
+      LFileListFrame.SubtitleList.ItemIndex := LConvertItem.SubtitleFileIndex;
       LFileListFrame.RemoveBtn.Tag := FFileListFrames.Count;
       LFileListFrame.RangeBtn.Tag := FFileListFrames.Count;
       LFileListFrame.PreviewBtn.Tag := FFileListFrames.Count;
@@ -5030,14 +5055,14 @@ begin
       begin
         VideoName := FileName;
         VideoIndex := Index;
-        SubIndex := FMasterFileInfoList[index].SubtitleIndex;
+        SubIndex := FMasterFileInfoList[index].SubtitleFileIndex;
         AudioOnly := IsAudioOnly(FileName);
         AudioStream := FMasterFileInfoList[Index].SelectedMEncoderAudio;
       end;
       MainForm.Enabled := False;
       PreviewForm.FromMainForm := True;
       PreviewForm.PositionBar.MaxValue := FMasterFileInfoList[Index].ConstDuration;
-      PreviewForm.DelaysEdit.Text := FloatToStr(MainForm.FMasterFileInfoList[Index].SubtitleDelay) + '/' + FloatToStr(MainForm.FMasterFileInfoList[Index].AudioDelay);
+      PreviewForm.DelaysEdit.Text := MainForm.FMasterFileInfoList[Index].SelectedSubTrackDelay + '/' + MainForm.FMasterFileInfoList[Index].SelectedAudioTrackDelay;
       PreviewForm.Caption := 'Preview [' + ExtractFileName(FileName) + ']';
       PreviewForm.Show;
     end
@@ -5060,7 +5085,7 @@ begin
     begin
       VideoName := FMasterFileInfoList[LItemIndex].FilePath;
       VideoIndex := LItemIndex;
-      SubtitleIndex := FMasterFileInfoList[LItemIndex].SubtitleIndex;
+      SubtitleIndex := FMasterFileInfoList[LItemIndex].SubtitleFileIndex;
       StartValue := FMasterFileInfoList[LItemIndex].StartPosition;
       EndValue := FMasterFileInfoList[LItemIndex].EndPosition;
       PositionBar.MaxValue := FMasterFileInfoList[LItemIndex].ConstDuration;
@@ -5103,11 +5128,11 @@ begin
         begin
           if LSubList.Items.Count > 0 then
           begin
-            FMasterFileInfoList[index].SubtitleIndex := LSubList.ItemIndex;
+            FMasterFileInfoList[index].SubtitleFileIndex := LSubList.ItemIndex;
           end
           else
           begin
-            FMasterFileInfoList[index].SubtitleIndex := -1;
+            FMasterFileInfoList[index].SubtitleFileIndex := -1;
           end;
         end;
     end;
@@ -5120,6 +5145,7 @@ var
   LFileIndex: integer;
   LSubtypeCBox: TComboBox;
   LSubtitleCBox: TComboBox;
+  I: Integer;
 begin
   LSubtypeCBox := (Sender as TComboBox);
   LFileIndex := LSubtypeCBox.Tag;
@@ -5132,14 +5158,20 @@ begin
     case LSubtypeCBox.ItemIndex of
       0: // embedded
         begin
-          LSubtitleCBox.Items.AddStrings(LConvertItem.SubtitleTracks);
+          for I := 0 to LConvertItem.SubtitleEmbeddedStreams.Count-1 do
+          begin
+            LSubtitleCBox.Items.Add(LConvertItem.SubtitleEmbeddedStreams[i].TrackName);
+          end;
           LSubtitleCBox.ItemIndex := LConvertItem.SubtitleTrackIndex;
           LConvertItem.SelectedSubtitleType := embedded;
         end;
       1: // files
         begin
-          LSubtitleCBox.Items.AddStrings(LConvertItem.SubtitleFiles);
-          LSubtitleCBox.ItemIndex := LConvertItem.SubtitleIndex;
+          for I := 0 to LConvertItem.SubtitleFileStreams.Count-1 do
+          begin
+            LSubtitleCBox.Items.Add(LConvertItem.SubtitleFileStreams[i].Path);
+          end;
+          LSubtitleCBox.ItemIndex := LConvertItem.SubtitleFileIndex;
           LConvertItem.SelectedSubtitleType := subfile;
         end;
     end;
@@ -5449,7 +5481,7 @@ begin
   FFilesToCheck := TStringList.Create;
   FTitles := TList<TTitle>.Create;
   FMasterFileInfoList := TFileInfoList.Create;
-  FFileInfo := TFileInfoExtractor.Create(FFFMpegPath, FMPlayerPath, FTempFolder);
+  FFileInfo := TFileInfoExtractor.Create(FFFMpegPath, FMPlayerPath, FTempFolder, ExtractFileDir(ParamStr(0)) + '\ffmpeg');
 
   FBImg.Parent := sStatusBar1;
 

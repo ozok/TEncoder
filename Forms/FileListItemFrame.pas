@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
-  Vcl.ComCtrls;
+  Vcl.ComCtrls, System.ImageList, Vcl.ImgList;
 
 type
   TFileListFrame = class(TFrame)
@@ -25,6 +25,7 @@ type
     Bevel1: TBevel;
     FileInfoBtn: TButton;
     OpenFolderBtn: TButton;
+    ImageList1: TImageList;
   private
     { Private declarations }
   public

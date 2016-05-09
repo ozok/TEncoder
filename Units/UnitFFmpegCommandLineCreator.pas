@@ -728,17 +728,17 @@ begin
         end
         else
         begin
-          LAudioDelayCMD := ' -itsoffset ' + StringReplace(FloatToStr(FMasterFileInfoList[FFileIndex].AudioDelay), ',', '.', []);
+          LAudioDelayCMD := ' -itsoffset ' + StringReplace(FMasterFileInfoList[FFileIndex].SelectedAudioTrackDelay, ',', '.', []);
         end;
 
         // if video is none or there are no video streams
         if (VideoEncoderList.ItemIndex = 11) or (FMasterFileInfoList[FFileIndex].FFMmpegVideoID = -1) then
         begin
-          LAudioCommandLine := ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
+          LAudioCommandLine := ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedFFmpegAudio + ' ';
         end
         else
         begin
-          LAudioCommandLine := ' -map 0:' + FloatToStr(FMasterFileInfoList[FFileIndex].FFMmpegVideoID) + ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
+          LAudioCommandLine := ' -map 0:' + FloatToStr(FMasterFileInfoList[FFileIndex].FFMmpegVideoID) + ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedFFmpegAudio + ' ';
         end;
       end;
       Result.SeconPassCMD := ' -y ' + LAudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" -pass 2 -passlogfile "' + LPassFilePath + '" ' +
@@ -791,17 +791,17 @@ begin
         end
         else
         begin
-          LAudioDelayCMD := ' -itsoffset ' + StringReplace(FloatToStr(FMasterFileInfoList[FFileIndex].AudioDelay), ',', '.', []);
+          LAudioDelayCMD := ' -itsoffset ' + StringReplace(FMasterFileInfoList[FFileIndex].SelectedAudioTrackDelay, ',', '.', []);
         end;
 
         // if video is none
         if (VideoEncoderList.ItemIndex = 11) or (FMasterFileInfoList[FFileIndex].FFMmpegVideoID = -1) then
         begin
-          LAudioCommandLine := ' -map 0:' + (FMasterFileInfoList[FFileIndex].SelectedAudio) + ' ';
+          LAudioCommandLine := ' -map 0:' + (FMasterFileInfoList[FFileIndex].SelectedFFmpegAudio) + ' ';
         end
         else
         begin
-          LAudioCommandLine := ' -map 0:' + FloatToStr(FMasterFileInfoList[FFileIndex].FFMmpegVideoID) + ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedAudio + ' ';
+          LAudioCommandLine := ' -map 0:' + FloatToStr(FMasterFileInfoList[FFileIndex].FFMmpegVideoID) + ' -map 0:' + FMasterFileInfoList[FFileIndex].SelectedFFmpegAudio + ' ';
         end;
       end;
       Result.SinglePassCMD := ' -y ' + LAudioDelayCMD + MainForm.ThreadCMD(1) + ' -i "' + FFileName + '" ' + CustomArgs + ' ' + CreateRangeCMD(FMasterFileInfoList[FFileIndex].StartPosition,

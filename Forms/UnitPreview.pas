@@ -312,7 +312,7 @@ begin
   PositionBar.Progress := 0;
   PositionEdit.Text := '00:00:00/00:00:00';
 
-  if (SubDelayValue <> MainForm.FMasterFileInfoList[VideoIndex].SubtitleDelay) or (AudioDelayValue <> MainForm.FMasterFileInfoList[VideoIndex].AudioDelay) then
+  if (SubDelayValue <> MainForm.FMasterFileInfoList[VideoIndex].SelectedSubTrackDelayAsExtended) or (AudioDelayValue <> MainForm.FMasterFileInfoList[VideoIndex].SelectedAudioTrackDelayAsExtended) then
   begin
 
     if ID_YES = Application.MessageBox('Delay values for this video has been changed. Would you like to save it?', 'Confirm', MB_ICONQUESTION or MB_YESNO) then
@@ -320,8 +320,8 @@ begin
 
       with MainForm do
       begin
-        FMasterFileInfoList[VideoIndex].SubtitleDelay := SubDelayValue;
-        FMasterFileInfoList[VideoIndex].AudioDelay := AudioDelayValue;
+        FMasterFileInfoList[VideoIndex].SetSelectedSubTrackDelay(SubDelayValue);
+        FMasterFileInfoList[VideoIndex].SetSelectedAudioTrackDelay(AudioDelayValue);
       end;
 
     end;
@@ -453,8 +453,8 @@ procedure TPreviewForm.FormShow(Sender: TObject);
 begin
   PreviewForm.Width := 735;
   PreviewForm.Height := 400;
-  SubDelayValue := MainForm.FMasterFileInfoList[VideoIndex].SubtitleDelay;
-  AudioDelayValue := MainForm.FMasterFileInfoList[VideoIndex].AudioDelay;
+  SubDelayValue := MainForm.FMasterFileInfoList[VideoIndex].SelectedSubTrackDelayAsExtended;
+  AudioDelayValue := MainForm.FMasterFileInfoList[VideoIndex].SelectedAudioTrackDelayAsExtended;
 
   if AudioOnly then
   begin
@@ -538,7 +538,7 @@ begin
       VideoVolumeLevel := VolumeBar.Progress;
       EnableDeint := EffectForm.DeintEnblBtn.Checked;
       DeintMethodIndex := EffectForm.DeintMethodList.ItemIndex;
-      AudioDelay := MainForm.FMasterFileInfoList[VideoIndex].AudioDelay;
+      AudioDelay := MainForm.FMasterFileInfoList[VideoIndex].SelectedAudioTrackDelayAsExtended;
       StartTime := MainForm.FMasterFileInfoList[VideoIndex].StartPosition;
       EndTime := MainForm.FMasterFileInfoList[VideoIndex].EndPosition;
       ;
@@ -559,7 +559,7 @@ begin
         FontAutoScale := FloatToStr(SettingsForm.AutoScaleList.ItemIndex);
         TextScale := SettingsForm.DefScaleEdit.Text;
         SubtilePosition := FloatToStr(SettingsForm.SubposBar.Position);
-        Delay := MainForm.FMasterFileInfoList[VideoIndex].SubtitleDelay;
+        Delay := MainForm.FMasterFileInfoList[VideoIndex].SelectedAudioTrackDelayAsExtended;
         UseSSAStyle := SettingsForm.SubSSABtn.Checked;
       end;
 
@@ -746,8 +746,8 @@ begin
 
     PreviewForm.Width := 735;
     PreviewForm.Height := 400;
-    SubDelayValue := MainForm.FMasterFileInfoList[VideoIndex].SubtitleDelay;
-    AudioDelayValue := MainForm.FMasterFileInfoList[VideoIndex].AudioDelay;
+    SubDelayValue := MainForm.FMasterFileInfoList[VideoIndex].SelectedSubTrackDelayAsExtended;
+    AudioDelayValue := MainForm.FMasterFileInfoList[VideoIndex].SelectedAudioTrackDelayAsExtended;
 
   end;
 
@@ -761,8 +761,8 @@ begin
   DelaysEdit.Text := '0/0';
   with MainForm do
   begin
-    FMasterFileInfoList[VideoIndex].AudioDelay := 0;
-    FMasterFileInfoList[VideoIndex].SubtitleDelay := 0;
+    FMasterFileInfoList[VideoIndex].SetSelectedAudioTrackDelay(0);
+    FMasterFileInfoList[VideoIndex].SetSelectedSubTrackDelay(0);
   end;
 
 end;
@@ -771,8 +771,8 @@ procedure TPreviewForm.SaveDelaysBtnClick(Sender: TObject);
 begin
   with MainForm do
   begin
-    FMasterFileInfoList[VideoIndex].SubtitleDelay := SubDelayValue;
-    FMasterFileInfoList[VideoIndex].AudioDelay := AudioDelayValue;
+    FMasterFileInfoList[VideoIndex].SetSelectedSubTrackDelay(SubDelayValue);
+    FMasterFileInfoList[VideoIndex].SetSelectedAudioTrackDelay(AudioDelayValue);
   end;
 end;
 

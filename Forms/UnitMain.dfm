@@ -407,8 +407,8 @@ object MainForm: TMainForm
             OnClick = StartBtnClick
           end
           object MergeBtn: TCheckBox
-            Left = 693
-            Top = 16
+            Left = 747
+            Top = 20
             Width = 153
             Height = 19
             Caption = 'Merge videos to one video'
@@ -5800,9 +5800,6 @@ object MainForm: TMainForm
   object ToolsMenu: TPopupMenu
     Left = 24
     Top = 216
-    object FileInfo1: TMenuItem
-      Caption = 'File Info'
-    end
     object rim1: TMenuItem
       Caption = 'Trim (Enable/disable under settings window)'
       Hint = 'You can disable/enable this under settings'

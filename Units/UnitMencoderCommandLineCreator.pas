@@ -389,7 +389,7 @@ begin
       ASR := ' ';
     end;
 
-    AudioDelayCMD := ' -delay ' + StringReplace(FloatToStr(FMasterFileInfoList[FFileIndex].AudioDelay), ',', '.', []) + ' ';
+    AudioDelayCMD := ' -delay ' + StringReplace(FMasterFileInfoList[FFileIndex].SelectedAudioTrackDelay, ',', '.', []) + ' ';
 
     // audio channels
     case AdvancedOptionsForm.AudioChannelsList.ItemIndex of
@@ -639,9 +639,9 @@ begin
                     ' -subfont-text-scale ' + SettingsForm.DefScaleEdit.Text + ' -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"';
 
                   // subtitle delay
-                  if FMasterFileInfoList[FFileIndex].SubtitleDelay <> 0 then
+                  if FMasterFileInfoList[FFileIndex].SelectedSubTrackDelayAsExtended <> 0 then
                   begin
-                    SubtitleCMD := SubtitleCMD + ' -subdelay ' + FloatToStr(FMasterFileInfoList[FFileIndex].SubtitleDelay);
+                    SubtitleCMD := SubtitleCMD + ' -subdelay ' + FMasterFileInfoList[FFileIndex].SelectedSubTrackDelay;
                   end;
                 end;
               end
@@ -730,9 +730,9 @@ begin
                     ' -subfont-text-scale ' + SettingsForm.DefScaleEdit.Text + ' -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"';
 
                   // subtitle delay
-                  if FMasterFileInfoList[FFileIndex].SubtitleDelay <> 0 then
+                  if FMasterFileInfoList[FFileIndex].SelectedSubTrackDelayAsExtended <> 0 then
                   begin
-                    SubtitleCMD := SubtitleCMD + ' -subdelay ' + FloatToStr(FMasterFileInfoList[FFileIndex].SubtitleDelay);
+                    SubtitleCMD := SubtitleCMD + ' -subdelay ' + FMasterFileInfoList[FFileIndex].SelectedSubTrackDelay;
                   end;
                 end;
               end
@@ -821,9 +821,9 @@ begin
                     ' -subfont-text-scale ' + SettingsForm.DefScaleEdit.Text + ' -sub "' + FMasterFileInfoList[FFileIndex].SelectedSubtitleFile + '"';
 
                   // subtitle delay
-                  if FMasterFileInfoList[FFileIndex].SubtitleDelay <> 0 then
+                  if FMasterFileInfoList[FFileIndex].SelectedSubTrackDelayAsExtended <> 0 then
                   begin
-                    SubtitleCMD := SubtitleCMD + ' -subdelay ' + FloatToStr(FMasterFileInfoList[FFileIndex].SubtitleDelay);
+                    SubtitleCMD := SubtitleCMD + ' -subdelay ' + FMasterFileInfoList[FFileIndex].SelectedSubTrackDelay;
                   end;
                 end;
               end

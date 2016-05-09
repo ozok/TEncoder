@@ -244,7 +244,7 @@ begin
       VideoVolumeLevel := VolumeBar.Progress;
       EnableDeint := EffectForm.DeintEnblBtn.Checked;
       DeintMethodIndex := EffectForm.DeintMethodList.ItemIndex;
-      AudioDelay := MainForm.FMasterFileInfoList[VideoIndex].AudioDelay;
+      AudioDelay := MainForm.FMasterFileInfoList[VideoIndex].SelectedAudioTrackDelayAsExtended;
       StartTime := MainForm.FMasterFileInfoList[VideoIndex].StartPosition;
       EndTime := MainForm.FMasterFileInfoList[VideoIndex].EndPosition;
       RotateMode := EffectForm.RotateList.ItemIndex;
@@ -258,7 +258,7 @@ begin
         FontAutoScale := FloatToStr(SettingsForm.AutoScaleList.ItemIndex);
         TextScale := SettingsForm.DefScaleEdit.Text;
         SubtilePosition := FloatToStr(SettingsForm.SubposBar.Position);
-        Delay := MainForm.FMasterFileInfoList[VideoIndex].SubtitleDelay;
+        Delay := MainForm.FMasterFileInfoList[VideoIndex].SelectedSubTrackDelayAsExtended;
       end;
     end;
 

@@ -171,7 +171,7 @@ begin
       begin
         VideoName := FileName;
         VideoIndex := FileIndex;
-        SubIndex := MainForm.FMasterFileInfoList[FileIndex].SubtitleIndex;
+        SubIndex := MainForm.FMasterFileInfoList[FileIndex].SubtitleFileIndex;
       end;
 
       EffectForm.Enabled := False;
